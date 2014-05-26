@@ -1,4 +1,4 @@
-BlocSpot Templatew
+BlocSpot Template
 ================
 
 This is the template for the Android BlocSpot project.
