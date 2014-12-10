@@ -1,4 +1,4 @@
-package com.bloc.blocspot;
+package com.bloc.blocspot.ui.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -12,10 +12,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
-
+import android.widget.ListView;
 
 import com.bloc.blocspot.blocspot.R;
+import com.bloc.blocspot.places.Place;
+import com.bloc.blocspot.places.PlacesService;
+import com.bloc.blocspot.utils.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -23,8 +28,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import com.bloc.blocspot.places.*;
 
 import java.util.ArrayList;
 
@@ -42,11 +45,26 @@ public class BlocSpotActivity extends Activity {
     private String[] places;
     private LocationManager locationManager;
     private Location loc;
+    private boolean mListState = true;
+    private MapFragment mMapFragment;
+    private ListView mPoiList;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Constants.LIST_STATE, mListState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
+        }
+
+        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mPoiList = (ListView) findViewById(R.id.poiList);
 
         initCompo();
         places = getResources().getStringArray(R.array.places);
@@ -69,6 +87,14 @@ public class BlocSpotActivity extends Activity {
                         return true;
                     }
                 });
+
+        if(mListState == true) { //hide the map if the list state is selected
+            getFragmentManager().beginTransaction().hide(getFragmentManager()
+                    .findFragmentById(R.id.map)).commit();
+        }
+        else if(mListState == false) { //hide the list if map is to be shown
+            mPoiList.setVisibility(View.INVISIBLE);
+        }
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
@@ -80,6 +106,30 @@ public class BlocSpotActivity extends Activity {
         public GetPlaces(Context context, String places) {
             this.context = context;
             this.places = places;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(context);
+            dialog.setCancelable(false);
+            dialog.setMessage("Loading..");
+            dialog.isIndeterminate();
+            dialog.show();
+        }
+
+        @Override
+        protected ArrayList<Place> doInBackground(Void... arg0) {
+            PlacesService service = new PlacesService(
+                    "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI");
+            ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(), // 28.632808
+                    loc.getLongitude(), places); // 77.218276
+
+            for (int i = 0; i < findPlaces.size(); i++) {
+                Place placeDetail = findPlaces.get(i);
+                Log.e(TAG, "places : " + placeDetail.getName());
+            }
+            return findPlaces;
         }
 
         @Override
@@ -107,30 +157,6 @@ public class BlocSpotActivity extends Activity {
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
         }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog = new ProgressDialog(context);
-            dialog.setCancelable(false);
-            dialog.setMessage("Loading..");
-            dialog.isIndeterminate();
-            dialog.show();
-        }
-
-        @Override
-        protected ArrayList<Place> doInBackground(Void... arg0) {
-            PlacesService service = new PlacesService(
-                    "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI");
-            ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(), // 28.632808
-                    loc.getLongitude(), places); // 77.218276
-
-            for (int i = 0; i < findPlaces.size(); i++) {
-                Place placeDetail = findPlaces.get(i);
-                Log.e(TAG, "places : " + placeDetail.getName());
-            }
-            return findPlaces;
-        }
     }
 
     private void initCompo() {
@@ -141,6 +167,25 @@ public class BlocSpotActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.action_settings) {
+            if(mListState == true) {
+                getFragmentManager().beginTransaction().show(mMapFragment).commit();
+                mPoiList.setVisibility(View.INVISIBLE);
+                mListState = false;
+            }
+            else {
+                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+                mPoiList.setVisibility(View.VISIBLE);
+                mListState = true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void currentLocation() {
