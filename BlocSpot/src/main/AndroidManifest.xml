@@ -37,6 +37,7 @@
 
         <activity
             android:name="com.bloc.blocspot.ui.activities.SearchActivity"
+            android:parentActivityName="com.bloc.blocspot.ui.activities.BlocSpotActivity" >
             android:label="@string/title_activity_search" >
         </activity>
     </application>

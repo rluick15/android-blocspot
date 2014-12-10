@@ -23,7 +23,6 @@
 
     <ListView
         android:id="@+id/searchList"
-        android:entries="@array/places"
         android:layout_below="@+id/scrollView"
         android:layout_alignParentLeft="true"
         android:layout_width="match_parent"
