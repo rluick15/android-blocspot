@@ -1,10 +1,10 @@
 package com.bloc.blocspot.places;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *  Model class for Places data.
@@ -89,7 +89,8 @@ public class Place {
 
     @Override
     public String toString() {
-        return "Place{" + "id=" + id + ", icon=" + icon + ", name=" + name + ", latitude=" + latitude + ", longitude=" + longitude + '}';
+        return "Place{" + "id=" + id + ", icon=" + icon + ", name=" + name
+                + ", latitude=" + latitude + ", longitude=" + longitude + '}';
     }
 
 }

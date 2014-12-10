@@ -47,32 +47,28 @@ public class BlocSpotActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initCompo();
         places = getResources().getStringArray(R.array.places);
         currentLocation();
+
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(ArrayAdapter.createFromResource(
-                        this, R.array.places, android.R.layout.simple_list_item_1),
+                this, R.array.places, android.R.layout.simple_list_item_1),
                 new ActionBar.OnNavigationListener() {
-
                     @Override
-                    public boolean onNavigationItemSelected(int itemPosition,
-                                                            long itemId) {
-                        Log.e(TAG,
-                                places[itemPosition].toLowerCase().replace("-",
-                                        "_"));
+                    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+                        Log.e(TAG, places[itemPosition].toLowerCase().replace("-", "_"));
                         if (loc != null) {
                             mMap.clear();
                             new GetPlaces(BlocSpotActivity.this,
                                     places[itemPosition].toLowerCase().replace(
-                                            "-", "_").replace(" ", "_")).execute();
+                                    "-", "_").replace(" ", "_")).execute();
                         }
                         return true;
                     }
-
                 });
-
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
@@ -95,9 +91,8 @@ public class BlocSpotActivity extends Activity {
             for (int i = 0; i < result.size(); i++) {
                 mMap.addMarker(new MarkerOptions()
                         .title(result.get(i).getName())
-                        .position(
-                                new LatLng(result.get(i).getLatitude(), result
-                                        .get(i).getLongitude()))
+                        .position(new LatLng(result.get(i).getLatitude(),
+                                result.get(i).getLongitude()))
                         .icon(BitmapDescriptorFactory
                                 .fromResource(R.drawable.pin))
                         .snippet(result.get(i).getVicinity()));
@@ -126,23 +121,20 @@ public class BlocSpotActivity extends Activity {
         @Override
         protected ArrayList<Place> doInBackground(Void... arg0) {
             PlacesService service = new PlacesService(
-                    "Put your project browser API key here");
+                    "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI");
             ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(), // 28.632808
                     loc.getLongitude(), places); // 77.218276
 
             for (int i = 0; i < findPlaces.size(); i++) {
-
                 Place placeDetail = findPlaces.get(i);
                 Log.e(TAG, "places : " + placeDetail.getName());
             }
             return findPlaces;
         }
-
     }
 
     private void initCompo() {
-        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-                .getMap();
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
     }
 
     @Override
@@ -154,20 +146,19 @@ public class BlocSpotActivity extends Activity {
     private void currentLocation() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        String provider = locationManager
-                .getBestProvider(new Criteria(), false);
+        String provider = locationManager.getBestProvider(new Criteria(), true);
 
         Location location = locationManager.getLastKnownLocation(provider);
 
         if (location == null) {
             locationManager.requestLocationUpdates(provider, 0, 0, listener);
-        } else {
+        }
+        else {
             loc = location;
             new GetPlaces(BlocSpotActivity.this, places[0].toLowerCase().replace(
                     "-", "_")).execute();
             Log.e(TAG, "location : " + location);
         }
-
     }
 
     private LocationListener listener = new LocationListener() {
