@@ -13,14 +13,12 @@
       <config />
     </shared>
   </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.bloc.blocspot.blocspot" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="4a6db0f7-dc06-4430-bdde-02615bbe9a07" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/SearchActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/values-w820dp/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/menu/menu_search.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -98,22 +96,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SearchActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SearchActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/SearchActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29708737" vertical-offset="153" max-vertical-offset="833">
-              <caret line="24" column="59" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="833">
+              <caret line="36" column="20" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_search.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="activity_search.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.037037" vertical-offset="0" max-vertical-offset="306">
-              <caret line="8" column="49" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
-              <folding />
+            <state vertical-scroll-proportion="0.58196723" vertical-offset="90" max-vertical-offset="663">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+              <folding>
+                <element signature="e#223#258#0" expanded="true" />
+                <element signature="e#284#319#0" expanded="true" />
+                <element signature="e#343#376#0" expanded="true" />
+                <element signature="e#403#436#0" expanded="true" />
+                <element signature="e#1357#1390#0" expanded="true" />
+              </folding>
             </state>
           </provider>
           <provider editor-type-id="android-designer">
@@ -121,11 +125,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="menu_search.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/menu/menu_search.xml">
+      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state vertical-scroll-proportion="-10.92" vertical-offset="84" max-vertical-offset="680">
+              <caret line="21" column="25" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -1117,15 +1121,15 @@
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_poilist.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/build.gradle" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" />
-        <option value="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/fragments/PoiListFragment.java" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/menu/list_menu.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/menu/map_menu.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/menu/menu_search.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/SearchActivity.java" />
+        <option value="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml" />
       </list>
     </option>
   </component>
@@ -1602,7 +1606,7 @@
       <option name="DEPLOY" value="true" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="true" />
       <option name="PREFERRED_AVD" value="" />
       <option name="USE_COMMAND_LINE" value="true" />
       <option name="COMMAND_LINE" value="" />
@@ -1663,7 +1667,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24919094" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1874,14 +1878,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.48" vertical-offset="3" max-vertical-offset="476">
-          <caret line="20" column="87" selection-start-line="20" selection-start-column="87" selection-end-line="20" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/places/Place.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="386" max-vertical-offset="1241">
@@ -1928,17 +1924,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.037037" vertical-offset="0" max-vertical-offset="306">
-          <caret line="8" column="49" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2568" max-vertical-offset="3944">
@@ -1952,18 +1937,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/menu/menu_search.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="289">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.19805825" vertical-offset="0" max-vertical-offset="515">
+          <caret line="6" column="55" selection-start-line="6" selection-start-column="55" selection-end-line="6" selection-end-column="55" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/SearchActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29708737" vertical-offset="153" max-vertical-offset="833">
-          <caret line="24" column="59" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="833">
+          <caret line="36" column="20" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.92" vertical-offset="84" max-vertical-offset="680">
+          <caret line="21" column="25" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/layout/activity_search.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.58196723" vertical-offset="90" max-vertical-offset="663">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <element signature="e#223#258#0" expanded="true" />
+            <element signature="e#284#319#0" expanded="true" />
+            <element signature="e#343#376#0" expanded="true" />
+            <element signature="e#403#436#0" expanded="true" />
+            <element signature="e#1357#1390#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>
