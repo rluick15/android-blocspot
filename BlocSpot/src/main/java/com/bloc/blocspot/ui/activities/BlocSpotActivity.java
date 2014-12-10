@@ -3,6 +3,7 @@ package com.bloc.blocspot.ui.activities;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -197,17 +198,19 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_settings) {
-            if(mListState == true) {
-                getFragmentManager().beginTransaction().show(mMapFragment).commit();
-                mPoiList.setVisibility(View.INVISIBLE);
-                mListState = false;
-            }
-            else {
-                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
-                mPoiList.setVisibility(View.VISIBLE);
-                mListState = true;
-            }
-            this.invalidateOptionsMenu();
+//            if(mListState == true) {
+//                getFragmentManager().beginTransaction().show(mMapFragment).commit();
+//                mPoiList.setVisibility(View.INVISIBLE);
+//                mListState = false;
+//            }
+//            else {
+//                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+//                mPoiList.setVisibility(View.VISIBLE);
+//                mListState = true;
+//            }
+//            this.invalidateOptionsMenu();
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
