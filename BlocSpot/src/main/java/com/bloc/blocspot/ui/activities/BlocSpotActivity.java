@@ -139,6 +139,9 @@ public class BlocSpotActivity extends Activity {
         @Override
         protected void onPostExecute(ArrayList<Place> result) {
             super.onPostExecute(result);
+
+            ArrayList<String> resultName = new ArrayList<String>();
+
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
@@ -150,6 +153,8 @@ public class BlocSpotActivity extends Activity {
                         .icon(BitmapDescriptorFactory
                                 .fromResource(R.drawable.pin))
                         .snippet(result.get(i).getVicinity()));
+
+                resultName.add(i, result.get(i).getName());
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(result.get(0).getLatitude(), result
@@ -160,6 +165,11 @@ public class BlocSpotActivity extends Activity {
                     .build(); // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                    android.R.layout.simple_expandable_list_item_1,
+                    android.R.id.text1, resultName);
+            mPoiList.setAdapter(adapter);
         }
     }
 
