@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.places.Place;
@@ -48,6 +49,7 @@ public class BlocSpotActivity extends Activity {
     private boolean mListState = true;
     private MapFragment mMapFragment;
     private ListView mPoiList;
+    private TextView mEmptyView;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -64,7 +66,9 @@ public class BlocSpotActivity extends Activity {
         }
 
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mPoiList = (ListView) findViewById(R.id.poiList);
+        mPoiList = (ListView) findViewById(android.R.id.list);
+        mEmptyView = (TextView) findViewById(R.id.emptyListView);
+        mPoiList.setEmptyView(mEmptyView); //set the empty listview
 
         initCompo();
         places = getResources().getStringArray(R.array.places);

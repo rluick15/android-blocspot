@@ -14,10 +14,20 @@ tools:context="com.bloc.blocspot.ui.fragment.POIListFragment">
         tools:layout="@layout/activity_main" />
 
     <ListView
-        android:id="@+id/poiList"
-        android:entries="@array/places"
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/emptyListView"
+        android:text="@string/empty_poi_list_text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:visibility="gone" />
 
 </RelativeLayout>
