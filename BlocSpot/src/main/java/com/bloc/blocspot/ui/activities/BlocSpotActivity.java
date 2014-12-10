@@ -1,7 +1,6 @@
 package com.bloc.blocspot.ui.activities;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Criteria;
@@ -10,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +25,7 @@ import com.bloc.blocspot.utils.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
  * @Date   10/3/2013
  *
  */
-public class BlocSpotActivity extends Activity {
+public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -93,12 +94,16 @@ public class BlocSpotActivity extends Activity {
                 });
 
         if(mListState == true) { //hide the map if the list state is selected
-            getFragmentManager().beginTransaction().hide(getFragmentManager()
-                    .findFragmentById(R.id.map)).commit();
+            getFragmentManager().beginTransaction().hide(mMapFragment).commit();
         }
         else if(mListState == false) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
@@ -179,7 +184,12 @@ public class BlocSpotActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        if(mListState == true) {
+            getMenuInflater().inflate(R.menu.list_menu, menu);
+        }
+        if(mListState == false) {
+            getMenuInflater().inflate(R.menu.map_menu, menu);
+        }
         return true;
     }
 
@@ -197,6 +207,7 @@ public class BlocSpotActivity extends Activity {
                 mPoiList.setVisibility(View.VISIBLE);
                 mListState = true;
             }
+            this.invalidateOptionsMenu();
         }
 
         return super.onOptionsItemSelected(item);

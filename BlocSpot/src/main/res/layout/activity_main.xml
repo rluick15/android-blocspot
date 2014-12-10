@@ -5,14 +5,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context="com.bloc.blocspot.ui.fragment.POIListFragment">
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.MapFragment"
-        tools:layout="@layout/activity_main" />
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
@@ -29,5 +21,13 @@ tools:context="com.bloc.blocspot.ui.fragment.POIListFragment">
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:visibility="gone" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.google.android.gms.maps.MapFragment"
+        tools:layout="@layout/activity_main" />
 
 </RelativeLayout>
