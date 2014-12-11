@@ -15,17 +15,10 @@
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CUSTOM_FILTER" value="exce" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.bloc.blocspot.blocspot" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a6db0f7-dc06-4430-bdde-02615bbe9a07" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/xml/searchable.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/places/PlacesService.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/places/PlacesService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/SearchActivity.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/SearchActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="4a6db0f7-dc06-4430-bdde-02615bbe9a07" name="Default" comment="" />
     <ignored path="android-blocspot.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -115,7 +108,7 @@
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/places/PlacesService.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.37250996" vertical-offset="867" max-vertical-offset="1734">
-              <caret line="80" column="45" selection-start-line="80" selection-start-column="45" selection-end-line="80" selection-end-column="45" />
+              <caret line="80" column="27" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
               <folding>
                 <element signature="e#2951#2952#0" expanded="true" />
                 <element signature="e#2993#2994#0" expanded="true" />
@@ -2088,7 +2081,7 @@
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/places/PlacesService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.37250996" vertical-offset="867" max-vertical-offset="1734">
-          <caret line="80" column="45" selection-start-line="80" selection-start-column="45" selection-end-line="80" selection-end-column="45" />
+          <caret line="80" column="27" selection-start-line="80" selection-start-column="27" selection-end-line="80" selection-end-column="27" />
           <folding>
             <element signature="e#2951#2952#0" expanded="true" />
             <element signature="e#2993#2994#0" expanded="true" />
