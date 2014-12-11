@@ -19,6 +19,7 @@ import android.widget.SearchView;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
+import com.bloc.blocspot.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -83,8 +84,7 @@ public class SearchActivity extends Activity {
         }
         else {
             loc = location;
-            new GetPlaces(SearchActivity.this, places[0].toLowerCase().replace(
-                    "-", "_")).execute();
+            new GetPlaces(SearchActivity.this, "").execute();
             Log.e(TAG, "location : " + location);
         }
     }
@@ -112,11 +112,11 @@ public class SearchActivity extends Activity {
 
         private ProgressDialog dialog;
         private Context context;
-        private String places;
+        private String searchText;
 
-        public GetPlaces(Context context, String places) {
+        public GetPlaces(Context context, String searchText) {
             this.context = context;
-            this.places = places;
+            this.searchText = searchText;
         }
 
         @Override
@@ -124,7 +124,7 @@ public class SearchActivity extends Activity {
             super.onPreExecute();
             dialog = new ProgressDialog(context);
             dialog.setCancelable(false);
-            dialog.setMessage("Loading..");
+            dialog.setMessage(getString(R.string.loading_message));
             dialog.isIndeterminate();
             dialog.show();
         }
@@ -132,9 +132,9 @@ public class SearchActivity extends Activity {
         @Override
         protected ArrayList<Place> doInBackground(Void... arg0) {
             PlacesService service = new PlacesService(
-                    "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI");
+                    Constants.API_KEY);
             ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(),
-                    loc.getLongitude(), places);
+                    loc.getLongitude(), searchText);
 
             for (int i = 0; i < findPlaces.size(); i++) {
                 Place placeDetail = findPlaces.get(i);
