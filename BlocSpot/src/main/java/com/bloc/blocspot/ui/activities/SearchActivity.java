@@ -14,10 +14,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.bloc.blocspot.adapters.PlacesSearchItemAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
@@ -33,25 +33,34 @@ public class SearchActivity extends Activity {
     private Location loc;
     private String[] places;
     private ListView mSearchList;
+    private String mQuery;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Constants.QUERY_TEXT, mQuery);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        if (savedInstanceState != null) {
+            mQuery = savedInstanceState.getString(Constants.QUERY_TEXT);
+        }
 
         //get the search view query string
-        String query = null;
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
-            query = getIntent().getStringExtra(SearchManager.QUERY);
+            mQuery = getIntent().getStringExtra(SearchManager.QUERY);
         }
 
         places = getResources().getStringArray(R.array.places);
         currentLocation();
         mSearchList = (ListView) findViewById(R.id.searchList);
 
-        if (query != null) {
+        if (mQuery != null) {
             new GetPlaces(SearchActivity.this,
-                    query.toLowerCase().replace("-", "_").replace(" ", "_")).execute();
+                    mQuery.toLowerCase().replace("-", "_").replace(" ", "_")).execute();
         }
     }
 
@@ -165,9 +174,7 @@ public class SearchActivity extends Activity {
                 resultName.add(i, result.get(i).getName());
             }
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-                    android.R.layout.simple_expandable_list_item_1,
-                    android.R.id.text1, resultName);
+            PlacesSearchItemAdapter adapter = new PlacesSearchItemAdapter(context, result, loc);
             mSearchList.setAdapter(adapter);
         }
     }

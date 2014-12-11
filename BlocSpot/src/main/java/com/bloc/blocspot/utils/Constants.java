@@ -7,6 +7,7 @@ public class Constants {
 
     //SavedInstanceState Constants
     public static final String LIST_STATE = "listState";
+    public static final String QUERY_TEXT = "queryText";
 
     //API Key
     public static final String API_KEY = "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI";
@@ -28,9 +29,13 @@ public class Constants {
             "shopping_mall|spa|stadium|storage|store|subway_station|synagogue|" +
             "train_station|university|zoo";
     public static final String LOCATION = "&location=";
+    public static final String KEYWORD = "&keyword=";
     public static final String SENSOR_AND_KEY = "&sensor=false&key=";
     public static final String RANK_BY_DISTANCE = "&rankby=distance";
     public static final String COMMA = ",";
+
+    //Misc
+    public static final String EMPTY_STRING = "";
     
 
 

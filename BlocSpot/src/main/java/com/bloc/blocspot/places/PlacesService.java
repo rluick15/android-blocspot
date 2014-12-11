@@ -68,7 +68,7 @@ public class PlacesService {
     private String makeUrl(double latitude, double longitude, String place) {
         StringBuilder urlString = new StringBuilder(Constants.BASE_URL);
 
-        if (place.equals("")) {
+        if (place.equals(Constants.EMPTY_STRING)) {
             urlString.append(Constants.LOCATION);
             urlString.append(Double.toString(latitude));
             urlString.append(Constants.COMMA);
@@ -82,7 +82,7 @@ public class PlacesService {
             urlString.append(Double.toString(latitude));
             urlString.append(Constants.COMMA);
             urlString.append(Double.toString(longitude));
-            urlString.append("&keyword=" + place);
+            urlString.append(Constants.KEYWORD + place);
             urlString.append(Constants.ALL_PLACE_TYPES);
             urlString.append(Constants.RANK_BY_DISTANCE);
             urlString.append(Constants.SENSOR_AND_KEY + API_KEY);

@@ -33,5 +33,6 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="loading_message">Loading..</string>
     <string name="search_hint">Search</string>
+    <string name="title_activity_places_search_item_adapter">PlacesSearchItemAdapter</string>
 
 </resources>
