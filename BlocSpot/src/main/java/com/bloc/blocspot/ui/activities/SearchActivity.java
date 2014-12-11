@@ -2,7 +2,9 @@ package com.bloc.blocspot.ui.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -37,15 +39,20 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        //get the search view query string
+        String query = null;
+        if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
+            query = getIntent().getStringExtra(SearchManager.QUERY);
+        }
+
         places = getResources().getStringArray(R.array.places);
         currentLocation();
-
         mSearchList = (ListView) findViewById(R.id.searchList);
 
-//        if (loc != null) {
-//            new GetPlaces(SearchActivity.this,
-//                    places[0].toLowerCase().replace("-", "_").replace(" ", "_")).execute();
-//        }
+        if (query != null) {
+            new GetPlaces(SearchActivity.this,
+                    query.toLowerCase().replace("-", "_").replace(" ", "_")).execute();
+        }
     }
 
 
@@ -55,11 +62,13 @@ public class SearchActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         //automatically expand and focus on the search view
-        MenuItem searchViewItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) searchViewItem.getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);
         searchView.requestFocusFromTouch();
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return true;
     }

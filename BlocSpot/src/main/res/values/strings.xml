@@ -32,5 +32,6 @@
     <string name="empty_poi_list_text">You have not selected any Points of Interest! \nClick the search button above to begin.</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="loading_message">Loading..</string>
+    <string name="search_hint">Search</string>
 
 </resources>
