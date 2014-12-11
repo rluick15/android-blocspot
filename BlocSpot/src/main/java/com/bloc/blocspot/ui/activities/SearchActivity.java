@@ -174,7 +174,7 @@ public class SearchActivity extends Activity {
                 resultName.add(i, result.get(i).getName());
             }
 
-            PlacesSearchItemAdapter adapter = new PlacesSearchItemAdapter(context, result);
+            PlacesSearchItemAdapter adapter = new PlacesSearchItemAdapter(context, result, loc);
             mSearchList.setAdapter(adapter);
         }
     }

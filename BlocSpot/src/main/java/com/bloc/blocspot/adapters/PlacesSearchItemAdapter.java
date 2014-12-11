@@ -1,6 +1,7 @@
 package com.bloc.blocspot.adapters;
 
 import android.content.Context;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,14 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place> {
 
     private Context mContext;
     private ArrayList<Place> mPlaceList;
+    private Location mLoc;
 
-    public PlacesSearchItemAdapter(Context context, ArrayList<Place> places) {
+    public PlacesSearchItemAdapter(Context context, ArrayList<Place> places, Location loc) {
         super(context, R.layout.adapter_places_search_item, places);
 
         mContext = context;
         mPlaceList = places;
+        mLoc = loc;
     }
 
     @Override
@@ -50,16 +53,21 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place> {
             e.printStackTrace();
         }
 
-        String typeCap = capitalizeString(type);
+        Location placeLoc = new Location("");
+        placeLoc.setLatitude(mPlaceList.get(position).getLatitude());
+        placeLoc.setLongitude(mPlaceList.get(position).getLongitude());
+        float dist = (float) (mLoc.distanceTo(placeLoc) / 1609.34); //in miles
+
+        String typeCap = CapitalizeString(type);
 
         holder.nameLabel.setText(mPlaceList.get(position).getName());
         holder.typeLabel.setText(typeCap);
-
+        holder.distanceLabel.setText(String.format("%.2f", dist) + " mi");
 
         return convertView;
     }
 
-    public static String capitalizeString(String string) {
+    private static String CapitalizeString(String string) {
         char[] chars = string.toLowerCase().toCharArray();
         boolean found = false;
         for (int i = 0; i < chars.length; i++) {
