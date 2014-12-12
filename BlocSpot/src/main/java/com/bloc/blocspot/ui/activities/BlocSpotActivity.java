@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -68,6 +70,12 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         mPoiList = (ListView) findViewById(android.R.id.list);
         mEmptyView = (TextView) findViewById(R.id.emptyListView);
         mPoiList.setEmptyView(mEmptyView); //set the empty listview
+
+        SharedPreferences sharedPrefs = getSharedPreferences(Constants.MAIN_PREFS, 0);
+        SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
+        //Student mStudentObject = gson.fromJson(json, Student.class);
 
         initCompo();
         places = getResources().getStringArray(R.array.places);

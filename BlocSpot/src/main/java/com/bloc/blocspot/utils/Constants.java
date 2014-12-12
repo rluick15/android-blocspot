@@ -9,6 +9,10 @@ public class Constants {
     public static final String LIST_STATE = "listState";
     public static final String QUERY_TEXT = "queryText";
 
+    //Shared Preferences
+    public static final String MAIN_PREFS ="mainPrefs";
+    public static final String CATEGORY_ARRAY = "categoryArray";
+
     //API Key
     public static final String API_KEY = "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI";
 
