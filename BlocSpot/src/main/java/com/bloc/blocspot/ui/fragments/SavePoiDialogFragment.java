@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.bloc.blocspot.adapters.SavePoiListAdapter;
@@ -51,12 +52,23 @@ public class SavePoiDialogFragment extends DialogFragment {
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences(Constants.MAIN_PREFS, 0);
         String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
-        ArrayList<Category> categories = new Gson().fromJson(json, type);
+        final ArrayList<Category> categories = new Gson().fromJson(json, type);
 
         mListView = (ListView) rootView.findViewById(R.id.categoryList);
         SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
         mListView.setChoiceMode(mListView.CHOICE_MODE_SINGLE);
         mListView.setAdapter(adapter);
+
+        Button newCatButton = (Button) rootView.findViewById(R.id.addButton);
+        newCatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreateCategoryDialogFragment dialogFragment =
+                        new CreateCategoryDialogFragment(mPlace, categories);
+                dialogFragment.show(getFragmentManager(), "dialog");
+                dismiss();
+            }
+        });
 
         return rootView;
     }
