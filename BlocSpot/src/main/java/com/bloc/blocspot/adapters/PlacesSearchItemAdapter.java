@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
@@ -16,7 +17,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class PlacesSearchItemAdapter extends ArrayAdapter<Place> {
+public class PlacesSearchItemAdapter extends ArrayAdapter<Place> implements Filterable {
 
     private Context mContext;
     private ArrayList<Place> mPlaceList;
@@ -80,6 +81,41 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place> {
         }
         return String.valueOf(chars);
     }
+
+//    @Override
+//    public Filter getFilter() {
+//        return new Filter() {
+//            @Override
+//            protected FilterResults performFiltering(CharSequence constraint) {
+//
+//                FilterResults results = new FilterResults();
+//                ArrayList<Place> tempList = new ArrayList<Place>();
+//                if(constraint != null && mPlaceList != null) {
+//                    int length = mPlaceList.size();
+//                    int i = 0;
+//                    while (i < length) {
+//                        Place item = mPlaceList.get(i);
+//                        tempList.add(item);
+//                        i++;
+//                    }
+//                    results.values = tempList;
+//                    results.count = tempList.size();
+//                }
+//                return results;
+//            }
+//
+//            @Override
+//            protected void publishResults(CharSequence charSequence, FilterResults results) {
+//                mPlaceList = (ArrayList<Place>) results.values;
+//                if (results.count > 0) {
+//                    notifyDataSetChanged();
+//                }
+//                else {
+//                    notifyDataSetInvalidated();
+//                }
+//            }
+//        };
+//    }
 
     private static class ViewHolder {
         TextView nameLabel;

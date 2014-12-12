@@ -14,8 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.PlacesSearchItemAdapter;
 import com.bloc.blocspot.blocspot.R;
@@ -34,6 +37,7 @@ public class SearchActivity extends Activity {
     private String[] places;
     private ListView mSearchList;
     private String mQuery;
+    PlacesSearchItemAdapter mAdapter;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -62,6 +66,13 @@ public class SearchActivity extends Activity {
             new GetPlaces(SearchActivity.this,
                     mQuery.toLowerCase().replace("-", "_").replace(" ", "_")).execute();
         }
+
+        mSearchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Toast.makeText(SearchActivity.this, String.valueOf(position), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -74,10 +85,26 @@ public class SearchActivity extends Activity {
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setIconifiedByDefault(false);
         searchView.setFocusable(true);
+        searchView.setSubmitButtonEnabled(true);
         searchView.requestFocusFromTouch();
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+//        searchView.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {}
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+//                if(mAdapter != null) {
+//                    mAdapter.getFilter().filter(charSequence);
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {}
+//        });
 
         return true;
     }
@@ -154,10 +181,6 @@ public class SearchActivity extends Activity {
             ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(),
                     loc.getLongitude(), searchText);
 
-            for (int i = 0; i < findPlaces.size(); i++) {
-                Place placeDetail = findPlaces.get(i);
-                Log.e(TAG, "places : " + placeDetail.getName());
-            }
             return findPlaces;
         }
 
@@ -174,8 +197,9 @@ public class SearchActivity extends Activity {
                 resultName.add(i, result.get(i).getName());
             }
 
-            PlacesSearchItemAdapter adapter = new PlacesSearchItemAdapter(context, result, loc);
-            mSearchList.setAdapter(adapter);
+            mAdapter = new PlacesSearchItemAdapter(context, result, loc);
+            mSearchList.setTextFilterEnabled(true);
+            mSearchList.setAdapter(mAdapter);
         }
     }
 }
