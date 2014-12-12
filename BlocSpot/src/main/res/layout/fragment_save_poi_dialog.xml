@@ -13,6 +13,7 @@
 
     <LinearLayout
         android:id="@+id/buttons"
+        android:background="@android:color/white"
         android:layout_below="@+id/categoryList"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -26,10 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editText"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+            android:layout_alignParentStart="true"/>
 
         <Button
             android:id="@+id/cancelButton"
@@ -39,10 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editText"
             android:layout_alignRight="@+id/editText"
-            android:layout_alignEnd="@+id/editText"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+            android:layout_alignEnd="@+id/editText"/>
     </LinearLayout>
 
 </RelativeLayout>

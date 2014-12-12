@@ -30,7 +30,6 @@ public class SavePoiDialogFragment extends DialogFragment {
     public SavePoiDialogFragment() {} // Required empty public constructor
 
     public SavePoiDialogFragment(Context context, Place place) {
-
         this.mPlace = place;
         this.mContext = context;
     }
@@ -38,12 +37,15 @@ public class SavePoiDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_save_poi_dialog, container, false);
         getDialog().setTitle(getString(R.string.title_save_poi_dialog));
+
+        //Todo: change background and color of title
 
         //get Category Array
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences(Constants.MAIN_PREFS, 0);
