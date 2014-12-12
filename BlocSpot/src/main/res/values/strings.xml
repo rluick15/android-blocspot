@@ -34,5 +34,7 @@
     <string name="loading_message">Loading..</string>
     <string name="search_hint">Search</string>
     <string name="title_activity_places_search_item_adapter">PlacesSearchItemAdapter</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_save_poi">Save POI</string>
 
 </resources>
