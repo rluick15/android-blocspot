@@ -55,6 +55,7 @@ public class SavePoiDialogFragment extends DialogFragment {
 
         mListView = (ListView) rootView.findViewById(R.id.categoryList);
         SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
+        mListView.setChoiceMode(mListView.CHOICE_MODE_SINGLE);
         mListView.setAdapter(adapter);
 
         return rootView;
