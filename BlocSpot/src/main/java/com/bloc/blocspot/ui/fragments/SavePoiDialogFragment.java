@@ -8,8 +8,10 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
@@ -55,9 +57,16 @@ public class SavePoiDialogFragment extends DialogFragment {
         final ArrayList<Category> categories = new Gson().fromJson(json, type);
 
         mListView = (ListView) rootView.findViewById(R.id.categoryList);
-        SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
-        mListView.setChoiceMode(mListView.CHOICE_MODE_SINGLE);
+        final SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Toast.makeText(mContext, String.valueOf(position), Toast.LENGTH_LONG).show();
+                view.setSelected(true);
+            }
+        });
 
         Button newCatButton = (Button) rootView.findViewById(R.id.addButton);
         newCatButton.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +78,15 @@ public class SavePoiDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
+
+        Button cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
 
         return rootView;
     }

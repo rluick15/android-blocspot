@@ -5,6 +5,7 @@
 
     <ListView
         android:id="@+id/categoryList"
+        android:background="@drawable/clicked_blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
