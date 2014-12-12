@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
@@ -17,7 +16,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-public class PlacesSearchItemAdapter extends ArrayAdapter<Place> implements Filterable {
+public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
 
     private Context mContext;
     private ArrayList<Place> mPlaceList;

@@ -36,10 +36,14 @@ public class Constants {
     public static final String KEYWORD = "&keyword=";
     public static final String SENSOR_AND_KEY = "&sensor=false&key=";
     public static final String RANK_BY_DISTANCE = "&rankby=distance";
-    public static final String COMMA = ",";
+
+    //Colors
+    public static final String CYAN = "cyan";
 
     //Misc
     public static final String EMPTY_STRING = "";
+    public static final String COMMA = ",";
+    public static final String CATEGORY_UNCATEGORIZED = "categoryUncategorized";
     
 
 

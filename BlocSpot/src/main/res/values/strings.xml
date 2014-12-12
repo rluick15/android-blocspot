@@ -36,5 +36,6 @@
     <string name="title_activity_places_search_item_adapter">PlacesSearchItemAdapter</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_save_poi">Save POI</string>
+    <string name="title_save_poi_dialog">Choose Category</string>
 
 </resources>

@@ -1,16 +1,16 @@
 package com.bloc.blocspot.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.places.Place;
@@ -25,11 +25,14 @@ public class SavePoiDialogFragment extends DialogFragment {
 
     private Place mPlace;
     private ListView mListView;
+    private Context mContext;
 
     public SavePoiDialogFragment() {} // Required empty public constructor
 
-    public SavePoiDialogFragment(Place place) {
+    public SavePoiDialogFragment(Context context, Place place) {
+
         this.mPlace = place;
+        this.mContext = context;
     }
 
     @Override
@@ -40,6 +43,7 @@ public class SavePoiDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_save_poi_dialog, container, false);
+        getDialog().setTitle(getString(R.string.title_save_poi_dialog));
 
         //get Category Array
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences(Constants.MAIN_PREFS, 0);
@@ -47,16 +51,8 @@ public class SavePoiDialogFragment extends DialogFragment {
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
         ArrayList<Category> categories = new Gson().fromJson(json, type);
 
-        ArrayList<String> categoryName = new ArrayList<String>();
-        for(int i = 0; i < categories.size(); i++) {
-            categoryName.add(categories.get(i).getName());
-        }
-        Log.e("ERROR", categoryName.get(0));
-
         mListView = (ListView) rootView.findViewById(R.id.categoryList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1, categoryName);
+        SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
         mListView.setAdapter(adapter);
 
         return rootView;

@@ -118,7 +118,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         ArrayList<Category> categories = new Gson().fromJson(json, type);
         if(categories == null) {
             categories = new ArrayList<Category>();
-            Category uncategorized = new Category("Uncategorized", "cyan");
+            Category uncategorized = new Category(Constants.CATEGORY_UNCATEGORIZED, Constants.CYAN);
             categories.add(uncategorized);
             String jsonCat = new Gson().toJson(categories);
             SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
@@ -172,7 +172,9 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             ArrayList<String> resultName = new ArrayList<String>();
 
             if (dialog.isShowing()) {
-                dialog.dismiss();
+                try {
+                    dialog.dismiss();
+                } catch (IllegalArgumentException e){}
             }
             for (int i = 0; i < result.size(); i++) {
                 mMap.addMarker(new MarkerOptions()

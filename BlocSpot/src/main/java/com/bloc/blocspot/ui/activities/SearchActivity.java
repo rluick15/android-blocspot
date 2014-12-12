@@ -71,7 +71,7 @@ public class SearchActivity extends FragmentActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Place place = (Place) adapterView.getItemAtPosition(position);
-                SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(place);
+                SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(SearchActivity.this, place);
                 poiDialog.show(getSupportFragmentManager(), "dialog");
             }
         });
