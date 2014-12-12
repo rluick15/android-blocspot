@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
+import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.utils.Constants;
@@ -33,7 +34,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -71,11 +74,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         mEmptyView = (TextView) findViewById(R.id.emptyListView);
         mPoiList.setEmptyView(mEmptyView); //set the empty listview
 
-        SharedPreferences sharedPrefs = getSharedPreferences(Constants.MAIN_PREFS, 0);
-        SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
-        //Student mStudentObject = gson.fromJson(json, Student.class);
+        checkCategoryPreference();
 
         initCompo();
         places = getResources().getStringArray(R.array.places);
@@ -104,6 +103,27 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         }
         else if(mListState == false) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * This method is called onCreate of the Main Activity. It checks if a shared preference
+     * file has been created for the Category list and if not creates one with an array list
+     * that contains one default category "Uncategorized"     *
+     */
+    private void checkCategoryPreference() {
+        SharedPreferences sharedPrefs = getSharedPreferences(Constants.MAIN_PREFS, 0);
+        String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
+        Type type = new TypeToken<ArrayList<Category>>(){}.getType();
+        ArrayList<Category> categories = new Gson().fromJson(json, type);
+        if(categories == null) {
+            categories = new ArrayList<Category>();
+            Category uncategorized = new Category("Uncategorized", "cyan");
+            categories.add(uncategorized);
+            String jsonCat = new Gson().toJson(categories);
+            SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
+            prefsEditor.putString(Constants.CATEGORY_ARRAY, jsonCat);
+            prefsEditor.commit();
         }
     }
 
