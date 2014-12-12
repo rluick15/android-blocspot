@@ -15,6 +15,7 @@
     <Button
         android:id="@+id/addButton"
         android:layout_below="@+id/categoryList"
+        style="?android:attr/buttonStyleSmall"
         android:text="Add Category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

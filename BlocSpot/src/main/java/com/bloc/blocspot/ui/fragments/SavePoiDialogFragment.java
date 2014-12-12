@@ -64,7 +64,7 @@ public class SavePoiDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 CreateCategoryDialogFragment dialogFragment =
-                        new CreateCategoryDialogFragment(mPlace, categories);
+                        new CreateCategoryDialogFragment(mPlace, categories, mContext);
                 dialogFragment.show(getFragmentManager(), "dialog");
                 dismiss();
             }

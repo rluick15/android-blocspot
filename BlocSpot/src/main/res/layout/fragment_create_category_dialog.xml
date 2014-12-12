@@ -4,4 +4,124 @@
     android:layout_height="match_parent"
     tools:context="com.bloc.blocspot.ui.fragments.CreateCategoryDialogFragment">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_padding">
+
+            <TextView
+                android:id="@+id/colorTitle"
+                android:text="@string/title_choose_color"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/adapter_mini_margin"/>
+
+            <RadioGroup
+                android:layout_below="@id/colorTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RadioButton
+                    android:id="@+id/blue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/blue"/>
+
+                <RadioButton
+                    android:id="@+id/green"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/green"/>
+
+                <RadioButton
+                    android:id="@+id/magenta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/magenta"/>
+
+                <RadioButton
+                    android:id="@+id/orange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/orange"/>
+
+                <RadioButton
+                    android:id="@+id/red"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/red"/>
+
+                <RadioButton
+                    android:id="@+id/rose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/rose"/>
+
+                <RadioButton
+                    android:id="@+id/violet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/violet"/>
+
+                <RadioButton
+                    android:id="@+id/radioButton8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="               "
+                    android:background="@color/yellow"/>
+            </RadioGroup>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_vertical_padding">
+
+            <TextView
+                android:id="@+id/nameTitle"
+                android:text="@string/title_category_name"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/adapter_mini_margin" />
+
+            <EditText
+                android:id="@+id/newCatName"
+                android:layout_below="@+id/nameTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_big_margin"/>
+
+            <Button
+                android:id="@+id/addCatButton"
+                android:text="@string/button_create_category"
+                android:layout_below="@id/newCatName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/cancelCatButton"
+                android:text="@string/button_cancel"
+                android:layout_below="@id/addCatButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </LinearLayout>
+
 </LinearLayout>
