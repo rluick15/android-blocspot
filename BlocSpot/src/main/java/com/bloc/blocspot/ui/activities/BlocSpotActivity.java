@@ -3,6 +3,7 @@ package com.bloc.blocspot.ui.activities;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -34,10 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
 /**
- *  This class is used to search places using Places API using keywords like police,hospital etc.
  *
- * @author Karn Shah
- * @Date   10/3/2013
  *
  */
 public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -102,9 +100,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-    }
+    public void onMapReady(GoogleMap googleMap) {} //Todo: Something goes here!
 
     private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
 
@@ -122,7 +118,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             super.onPreExecute();
             dialog = new ProgressDialog(context);
             dialog.setCancelable(false);
-            dialog.setMessage("Loading..");
+            dialog.setMessage(getString(R.string.loading_message));
             dialog.isIndeterminate();
             dialog.show();
         }
@@ -130,7 +126,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         @Override
         protected ArrayList<Place> doInBackground(Void... arg0) {
             PlacesService service = new PlacesService(
-                    "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI");
+                    Constants.API_KEY);
             ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(), // 28.632808
                     loc.getLongitude(), places); // 77.218276
 
@@ -197,17 +193,19 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_settings) {
-            if(mListState == true) {
-                getFragmentManager().beginTransaction().show(mMapFragment).commit();
-                mPoiList.setVisibility(View.INVISIBLE);
-                mListState = false;
-            }
-            else {
-                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
-                mPoiList.setVisibility(View.VISIBLE);
-                mListState = true;
-            }
-            this.invalidateOptionsMenu();
+//            if(mListState == true) {
+//                getFragmentManager().beginTransaction().show(mMapFragment).commit();
+//                mPoiList.setVisibility(View.INVISIBLE);
+//                mListState = false;
+//            }
+//            else {
+//                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+//                mPoiList.setVisibility(View.VISIBLE);
+//                mListState = true;
+//            }
+//            this.invalidateOptionsMenu();
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -234,19 +232,13 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private LocationListener listener = new LocationListener() {
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
 
         @Override
-        public void onProviderEnabled(String provider) {
-
-        }
+        public void onProviderEnabled(String provider) {}
 
         @Override
-        public void onProviderDisabled(String provider) {
-
-        }
+        public void onProviderDisabled(String provider) {}
 
         @Override
         public void onLocationChanged(Location location) {

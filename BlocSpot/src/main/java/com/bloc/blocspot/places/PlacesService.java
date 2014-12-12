@@ -2,6 +2,8 @@ package com.bloc.blocspot.places;
 
 import android.util.Log;
 
+import com.bloc.blocspot.utils.Constants;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,8 +50,7 @@ public class PlacesService {
             ArrayList<Place> arrayList = new ArrayList<Place>();
             for (int i = 0; i < array.length(); i++) {
                 try {
-                    Place place = Place
-                            .jsonToPontoReferencia((JSONObject) array.get(i));
+                    Place place = Place.jsonToPontoReferencia((JSONObject) array.get(i));
                     Log.v("Places Services ", "" + place);
                     arrayList.add(place);
                 } catch (Exception e) {
@@ -64,27 +65,27 @@ public class PlacesService {
         return null;
     }
 
-    // https://maps.googleapis.com/maps/api/place/search/json?location=28.632808,77.218276&radius=500&types=atm&sensor=false&key=apikey
     private String makeUrl(double latitude, double longitude, String place) {
-        StringBuilder urlString = new StringBuilder(
-                "https://maps.googleapis.com/maps/api/place/search/json?");
+        StringBuilder urlString = new StringBuilder(Constants.BASE_URL);
 
-        if (place.equals("")) {
-            urlString.append("&location=");
+        if (place.equals(Constants.EMPTY_STRING)) {
+            urlString.append(Constants.LOCATION);
             urlString.append(Double.toString(latitude));
-            urlString.append(",");
+            urlString.append(Constants.COMMA);
             urlString.append(Double.toString(longitude));
-            urlString.append("&radius=1000");
-            // urlString.append("&types="+place);
-            urlString.append("&sensor=false&key=" + API_KEY);
-        } else {
-            urlString.append("&location=");
+            urlString.append(Constants.ALL_PLACE_TYPES);
+            urlString.append(Constants.RANK_BY_DISTANCE);
+            urlString.append(Constants.SENSOR_AND_KEY + API_KEY);
+        }
+        else {
+            urlString.append(Constants.LOCATION);
             urlString.append(Double.toString(latitude));
-            urlString.append(",");
+            urlString.append(Constants.COMMA);
             urlString.append(Double.toString(longitude));
-            urlString.append("&radius=1000");
-            urlString.append("&types=" + place);
-            urlString.append("&sensor=false&key=" + API_KEY);
+            urlString.append(Constants.KEYWORD + place);
+            urlString.append(Constants.ALL_PLACE_TYPES);
+            urlString.append(Constants.RANK_BY_DISTANCE);
+            urlString.append(Constants.SENSOR_AND_KEY + API_KEY);
         }
         return urlString.toString();
     }
