@@ -24,6 +24,7 @@
                 android:layout_marginBottom="@dimen/adapter_mini_margin"/>
 
             <RadioGroup
+                android:id="@+id/colorSelect"
                 android:layout_below="@id/colorTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -78,7 +79,7 @@
                     android:background="@color/violet"/>
 
                 <RadioButton
-                    android:id="@+id/radioButton8"
+                    android:id="@+id/yellow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="               "

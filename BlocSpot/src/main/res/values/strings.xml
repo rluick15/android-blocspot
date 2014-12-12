@@ -42,5 +42,7 @@
     <string name="title_category_name">Category Name</string>
     <string name="title_create_category">Create Category</string>
     <string name="button_create_category">Create Category</string>
+    <string name="toast_select_color">Select a Color</string>
+    <string name="toast_no_category">Category Name is Empty</string>
 
 </resources>

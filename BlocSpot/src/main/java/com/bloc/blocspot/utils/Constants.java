@@ -39,6 +39,14 @@ public class Constants {
 
     //Colors
     public static final String CYAN = "cyan";
+    public static final String BLUE = "blue";
+    public static final String GREEN = "green";
+    public static final String MAGENTA = "magenta";
+    public static final String ORANGE = "orange";
+    public static final String RED = "red";
+    public static final String ROSE = "rose";
+    public static final String VIOLET = "violet";
+    public static final String YELLOW = "yellow";
 
     //Misc
     public static final String EMPTY_STRING = "";
