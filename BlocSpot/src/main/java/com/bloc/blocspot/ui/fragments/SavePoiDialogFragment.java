@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
@@ -29,6 +28,7 @@ public class SavePoiDialogFragment extends DialogFragment {
     private Place mPlace;
     private ListView mListView;
     private Context mContext;
+    private Category mCategory;
 
     public SavePoiDialogFragment() {} // Required empty public constructor
 
@@ -63,8 +63,8 @@ public class SavePoiDialogFragment extends DialogFragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Toast.makeText(mContext, String.valueOf(position), Toast.LENGTH_LONG).show();
                 view.setSelected(true);
+                mCategory = (Category) adapterView.getItemAtPosition(position);
             }
         });
 
@@ -83,6 +83,20 @@ public class SavePoiDialogFragment extends DialogFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        Button savePoiButton = (Button) rootView.findViewById(R.id.saveButton);
+        savePoiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = mPlace.getName();
+                Double lat = mPlace.getLatitude();
+                Double lng = mPlace.getLongitude();
+                String catName = mCategory.getName();
+                String catColor = mCategory.getColor();
+                //Todo: Database time!!!
                 dismiss();
             }
         });

@@ -31,7 +31,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/createButton"
+            android:id="@+id/saveButton"
             android:text="@string/button_save_poi"
             android:layout_weight="1"
             android:layout_width="0dp"
