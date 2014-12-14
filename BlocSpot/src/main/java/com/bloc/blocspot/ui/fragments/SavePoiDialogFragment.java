@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
+import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.utils.Constants;
 import com.google.gson.Gson;
@@ -29,6 +31,7 @@ public class SavePoiDialogFragment extends DialogFragment {
     private ListView mListView;
     private Context mContext;
     private Category mCategory;
+    private PoiTable mPoiTable = new PoiTable();
 
     public SavePoiDialogFragment() {} // Required empty public constructor
 
@@ -91,11 +94,19 @@ public class SavePoiDialogFragment extends DialogFragment {
         savePoiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = mPlace.getName();
-                Double lat = mPlace.getLatitude();
-                Double lng = mPlace.getLongitude();
-                String catName = mCategory.getName();
-                String catColor = mCategory.getColor();
+                final String name = mPlace.getName();
+                final Double lat = mPlace.getLatitude();
+                final Double lng = mPlace.getLongitude();
+                final String catName = mCategory.getName();
+                final String catColor = mCategory.getColor();
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        mPoiTable.addNewPoi(name, lat, lng, catName, catColor);
+                    }
+                }.start();
+                Toast.makeText(mContext, mContext.getString(R.string.toast_poi_saved), Toast.LENGTH_LONG).show();
                 dismiss();
             }
         });

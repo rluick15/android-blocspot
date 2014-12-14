@@ -2,7 +2,7 @@ package com.bloc.blocspot.database.table;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.bloc.blocspot.BlocSpotApplication;
+import com.bloc.blocspot.blocspot.BlocSpotApplication;
 
 /**
  * Created by Rich on 12/14/2014.
@@ -25,7 +25,13 @@ public abstract class Table {
         if (isLoaded()) {
             return;
         }
-        mDb =  BlocSpotApplication.get().getWritableDb();
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                mDb =  BlocSpotApplication.get().getWritableDb();
+            }
+        }.start();
         setLoaded(true);
     }
 

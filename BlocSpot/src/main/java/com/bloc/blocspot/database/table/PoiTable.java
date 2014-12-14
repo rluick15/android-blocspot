@@ -1,6 +1,7 @@
 package com.bloc.blocspot.database.table;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.bloc.blocspot.utils.Constants;
@@ -40,5 +41,11 @@ public class PoiTable extends Table {
         values.put(Constants.TABLE_COLUMN_CAT_NAME, catName);
         values.put(Constants.TABLE_COLUMN_CAT_COLOR, catColor);
         mDb.insert(Constants.TABLE_POI_NAME, null, values);
+    }
+
+    public Cursor notesQuery() {
+        return mDb.query(Constants.TABLE_POI_NAME,
+                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME},
+                null, null, null, null, null, null);
     }
 }

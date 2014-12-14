@@ -1,4 +1,4 @@
-package com.bloc.blocspot;
+package com.bloc.blocspot.blocspot;
 
 import android.app.Application;
 import android.content.Context;
@@ -18,6 +18,7 @@ public class BlocSpotApplication  extends Application {
     @Override
     public void onCreate() {
         mDatabase = new BlocSpotDbHelper(getApplicationContext());
+        BlocSpotApplication.context = getApplicationContext();
     }
 
     public SQLiteDatabase getReadableDb() {
@@ -29,6 +30,6 @@ public class BlocSpotApplication  extends Application {
     }
 
     public static BlocSpotApplication get() {
-        return (BlocSpotApplication) context.getApplicationContext();
+        return (BlocSpotApplication) BlocSpotApplication.context;
     }
 }
