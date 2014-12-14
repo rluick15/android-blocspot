@@ -1,10 +1,54 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.bloc.blocspot.ui.fragments.SavePoiDialogFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ListView
+        android:id="@+id/categoryList"
+        android:background="@drawable/clicked_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/addButton"
+        android:layout_below="@+id/categoryList"
+        style="?android:attr/buttonStyleSmall"
+        android:text="Add Category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"/>
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:background="@android:color/white"
+        android:layout_below="@+id/addButton"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/saveButton"
+            android:text="@string/button_save_poi"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:text="@string/button_cancel"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editText"
+            android:layout_alignRight="@+id/editText"
+            android:layout_alignEnd="@+id/editText"/>
+    </LinearLayout>
+
+</RelativeLayout>

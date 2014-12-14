@@ -9,8 +9,27 @@ public class Constants {
     public static final String LIST_STATE = "listState";
     public static final String QUERY_TEXT = "queryText";
 
+    //Shared Preferences
+    public static final String MAIN_PREFS ="mainPrefs";
+    public static final String CATEGORY_ARRAY = "categoryArray";
+
     //API Key
     public static final String API_KEY = "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI";
+
+    //Database Constants
+        //Database
+        public static final String DATABASE_NAME = "BlocSpot";
+        public static final int DATABASE_VERSION = 1;
+        //Tables
+        public static final String TABLE_POI_NAME = "poiTable";
+            //Table Columns
+            public static final String TABLE_COLUMN_ID = "_id";
+                //POI
+                public static final String TABLE_COLUMN_POI_NAME = "name";
+                public static final String TABLE_COLUMN_LATITUDE= "lat";
+                public static final String TABLE_COLUMN_LONGITUDE= "lng";
+                public static final String TABLE_COLUMN_CAT_NAME= "catName";
+                public static final String TABLE_COLUMN_CAT_COLOR= "catColor";
 
     //JSON Search Constants
     public static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
@@ -32,10 +51,22 @@ public class Constants {
     public static final String KEYWORD = "&keyword=";
     public static final String SENSOR_AND_KEY = "&sensor=false&key=";
     public static final String RANK_BY_DISTANCE = "&rankby=distance";
-    public static final String COMMA = ",";
+
+    //Colors
+    public static final String CYAN = "cyan";
+    public static final String BLUE = "blue";
+    public static final String GREEN = "green";
+    public static final String MAGENTA = "magenta";
+    public static final String ORANGE = "orange";
+    public static final String RED = "red";
+    public static final String ROSE = "rose";
+    public static final String VIOLET = "violet";
+    public static final String YELLOW = "yellow";
 
     //Misc
     public static final String EMPTY_STRING = "";
+    public static final String COMMA = ",";
+    public static final String CATEGORY_UNCATEGORIZED = "categoryUncategorized";
     
 
 

@@ -4,6 +4,8 @@ import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,9 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
+import com.bloc.blocspot.categories.Category;
+import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.utils.Constants;
@@ -31,7 +36,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -49,6 +57,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private MapFragment mMapFragment;
     private ListView mPoiList;
     private TextView mEmptyView;
+    private PoiTable mPoiTable = new PoiTable();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -68,6 +77,8 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         mPoiList = (ListView) findViewById(android.R.id.list);
         mEmptyView = (TextView) findViewById(R.id.emptyListView);
         mPoiList.setEmptyView(mEmptyView); //set the empty listview
+
+        checkCategoryPreference();
 
         initCompo();
         places = getResources().getStringArray(R.array.places);
@@ -96,6 +107,27 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         }
         else if(mListState == false) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * This method is called onCreate of the Main Activity. It checks if a shared preference
+     * file has been created for the Category list and if not creates one with an array list
+     * that contains one default category "Uncategorized"     *
+     */
+    private void checkCategoryPreference() {
+        SharedPreferences sharedPrefs = getSharedPreferences(Constants.MAIN_PREFS, 0);
+        String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
+        Type type = new TypeToken<ArrayList<Category>>(){}.getType();
+        ArrayList<Category> categories = new Gson().fromJson(json, type);
+        if(categories == null) {
+            categories = new ArrayList<Category>();
+            Category uncategorized = new Category(Constants.CATEGORY_UNCATEGORIZED, Constants.CYAN);
+            categories.add(uncategorized);
+            String jsonCat = new Gson().toJson(categories);
+            SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
+            prefsEditor.putString(Constants.CATEGORY_ARRAY, jsonCat);
+            prefsEditor.commit();
         }
     }
 
@@ -144,7 +176,9 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             ArrayList<String> resultName = new ArrayList<String>();
 
             if (dialog.isShowing()) {
-                dialog.dismiss();
+                try {
+                    dialog.dismiss();
+                } catch (IllegalArgumentException e){}
             }
             for (int i = 0; i < result.size(); i++) {
                 mMap.addMarker(new MarkerOptions()
@@ -167,10 +201,19 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+            Cursor cursor = mPoiTable.notesQuery();
+
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(BlocSpotActivity.this,
                     android.R.layout.simple_expandable_list_item_1,
-                    android.R.id.text1, resultName);
+                    cursor,
+                    new String[] {"name"},
+                    new int[] {android.R.id.text1});
             mPoiList.setAdapter(adapter);
+
+//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+//                    android.R.layout.simple_expandable_list_item_1,
+//                    android.R.id.text1, resultName);
+//            mPoiList.setAdapter(adapter);
         }
     }
 
