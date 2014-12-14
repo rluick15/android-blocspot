@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,10 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
+import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.utils.Constants;
@@ -54,6 +57,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private MapFragment mMapFragment;
     private ListView mPoiList;
     private TextView mEmptyView;
+    private PoiTable mPoiTable = new PoiTable();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -197,10 +201,19 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+            Cursor cursor = mPoiTable.notesQuery();
+
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(BlocSpotActivity.this,
                     android.R.layout.simple_expandable_list_item_1,
-                    android.R.id.text1, resultName);
+                    cursor,
+                    new String[] {"name"},
+                    new int[] {android.R.id.text1});
             mPoiList.setAdapter(adapter);
+
+//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+//                    android.R.layout.simple_expandable_list_item_1,
+//                    android.R.id.text1, resultName);
+//            mPoiList.setAdapter(adapter);
         }
     }
 

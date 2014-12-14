@@ -44,5 +44,6 @@
     <string name="button_create_category">Create Category</string>
     <string name="toast_select_color">Select a Color</string>
     <string name="toast_no_category">Category Name is Empty</string>
+    <string name="toast_poi_saved">POI Saved!</string>
 
 </resources>
