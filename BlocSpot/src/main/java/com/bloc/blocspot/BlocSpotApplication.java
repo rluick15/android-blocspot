@@ -1,0 +1,34 @@
+package com.bloc.blocspot;
+
+import android.app.Application;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.bloc.blocspot.database.BlocSpotDbHelper;
+
+/**
+ * Created by Rich on 12/14/2014.
+ */
+public class BlocSpotApplication  extends Application {
+    private static BlocSpotDbHelper mDatabase;
+    private static Context context;
+
+    public BlocSpotApplication() {}
+
+    @Override
+    public void onCreate() {
+        mDatabase = new BlocSpotDbHelper(getApplicationContext());
+    }
+
+    public SQLiteDatabase getReadableDb() {
+        return mDatabase.getReadableDatabase();
+    }
+
+    public SQLiteDatabase getWritableDb() {
+        return mDatabase.getWritableDatabase();
+    }
+
+    public static BlocSpotApplication get() {
+        return (BlocSpotApplication) context.getApplicationContext();
+    }
+}

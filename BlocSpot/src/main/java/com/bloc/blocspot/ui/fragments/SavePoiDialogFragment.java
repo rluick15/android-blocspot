@@ -96,7 +96,6 @@ public class SavePoiDialogFragment extends DialogFragment {
                 Double lng = mPlace.getLongitude();
                 String catName = mCategory.getName();
                 String catColor = mCategory.getColor();
-                //Todo: Database time!!!
                 dismiss();
             }
         });
