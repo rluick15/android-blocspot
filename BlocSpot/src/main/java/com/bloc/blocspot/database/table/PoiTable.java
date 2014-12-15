@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bloc.blocspot.utils.Constants;
 
-/**
- * Created by Rich on 12/14/2014.
- */
 public class PoiTable extends Table {
 
     private static final String SQL_CREATE_POI =

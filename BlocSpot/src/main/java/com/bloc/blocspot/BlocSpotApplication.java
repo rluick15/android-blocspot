@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bloc.blocspot.database.BlocSpotDbHelper;
 
-/**
- * Created by Rich on 12/14/2014.
- */
 public class BlocSpotApplication  extends Application {
     private static BlocSpotDbHelper mDatabase;
     private static Context context;

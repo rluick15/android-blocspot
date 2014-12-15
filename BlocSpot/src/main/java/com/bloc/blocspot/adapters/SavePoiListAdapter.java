@@ -22,15 +22,12 @@ public class SavePoiListAdapter extends ArrayAdapter<Category> implements Checka
 
     private ArrayList<Category> mCategories;
     private Context mContext;
-    private ArrayList<Boolean> itemChecked;
-    private ViewHolder mHolder;
 
     public SavePoiListAdapter(Context context, ArrayList<Category> categories) {
         super(context, R.layout.adapter_save_poi, categories);
 
         this.mContext = context;
         this.mCategories = categories;
-        itemChecked = new ArrayList<Boolean>();
     }
 
     @Override
@@ -40,25 +37,25 @@ public class SavePoiListAdapter extends ArrayAdapter<Category> implements Checka
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+        ViewHolder holder;
         if(convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_save_poi, null);
-            mHolder = new ViewHolder();
-            mHolder.catText = (TextView) convertView.findViewById(R.id.catText);
-            mHolder.background = (RelativeLayout) convertView.findViewById(R.id.layoutBackground);
-            convertView.setTag(mHolder);
+            holder = new ViewHolder();
+            holder.catText = (TextView) convertView.findViewById(R.id.catText);
+            holder.background = (RelativeLayout) convertView.findViewById(R.id.layoutBackground);
+            convertView.setTag(holder);
         }
         else {
-            mHolder = (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-        mHolder.catText.setText(mCategories.get(position).getName());
-        setColor(position, mCategories, mHolder.background);
+        holder.catText.setText(mCategories.get(position).getName());
+        setColor(position, holder.background);
 
         return convertView;
     }
 
-    private void setColor(int position, ArrayList<Category> categories, RelativeLayout background) {
+    private void setColor(int position, RelativeLayout background) {
         String color = mCategories.get(position).getColor();
 
         if(color.equals(Constants.CYAN)) {

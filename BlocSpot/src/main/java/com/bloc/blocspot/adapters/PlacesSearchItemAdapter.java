@@ -69,7 +69,7 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
         holder.nameLabel.setText(name);
         holder.typeLabel.setText(typeCap);
         holder.distanceLabel.setText(String.format("%.2f", dist) + " mi");
-        
+
         Cursor cursor = mPoiTable.alreadyPoiCheck(name);
         if(cursor.moveToFirst() && cursor.getCount() >= 1) {
             String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
