@@ -36,7 +36,12 @@ public class BlocSpotDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {}
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion == 4 && newVersion == 5) {
+            db.execSQL("DROP TABLE " + Constants.TABLE_POI_NAME);
+            onCreate(db);
+        }
+    }
 
 
 }

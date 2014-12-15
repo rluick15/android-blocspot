@@ -111,7 +111,6 @@ public class SavePoiDialogFragment extends DialogFragment {
             }
         });
 
-
         return rootView;
     }
 

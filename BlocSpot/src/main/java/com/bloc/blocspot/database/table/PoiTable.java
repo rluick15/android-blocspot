@@ -18,8 +18,10 @@ public class PoiTable extends Table {
                     Constants.TABLE_COLUMN_LATITUDE + " DOUBLE," +
                     Constants.TABLE_COLUMN_LONGITUDE + " DOUBLE," +
                     Constants.TABLE_COLUMN_CAT_NAME + " TEXT," +
-                    Constants.TABLE_COLUMN_CAT_COLOR + " TEXT" +
-                    " )";
+                    Constants.TABLE_COLUMN_CAT_COLOR + " TEXT," +
+                    "UNIQUE(" + Constants.TABLE_COLUMN_POI_NAME +
+                    ") ON CONFLICT REPLACE" +
+                    ")";
 
     public PoiTable() {
         super(Constants.TABLE_POI_NAME);
