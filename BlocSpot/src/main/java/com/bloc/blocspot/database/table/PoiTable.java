@@ -45,9 +45,18 @@ public class PoiTable extends Table {
         mDb.insert(Constants.TABLE_POI_NAME, null, values);
     }
 
-    public Cursor notesQuery() {
+    public Cursor poiQuery() {
         return mDb.query(Constants.TABLE_POI_NAME,
                 new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME},
                 null, null, null, null, null, null);
+    }
+
+    public Cursor alreadyPoiCheck(String name) {
+        return mDb.query(Constants.TABLE_POI_NAME,
+                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME
+                        , Constants.TABLE_COLUMN_CAT_COLOR},
+                Constants.TABLE_COLUMN_POI_NAME + " = ?",
+                new String[]{name},
+                null, null, null, null);
     }
 }

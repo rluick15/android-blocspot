@@ -13,11 +13,18 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin">
 
+        <TextView
+            android:id="@+id/colorArea"
+            android:visibility="invisible"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/placeDist"/>
+
         <RelativeLayout
             android:id="@+id/textViews"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/placeDist"
             android:padding="@dimen/activity_vertical_padding"
             android:layout_marginRight="@dimen/adapter_mini_margin">

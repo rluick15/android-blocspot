@@ -108,6 +108,7 @@ public class SavePoiDialogFragment extends DialogFragment {
                 }.start();
                 Toast.makeText(mContext, mContext.getString(R.string.toast_poi_saved), Toast.LENGTH_LONG).show();
                 dismiss();
+                //Todo: intent back to main activity
             }
         });
 

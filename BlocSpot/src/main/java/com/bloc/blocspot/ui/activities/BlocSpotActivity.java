@@ -201,19 +201,15 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
 
-            Cursor cursor = mPoiTable.notesQuery();
 
+            //Todo:do in background
+            Cursor cursor = mPoiTable.poiQuery();
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(BlocSpotActivity.this,
                     android.R.layout.simple_expandable_list_item_1,
                     cursor,
                     new String[] {"name"},
                     new int[] {android.R.id.text1});
             mPoiList.setAdapter(adapter);
-
-//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-//                    android.R.layout.simple_expandable_list_item_1,
-//                    android.R.id.text1, resultName);
-//            mPoiList.setAdapter(adapter);
         }
     }
 
