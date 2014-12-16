@@ -149,14 +149,15 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         protected void onPreExecute() {
             super.onPreExecute();
             try {
-                dialog = new ProgressDialog(context);
-                dialog.setCancelable(false);
-                dialog.setMessage(getString(R.string.loading_message));
-                dialog.isIndeterminate();
-                dialog.show();
+//                dialog = new ProgressDialog(context);
+//                dialog.setCancelable(false);
+//                dialog.setMessage(getString(R.string.loading_message));
+//                dialog.isIndeterminate();
+//                dialog.show();
             }
             catch (Exception e) {
-                dialog.dismiss();
+                //dialog.dismiss();
+                Log.e("ERROR_PRE", String.valueOf(e));
             }
         }
 
@@ -175,6 +176,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                 }
             } catch (Exception e) {
                 ex = e;
+                Log.e("ERROR_DO", String.valueOf(ex));
             }
             return findPlaces;
         }
@@ -183,17 +185,17 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         protected void onPostExecute(ArrayList<Place> result) {
             super.onPostExecute(result);
             if(ex != null) {
-                Log.e("ERROR", String.valueOf(ex));
+                Log.e("ERROR_POST", String.valueOf(ex));
                 dialog.dismiss();
             }
 
             ArrayList<String> resultName = new ArrayList<String>();
 
-            if (dialog.isShowing()) {
-                try {
-                    dialog.dismiss();
-                } catch (IllegalArgumentException e){}
-            }
+//            if (dialog.isShowing()) {
+//                try {
+//                    dialog.dismiss();
+//                } catch (IllegalArgumentException e){}
+//            }
             for (int i = 0; i < result.size(); i++) {
                 mMap.addMarker(new MarkerOptions()
                         .title(result.get(i).getName())
