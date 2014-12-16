@@ -54,9 +54,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private LocationManager locationManager;
     private Location loc;
     private boolean mListState = true;
-    private MapFragment mMapFragment;
     private ListView mPoiList;
-    private TextView mEmptyView;
     private PoiTable mPoiTable = new PoiTable();
 
     @Override
@@ -73,10 +71,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
         }
 
-        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mPoiList = (ListView) findViewById(android.R.id.list);
-        mEmptyView = (TextView) findViewById(R.id.emptyListView);
-        mPoiList.setEmptyView(mEmptyView); //set the empty listview
+        TextView emptyView = (TextView) findViewById(R.id.emptyListView);
+        mPoiList.setEmptyView(emptyView); //set the empty listview
 
         checkCategoryPreference();
 
@@ -85,6 +83,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         currentLocation();
 
         final ActionBar actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(ArrayAdapter.createFromResource(
                 this, R.array.places, android.R.layout.simple_list_item_1),
@@ -102,10 +101,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                     }
                 });
 
-        if(mListState == true) { //hide the map if the list state is selected
-            getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+        if(mListState) { //hide the map if the list state is selected
+            getFragmentManager().beginTransaction().hide(mapFragment).commit();
         }
-        else if(mListState == false) { //hide the list if map is to be shown
+        else if(!mListState) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
     }
@@ -127,7 +126,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             String jsonCat = new Gson().toJson(categories);
             SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
             prefsEditor.putString(Constants.CATEGORY_ARRAY, jsonCat);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
     }
 
@@ -139,6 +138,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         private ProgressDialog dialog;
         private Context context;
         private String places;
+        private Exception ex;
 
         public GetPlaces(Context context, String places) {
             this.context = context;
@@ -148,23 +148,33 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(context);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(R.string.loading_message));
-            dialog.isIndeterminate();
-            dialog.show();
+            try {
+                dialog = new ProgressDialog(context);
+                dialog.setCancelable(false);
+                dialog.setMessage(getString(R.string.loading_message));
+                dialog.isIndeterminate();
+                dialog.show();
+            }
+            catch (Exception e) {
+                dialog.dismiss();
+            }
         }
 
         @Override
         protected ArrayList<Place> doInBackground(Void... arg0) {
-            PlacesService service = new PlacesService(
-                    Constants.API_KEY);
-            ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(), // 28.632808
-                    loc.getLongitude(), places); // 77.218276
+            ArrayList<Place> findPlaces = null;
+            try {
+                PlacesService service = new PlacesService(
+                        Constants.API_KEY);
+                findPlaces = service.findPlaces(loc.getLatitude(),
+                        loc.getLongitude(), places);
 
-            for (int i = 0; i < findPlaces.size(); i++) {
-                Place placeDetail = findPlaces.get(i);
-                Log.e(TAG, "places : " + placeDetail.getName());
+                for (int i = 0; i < findPlaces.size(); i++) {
+                    Place placeDetail = findPlaces.get(i);
+                    Log.e(TAG, "places : " + placeDetail.getName());
+                }
+            } catch (Exception e) {
+                ex = e;
             }
             return findPlaces;
         }
@@ -172,6 +182,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         @Override
         protected void onPostExecute(ArrayList<Place> result) {
             super.onPostExecute(result);
+            if(ex != null) {
+                Log.e("ERROR", String.valueOf(ex));
+                dialog.dismiss();
+            }
 
             ArrayList<String> resultName = new ArrayList<String>();
 
@@ -205,10 +219,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             //Todo:do in background
             Cursor cursor = mPoiTable.poiQuery();
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(BlocSpotActivity.this,
-                    android.R.layout.simple_expandable_list_item_1,
+                    R.layout.adapter_poi_list,
                     cursor,
                     new String[] {"name"},
-                    new int[] {android.R.id.text1});
+                    new int[] {R.id.placeName});
             mPoiList.setAdapter(adapter);
         }
     }
@@ -219,10 +233,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(mListState == true) {
+        if(mListState) {
             getMenuInflater().inflate(R.menu.list_menu, menu);
         }
-        if(mListState == false) {
+        if(!mListState) {
             getMenuInflater().inflate(R.menu.map_menu, menu);
         }
         return true;
