@@ -1,6 +1,5 @@
 package com.bloc.blocspot.ui.activities;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,7 +47,6 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
-    private String[] places;
     private LocationManager locationManager;
     private Location loc;
     private boolean mListState = true;
@@ -81,27 +78,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         checkCategoryPreference();
 
         initCompo();
-        places = getResources().getStringArray(R.array.places);
         currentLocation();
-
-        final ActionBar actionBar = getActionBar();
-        assert actionBar != null;
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setListNavigationCallbacks(ArrayAdapter.createFromResource(
-                this, R.array.places, android.R.layout.simple_list_item_1),
-                new ActionBar.OnNavigationListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                        Log.e(TAG, places[itemPosition].toLowerCase().replace("-", "_"));
-                        if (loc != null) {
-                            mMap.clear();
-                            new GetPlaces(BlocSpotActivity.this,
-                                    places[itemPosition].toLowerCase().replace(
-                                    "-", "_").replace(" ", "_")).execute();
-                        }
-                        return true;
-                    }
-                });
 
         if(mListState) { //hide the map if the list state is selected
             getFragmentManager().beginTransaction().hide(mMapFragment).commit();
@@ -147,7 +124,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         private Context context;
         private Exception ex;
 
-        public GetPlaces(Context context, String places) {
+        public GetPlaces(Context context) {
             this.context = context;
         }
 
@@ -208,8 +185,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                                 .defaultMarker(getMarkerColor(c))));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) // Sets the center of the map to
-                            // Mountain View
+                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //current location
                     .zoom(14) // Sets the zoom
                     .tilt(0) // Sets the tilt of the camera to 30 degrees
                     .build(); // Creates a CameraPosition from the builder
@@ -300,8 +276,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         }
         else {
             loc = location;
-            new GetPlaces(BlocSpotActivity.this, places[0].toLowerCase().replace(
-                    "-", "_")).execute();
+            new GetPlaces(BlocSpotActivity.this).execute();
             Log.e(TAG, "location : " + location);
         }
     }
