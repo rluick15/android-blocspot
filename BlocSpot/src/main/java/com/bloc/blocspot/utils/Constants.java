@@ -19,7 +19,7 @@ public class Constants {
     //Database Constants
         //Database
         public static final String DATABASE_NAME = "BlocSpot";
-        public static final int DATABASE_VERSION = 5;
+        public static final int DATABASE_VERSION = 8;
         //Tables
         public static final String TABLE_POI_NAME = "poiTable";
             //Table Columns
@@ -30,6 +30,8 @@ public class Constants {
                 public static final String TABLE_COLUMN_LONGITUDE= "lng";
                 public static final String TABLE_COLUMN_CAT_NAME= "catName";
                 public static final String TABLE_COLUMN_CAT_COLOR= "catColor";
+                public static final String TABLE_COLUMN_NOTE= "note";
+                public static final String TABLE_COLUMN_VISITED= "visited";
 
     //JSON Search Constants
     public static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
