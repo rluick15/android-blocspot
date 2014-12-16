@@ -2,6 +2,7 @@ package com.bloc.blocspot.ui.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -245,8 +246,8 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_settings) {
-            if(mListState == true) {
+        if(id == R.id.action_switch) {
+            if (mListState == true) {
                 getFragmentManager().beginTransaction().show(mMapFragment).commit();
                 mPoiList.setVisibility(View.INVISIBLE);
                 mListState = false;
@@ -257,8 +258,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                 mListState = true;
             }
             this.invalidateOptionsMenu();
-//            Intent intent = new Intent(this, SearchActivity.class);
-//            startActivity(intent);
+        }
+        else if(id == R.id.action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
