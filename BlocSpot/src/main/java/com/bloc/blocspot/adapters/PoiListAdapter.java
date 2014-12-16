@@ -22,6 +22,7 @@ public class PoiListAdapter extends CursorAdapter {
     private View mView;
     private final LayoutInflater inflater;
     private Location mLoc;
+    private String mName;
 
     public PoiListAdapter(Context context, Cursor c, Location loc) {
         super(context, c);
@@ -49,16 +50,16 @@ public class PoiListAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        final ViewHolder holder = (ViewHolder) view.getTag();
+        ViewHolder holder = (ViewHolder) view.getTag();
 
-        String name = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME));
+        mName = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME));
         String note = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_NOTE));
         Boolean visited = cursor.getInt(cursor.getColumnIndex(Constants.TABLE_COLUMN_VISITED)) > 0;
         Double lat = cursor.getDouble(cursor.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE));
         Double lng = cursor.getDouble(cursor.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE));
         String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
 
-        holder.name.setText(name);
+        holder.name.setText(mName);
         if(note != null) {
             holder.note.setText(note);
         }
@@ -74,6 +75,10 @@ public class PoiListAdapter extends CursorAdapter {
         }
 
         Utils.setColorString(color, holder.color);
+    }
+
+    public String getName() {
+        return mName;
     }
 
     private static class ViewHolder {

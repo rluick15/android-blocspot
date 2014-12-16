@@ -35,7 +35,6 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
 
     private LocationManager locationManager;
     private Location loc;
-    private String[] places;
     private ListView mSearchList;
     private String mQuery;
     PlacesSearchItemAdapter mAdapter;
@@ -61,7 +60,6 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
             mQuery = getIntent().getStringExtra(SearchManager.QUERY);
         }
 
-        places = getResources().getStringArray(R.array.places);
         currentLocation();
         mSearchList = (ListView) findViewById(R.id.searchList);
 

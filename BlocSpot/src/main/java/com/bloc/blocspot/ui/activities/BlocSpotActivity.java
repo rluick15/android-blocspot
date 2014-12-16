@@ -3,7 +3,6 @@ package com.bloc.blocspot.ui.activities;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -26,7 +25,6 @@ import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
-import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,6 +55,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private boolean mListState = true;
     private ListView mPoiList;
     private PoiTable mPoiTable = new PoiTable();
+    private MapFragment mMapFragment;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -74,7 +73,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
         Utils.setContext(this);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mPoiList = (ListView) findViewById(android.R.id.list);
         TextView emptyView = (TextView) findViewById(R.id.emptyListView);
         mPoiList.setEmptyView(emptyView); //set the empty listview
@@ -105,7 +104,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                 });
 
         if(mListState) { //hide the map if the list state is selected
-            getFragmentManager().beginTransaction().hide(mapFragment).commit();
+            getFragmentManager().beginTransaction().hide(mMapFragment).commit();
         }
         else if(!mListState) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
@@ -146,13 +145,11 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
         private ProgressDialog dialog;
         private Context context;
-        private String places;
         private Exception ex;
-        private Cursor cursor;
+        private Cursor mCursor;
 
         public GetPlaces(Context context, String places) {
             this.context = context;
-            this.places = places;
         }
 
         @Override
@@ -173,64 +170,50 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
         @Override
         protected ArrayList<Place> doInBackground(Void... arg0) {
-            ArrayList<Place> findPlaces = null;
+            ArrayList<Place> places = new ArrayList<Place>();
             try {
-                PlacesService service = new PlacesService(
-                        Constants.API_KEY);
-                findPlaces = service.findPlaces(loc.getLatitude(),
-                        loc.getLongitude(), places);
-
-                for (int i = 0; i < findPlaces.size(); i++) {
-                    Place placeDetail = findPlaces.get(i);
-                    Log.e(TAG, "places : " + placeDetail.getName());
-                }
-
-
+                mCursor = mPoiTable.poiQuery();
             } catch (Exception e) {
                 ex = e;
                 Log.e("ERROR_DO", String.valueOf(ex));
             }
-            return findPlaces;
+            return places;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Place> result) {
-            super.onPostExecute(result);
+        protected void onPostExecute(ArrayList<Place> places) {
+            super.onPostExecute(places);
             if(ex != null) {
                 Log.e("ERROR_POST", String.valueOf(ex));
                 dialog.dismiss();
             }
-
-            ArrayList<String> resultName = new ArrayList<String>();
+            PoiListAdapter adapter = new PoiListAdapter(BlocSpotActivity.this, mCursor, loc);
+            mPoiList.setAdapter(adapter);
 
             if (dialog.isShowing()) {
                 try {
                     dialog.dismiss();
                 } catch (IllegalArgumentException e){}
             }
-            for (int i = 0; i < result.size(); i++) {
-                mMap.addMarker(new MarkerOptions()
-                        .title(result.get(i).getName())
-                        .position(new LatLng(result.get(i).getLatitude(),
-                                result.get(i).getLongitude()))
-                        .icon(BitmapDescriptorFactory
-                                .fromResource(R.drawable.pin))
-                        .snippet(result.get(i).getVicinity()));
 
-                resultName.add(i, result.get(i).getName());
+            Cursor c;
+            for (int i = 0; i < mPoiList.getCount(); i++) {
+                c = ((Cursor) adapter.getItem(i));
+                mMap.addMarker(new MarkerOptions()
+                        .title(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME)))
+                        .position(new LatLng(c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE)),
+                                c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE))))
+                        .icon(BitmapDescriptorFactory
+                                .fromResource(R.drawable.pin)));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(result.get(0).getLatitude(), result
-                            .get(0).getLongitude())) // Sets the center of the map to
+                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) // Sets the center of the map to
                             // Mountain View
                     .zoom(14) // Sets the zoom
-                    .tilt(30) // Sets the tilt of the camera to 30 degrees
+                    .tilt(0) // Sets the tilt of the camera to 30 degrees
                     .build(); // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
-            cursor = mPoiTable.poiQuery();
-            PoiListAdapter adapter = new PoiListAdapter(BlocSpotActivity.this, cursor, loc);
-            mPoiList.setAdapter(adapter);
         }
     }
 
@@ -253,19 +236,19 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_settings) {
-//            if(mListState == true) {
-//                getFragmentManager().beginTransaction().show(mMapFragment).commit();
-//                mPoiList.setVisibility(View.INVISIBLE);
-//                mListState = false;
-//            }
-//            else {
-//                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
-//                mPoiList.setVisibility(View.VISIBLE);
-//                mListState = true;
-//            }
-//            this.invalidateOptionsMenu();
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+            if(mListState == true) {
+                getFragmentManager().beginTransaction().show(mMapFragment).commit();
+                mPoiList.setVisibility(View.INVISIBLE);
+                mListState = false;
+            }
+            else {
+                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+                mPoiList.setVisibility(View.VISIBLE);
+                mListState = true;
+            }
+            this.invalidateOptionsMenu();
+//            Intent intent = new Intent(this, SearchActivity.class);
+//            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
