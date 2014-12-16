@@ -19,15 +19,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.utils.Constants;
+import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -71,6 +72,8 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
         }
 
+        Utils.setContext(this);
+
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mPoiList = (ListView) findViewById(android.R.id.list);
         TextView emptyView = (TextView) findViewById(R.id.emptyListView);
@@ -109,6 +112,12 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utils.setContext(null);
+    }
+
     /**
      * This method is called onCreate of the Main Activity. It checks if a shared preference
      * file has been created for the Category list and if not creates one with an array list
@@ -139,6 +148,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         private Context context;
         private String places;
         private Exception ex;
+        private Cursor cursor;
 
         public GetPlaces(Context context, String places) {
             this.context = context;
@@ -149,11 +159,11 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         protected void onPreExecute() {
             super.onPreExecute();
             try {
-//                dialog = new ProgressDialog(context);
-//                dialog.setCancelable(false);
-//                dialog.setMessage(getString(R.string.loading_message));
-//                dialog.isIndeterminate();
-//                dialog.show();
+                dialog = new ProgressDialog(context);
+                dialog.setCancelable(false);
+                dialog.setMessage(getString(R.string.loading_message));
+                dialog.isIndeterminate();
+                dialog.show();
             }
             catch (Exception e) {
                 //dialog.dismiss();
@@ -174,6 +184,8 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                     Place placeDetail = findPlaces.get(i);
                     Log.e(TAG, "places : " + placeDetail.getName());
                 }
+
+
             } catch (Exception e) {
                 ex = e;
                 Log.e("ERROR_DO", String.valueOf(ex));
@@ -191,11 +203,11 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
             ArrayList<String> resultName = new ArrayList<String>();
 
-//            if (dialog.isShowing()) {
-//                try {
-//                    dialog.dismiss();
-//                } catch (IllegalArgumentException e){}
-//            }
+            if (dialog.isShowing()) {
+                try {
+                    dialog.dismiss();
+                } catch (IllegalArgumentException e){}
+            }
             for (int i = 0; i < result.size(); i++) {
                 mMap.addMarker(new MarkerOptions()
                         .title(result.get(i).getName())
@@ -216,15 +228,8 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                     .build(); // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
-
-
-            //Todo:do in background
-            Cursor cursor = mPoiTable.poiQuery();
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(BlocSpotActivity.this,
-                    R.layout.adapter_poi_list,
-                    cursor,
-                    new String[] {"name"},
-                    new int[] {R.id.placeName});
+            cursor = mPoiTable.poiQuery();
+            PoiListAdapter adapter = new PoiListAdapter(BlocSpotActivity.this, cursor, loc);
             mPoiList.setAdapter(adapter);
         }
     }

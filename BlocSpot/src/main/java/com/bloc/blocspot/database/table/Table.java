@@ -25,6 +25,7 @@ public abstract class Table {
             @Override
             public void run() {
                 super.run();
+                //Todo:ERROR!!!
                 mDb = BlocSpotApplication.get().getWritableDb();
             }
         }.start();

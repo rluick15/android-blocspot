@@ -25,6 +25,7 @@ import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.ui.fragments.SavePoiDialogFragment;
 import com.bloc.blocspot.utils.Constants;
+import com.bloc.blocspot.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,8 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
             mQuery = savedInstanceState.getString(Constants.QUERY_TEXT);
         }
 
+        Utils.setContext(this);
+
         //get the search view query string
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             mQuery = getIntent().getStringExtra(SearchManager.QUERY);
@@ -75,6 +78,12 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
                 poiDialog.show(getSupportFragmentManager(), "dialog");
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utils.setContext(null);
     }
 
     @Override
