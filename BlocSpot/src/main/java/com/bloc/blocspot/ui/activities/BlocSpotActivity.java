@@ -3,7 +3,6 @@ package com.bloc.blocspot.ui.activities;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -19,15 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
-import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.utils.Constants;
+import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -54,10 +53,9 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private LocationManager locationManager;
     private Location loc;
     private boolean mListState = true;
-    private MapFragment mMapFragment;
     private ListView mPoiList;
-    private TextView mEmptyView;
     private PoiTable mPoiTable = new PoiTable();
+    private MapFragment mMapFragment;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -73,10 +71,12 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
         }
 
+        Utils.setContext(this);
+
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mPoiList = (ListView) findViewById(android.R.id.list);
-        mEmptyView = (TextView) findViewById(R.id.emptyListView);
-        mPoiList.setEmptyView(mEmptyView); //set the empty listview
+        TextView emptyView = (TextView) findViewById(R.id.emptyListView);
+        mPoiList.setEmptyView(emptyView); //set the empty listview
 
         checkCategoryPreference();
 
@@ -85,6 +85,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         currentLocation();
 
         final ActionBar actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(ArrayAdapter.createFromResource(
                 this, R.array.places, android.R.layout.simple_list_item_1),
@@ -102,12 +103,18 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                     }
                 });
 
-        if(mListState == true) { //hide the map if the list state is selected
+        if(mListState) { //hide the map if the list state is selected
             getFragmentManager().beginTransaction().hide(mMapFragment).commit();
         }
-        else if(mListState == false) { //hide the list if map is to be shown
+        else if(!mListState) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utils.setContext(null);
     }
 
     /**
@@ -127,93 +134,120 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             String jsonCat = new Gson().toJson(categories);
             SharedPreferences.Editor prefsEditor = sharedPrefs.edit();
             prefsEditor.putString(Constants.CATEGORY_ARRAY, jsonCat);
-            prefsEditor.commit();
+            prefsEditor.apply();
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {} //Todo: Something goes here!
 
-    private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
+    private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;
         private Context context;
-        private String places;
+        private Exception ex;
 
         public GetPlaces(Context context, String places) {
             this.context = context;
-            this.places = places;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(context);
-            dialog.setCancelable(false);
-            dialog.setMessage(getString(R.string.loading_message));
-            dialog.isIndeterminate();
-            dialog.show();
-        }
-
-        @Override
-        protected ArrayList<Place> doInBackground(Void... arg0) {
-            PlacesService service = new PlacesService(
-                    Constants.API_KEY);
-            ArrayList<Place> findPlaces = service.findPlaces(loc.getLatitude(), // 28.632808
-                    loc.getLongitude(), places); // 77.218276
-
-            for (int i = 0; i < findPlaces.size(); i++) {
-                Place placeDetail = findPlaces.get(i);
-                Log.e(TAG, "places : " + placeDetail.getName());
+            try {
+                dialog = new ProgressDialog(context);
+                dialog.setCancelable(false);
+                dialog.setMessage(getString(R.string.loading_message));
+                dialog.isIndeterminate();
+                dialog.show();
             }
-            return findPlaces;
+            catch (Exception e) {
+                //dialog.dismiss();
+                Log.e("ERROR_PRE", String.valueOf(e));
+            }
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Place> result) {
-            super.onPostExecute(result);
+        protected Cursor doInBackground(Void... arg0) {
+            ArrayList<Place> places = new ArrayList<Place>();
+            Cursor cursor = null;
+            try {
+                cursor = mPoiTable.poiQuery();
+            } catch (Exception e) {
+                ex = e;
+                Log.e("ERROR_DO", String.valueOf(ex));
+            }
+            return cursor;
+        }
 
-            ArrayList<String> resultName = new ArrayList<String>();
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            super.onPostExecute(cursor);
+            if(ex != null) {
+                Log.e("ERROR_POST", String.valueOf(ex));
+                dialog.dismiss();
+            }
 
             if (dialog.isShowing()) {
                 try {
                     dialog.dismiss();
                 } catch (IllegalArgumentException e){}
             }
-            for (int i = 0; i < result.size(); i++) {
-                mMap.addMarker(new MarkerOptions()
-                        .title(result.get(i).getName())
-                        .position(new LatLng(result.get(i).getLatitude(),
-                                result.get(i).getLongitude()))
-                        .icon(BitmapDescriptorFactory
-                                .fromResource(R.drawable.pin))
-                        .snippet(result.get(i).getVicinity()));
 
-                resultName.add(i, result.get(i).getName());
+            PoiListAdapter adapter = new PoiListAdapter(BlocSpotActivity.this, cursor, loc);
+            mPoiList.setAdapter(adapter);
+
+            Cursor c;
+            for (int i = 0; i < cursor.getCount(); i++) {
+                c = ((Cursor) adapter.getItem(i));
+                mMap.addMarker(new MarkerOptions()
+                        .title(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME)))
+                        .position(new LatLng(c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE)),
+                                c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE))))
+                        .icon(BitmapDescriptorFactory
+                                .defaultMarker(getMarkerColor(c))));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(result.get(0).getLatitude(), result
-                            .get(0).getLongitude())) // Sets the center of the map to
+                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) // Sets the center of the map to
                             // Mountain View
                     .zoom(14) // Sets the zoom
-                    .tilt(30) // Sets the tilt of the camera to 30 degrees
+                    .tilt(0) // Sets the tilt of the camera to 30 degrees
                     .build(); // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
+        }
 
-            Cursor cursor = mPoiTable.notesQuery();
-
-            SimpleCursorAdapter adapter = new SimpleCursorAdapter(BlocSpotActivity.this,
-                    android.R.layout.simple_expandable_list_item_1,
-                    cursor,
-                    new String[] {"name"},
-                    new int[] {android.R.id.text1});
-            mPoiList.setAdapter(adapter);
-
-//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-//                    android.R.layout.simple_expandable_list_item_1,
-//                    android.R.id.text1, resultName);
-//            mPoiList.setAdapter(adapter);
+        private float getMarkerColor(Cursor c) {
+            float colorId = 0;
+            String color = c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
+            if(color.equals(Constants.CYAN)) {
+                colorId = BitmapDescriptorFactory.HUE_CYAN;
+            }
+            else if(color.equals(Constants.BLUE)) {
+                colorId = BitmapDescriptorFactory.HUE_BLUE;
+            }
+            else if(color.equals(Constants.GREEN)) {
+                colorId = BitmapDescriptorFactory.HUE_GREEN;
+            }
+            else if(color.equals(Constants.MAGENTA)) {
+                colorId = BitmapDescriptorFactory.HUE_MAGENTA;
+            }
+            else if(color.equals(Constants.ORANGE)) {
+                colorId = BitmapDescriptorFactory.HUE_ORANGE;
+            }
+            else if(color.equals(Constants.RED)) {
+                colorId = BitmapDescriptorFactory.HUE_RED;
+            }
+            else if(color.equals(Constants.ROSE)) {
+                colorId = BitmapDescriptorFactory.HUE_ROSE;
+            }
+            else if(color.equals(Constants.VIOLET)) {
+                colorId = BitmapDescriptorFactory.HUE_VIOLET;
+            }
+            else if(color.equals(Constants.YELLOW)) {
+                colorId = BitmapDescriptorFactory.HUE_YELLOW;
+            }
+            return colorId;
         }
     }
 
@@ -223,10 +257,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(mListState == true) {
+        if(mListState) {
             getMenuInflater().inflate(R.menu.list_menu, menu);
         }
-        if(mListState == false) {
+        if(!mListState) {
             getMenuInflater().inflate(R.menu.map_menu, menu);
         }
         return true;
@@ -236,19 +270,19 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_settings) {
-//            if(mListState == true) {
-//                getFragmentManager().beginTransaction().show(mMapFragment).commit();
-//                mPoiList.setVisibility(View.INVISIBLE);
-//                mListState = false;
-//            }
-//            else {
-//                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
-//                mPoiList.setVisibility(View.VISIBLE);
-//                mListState = true;
-//            }
-//            this.invalidateOptionsMenu();
-            Intent intent = new Intent(this, SearchActivity.class);
-            startActivity(intent);
+            if(mListState == true) {
+                getFragmentManager().beginTransaction().show(mMapFragment).commit();
+                mPoiList.setVisibility(View.INVISIBLE);
+                mListState = false;
+            }
+            else {
+                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+                mPoiList.setVisibility(View.VISIBLE);
+                mListState = true;
+            }
+            this.invalidateOptionsMenu();
+//            Intent intent = new Intent(this, SearchActivity.class);
+//            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

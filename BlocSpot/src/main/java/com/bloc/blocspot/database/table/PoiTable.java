@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bloc.blocspot.utils.Constants;
 
-/**
- * Created by Rich on 12/14/2014.
- */
 public class PoiTable extends Table {
 
     private static final String SQL_CREATE_POI =
@@ -18,8 +15,10 @@ public class PoiTable extends Table {
                     Constants.TABLE_COLUMN_LATITUDE + " DOUBLE," +
                     Constants.TABLE_COLUMN_LONGITUDE + " DOUBLE," +
                     Constants.TABLE_COLUMN_CAT_NAME + " TEXT," +
-                    Constants.TABLE_COLUMN_CAT_COLOR + " TEXT" +
-                    " )";
+                    Constants.TABLE_COLUMN_CAT_COLOR + " TEXT," +
+                    "UNIQUE(" + Constants.TABLE_COLUMN_POI_NAME +
+                    ") ON CONFLICT REPLACE" +
+                    ")";
 
     public PoiTable() {
         super(Constants.TABLE_POI_NAME);
@@ -40,12 +39,26 @@ public class PoiTable extends Table {
         values.put(Constants.TABLE_COLUMN_LONGITUDE, lng);
         values.put(Constants.TABLE_COLUMN_CAT_NAME, catName);
         values.put(Constants.TABLE_COLUMN_CAT_COLOR, catColor);
+        values.put(Constants.TABLE_COLUMN_NOTE, "");
+        values.put(Constants.TABLE_COLUMN_VISITED, false);
         mDb.insert(Constants.TABLE_POI_NAME, null, values);
     }
 
-    public Cursor notesQuery() {
+    public Cursor poiQuery() {
         return mDb.query(Constants.TABLE_POI_NAME,
-                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME},
+                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME,
+                        Constants.TABLE_COLUMN_NOTE, Constants.TABLE_COLUMN_VISITED,
+                        Constants.TABLE_COLUMN_LATITUDE, Constants.TABLE_COLUMN_LONGITUDE,
+                        Constants.TABLE_COLUMN_CAT_NAME, Constants.TABLE_COLUMN_CAT_COLOR},
                 null, null, null, null, null, null);
+    }
+
+    public Cursor alreadyPoiCheck(String name) {
+        return mDb.query(Constants.TABLE_POI_NAME,
+                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME
+                        , Constants.TABLE_COLUMN_CAT_COLOR},
+                Constants.TABLE_COLUMN_POI_NAME + " = ?",
+                new String[]{name},
+                null, null, null, null);
     }
 }

@@ -23,6 +23,10 @@ public class Place {
     private Double longitude;
     private JSONArray types;
 
+//    public Place(String name, Double latitude, Double longitude) {
+//
+//    }
+
     public String getId() {
         return id;
     }

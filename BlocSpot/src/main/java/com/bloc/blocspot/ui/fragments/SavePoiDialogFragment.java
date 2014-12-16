@@ -18,6 +18,7 @@ import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
+import com.bloc.blocspot.ui.activities.SearchActivity;
 import com.bloc.blocspot.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,7 +29,6 @@ import java.util.ArrayList;
 public class SavePoiDialogFragment extends DialogFragment {
 
     private Place mPlace;
-    private ListView mListView;
     private Context mContext;
     private Category mCategory;
     private PoiTable mPoiTable = new PoiTable();
@@ -53,21 +53,28 @@ public class SavePoiDialogFragment extends DialogFragment {
 
         //Todo: change background and color of title
 
+        //set the save button to disabled until a category is selected
+        final Button savePoiButton = (Button) rootView.findViewById(R.id.saveButton);
+        if(mCategory == null) {
+            savePoiButton.setEnabled(false);
+        }
+
         //get Category Array
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences(Constants.MAIN_PREFS, 0);
         String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
         final ArrayList<Category> categories = new Gson().fromJson(json, type);
 
-        mListView = (ListView) rootView.findViewById(R.id.categoryList);
+        ListView listView = (ListView) rootView.findViewById(R.id.categoryList);
         final SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mListView.setAdapter(adapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 view.setSelected(true);
                 mCategory = (Category) adapterView.getItemAtPosition(position);
+                savePoiButton.setEnabled(true);
             }
         });
 
@@ -90,7 +97,6 @@ public class SavePoiDialogFragment extends DialogFragment {
             }
         });
 
-        Button savePoiButton = (Button) rootView.findViewById(R.id.saveButton);
         savePoiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,10 +113,10 @@ public class SavePoiDialogFragment extends DialogFragment {
                     }
                 }.start();
                 Toast.makeText(mContext, mContext.getString(R.string.toast_poi_saved), Toast.LENGTH_LONG).show();
+                ((SearchActivity) mContext).returnToMain();
                 dismiss();
             }
         });
-
 
         return rootView;
     }
@@ -135,7 +141,8 @@ public class SavePoiDialogFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnSavePoiInteractionListener {
+        public void returnToMain();
     }
 
 }

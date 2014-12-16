@@ -1,6 +1,7 @@
 package com.bloc.blocspot.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
+import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
+import com.bloc.blocspot.utils.Constants;
+import com.bloc.blocspot.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +25,7 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
     private Context mContext;
     private ArrayList<Place> mPlaceList;
     private Location mLoc;
+    private PoiTable mPoiTable = new PoiTable();
 
     public PlacesSearchItemAdapter(Context context, ArrayList<Place> places, Location loc) {
         super(context, R.layout.adapter_places_search_item, places);
@@ -40,6 +45,7 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
             holder.nameLabel = (TextView) convertView.findViewById(R.id.placeName);
             holder.typeLabel = (TextView) convertView.findViewById(R.id.placeType);
             holder.distanceLabel = (TextView) convertView.findViewById(R.id.placeDist);
+            holder.colorLabel = (TextView) convertView.findViewById(R.id.colorArea);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -60,9 +66,21 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
 
         String typeCap = CapitalizeString(type);
 
-        holder.nameLabel.setText(mPlaceList.get(position).getName());
+        String name = mPlaceList.get(position).getName();
+        holder.nameLabel.setText(name);
         holder.typeLabel.setText(typeCap);
         holder.distanceLabel.setText(String.format("%.2f", dist) + " mi");
+
+        Cursor cursor = mPoiTable.alreadyPoiCheck(name);
+        if(cursor.moveToFirst() && cursor.getCount() >= 1) {
+            String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
+            holder.colorLabel.setVisibility(View.VISIBLE);
+            Utils.setColorString(color, holder.colorLabel);
+        }
+        else {
+            holder.colorLabel.setVisibility(View.INVISIBLE);
+        }
+        cursor.close();
 
         return convertView;
     }
@@ -80,6 +98,7 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
         }
         return String.valueOf(chars);
     }
+
 
 //    @Override
 //    public Filter getFilter() {
@@ -120,5 +139,6 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
         TextView nameLabel;
         TextView typeLabel;
         TextView distanceLabel;
+        TextView colorLabel;
     }
 }

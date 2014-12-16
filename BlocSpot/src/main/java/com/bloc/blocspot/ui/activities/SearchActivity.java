@@ -25,16 +25,16 @@ import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.places.PlacesService;
 import com.bloc.blocspot.ui.fragments.SavePoiDialogFragment;
 import com.bloc.blocspot.utils.Constants;
+import com.bloc.blocspot.utils.Utils;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends FragmentActivity {
+public class SearchActivity extends FragmentActivity implements SavePoiDialogFragment.OnSavePoiInteractionListener {
 
     private final String TAG = getClass().getSimpleName();
 
     private LocationManager locationManager;
     private Location loc;
-    private String[] places;
     private ListView mSearchList;
     private String mQuery;
     PlacesSearchItemAdapter mAdapter;
@@ -53,12 +53,13 @@ public class SearchActivity extends FragmentActivity {
             mQuery = savedInstanceState.getString(Constants.QUERY_TEXT);
         }
 
+        Utils.setContext(this);
+
         //get the search view query string
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             mQuery = getIntent().getStringExtra(SearchManager.QUERY);
         }
 
-        places = getResources().getStringArray(R.array.places);
         currentLocation();
         mSearchList = (ListView) findViewById(R.id.searchList);
 
@@ -77,6 +78,11 @@ public class SearchActivity extends FragmentActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utils.setContext(null);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -154,6 +160,12 @@ public class SearchActivity extends FragmentActivity {
             locationManager.removeUpdates(listener);
         }
     };
+
+    @Override
+    public void returnToMain() {
+        Intent intent = new Intent(this, BlocSpotActivity.class);
+        startActivity(intent);
+    }
 
     private class GetPlaces extends AsyncTask<Void, Void, ArrayList<Place>> {
 
