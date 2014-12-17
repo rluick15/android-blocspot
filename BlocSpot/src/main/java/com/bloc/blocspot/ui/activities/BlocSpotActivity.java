@@ -132,7 +132,6 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     public void applyFilters(String name) {
         mFilter = name;
-        mMap.clear();
         new GetPlaces(BlocSpotActivity.this, name).execute();
     }
 
@@ -200,6 +199,7 @@ public class BlocSpotActivity extends FragmentActivity
             mPoiList.setAdapter(adapter);
 
             Cursor c;
+            mMap.clear();
             for (int i = 0; i < cursor.getCount(); i++) {
                 c = ((Cursor) adapter.getItem(i));
                 mMap.addMarker(new MarkerOptions()
