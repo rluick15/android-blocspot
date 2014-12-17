@@ -47,5 +47,6 @@
     <string name="toast_poi_saved">POI Saved!</string>
     <string name="button_filter">Filter</string>
     <string name="button_reset_filter">Reset Filters</string>
+    <string name="title_filter">Filter By Category</string>
 
 </resources>

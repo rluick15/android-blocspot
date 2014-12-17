@@ -23,7 +23,6 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
-import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
@@ -45,7 +44,8 @@ import java.util.ArrayList;
  *
  *
  */
-public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCallback {
+public class BlocSpotActivity extends FragmentActivity
+        implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -55,11 +55,13 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     private ListView mPoiList;
     private PoiTable mPoiTable = new PoiTable();
     private MapFragment mMapFragment;
+    private String mFilter;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Constants.LIST_STATE, mListState);
+        outState.putString(Constants.FILTER_TEXT, mFilter);
     }
 
     @Override
@@ -68,6 +70,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         setContentView(R.layout.activity_main);
         if (savedInstanceState != null) {
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
+            mFilter = savedInstanceState.getString(Constants.FILTER_TEXT);
         }
 
         Utils.setContext(this);
@@ -88,6 +91,12 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         else if(!mListState) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyFilters(mFilter);
     }
 
     @Override
@@ -120,14 +129,22 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {} //Todo: Something goes here!
 
+    @Override
+    public void applyFilters(String name) {
+        mFilter = name;
+        new GetPlaces(BlocSpotActivity.this, name).execute();
+    }
+
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;
         private Context context;
+        private String filter;
         private Exception ex;
 
-        public GetPlaces(Context context) {
+        public GetPlaces(Context context, String filter) {
             this.context = context;
+            this.filter = filter;
         }
 
         @Override
@@ -148,10 +165,15 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
         @Override
         protected Cursor doInBackground(Void... arg0) {
-            ArrayList<Place> places = new ArrayList<Place>();
             Cursor cursor = null;
             try {
-                cursor = mPoiTable.poiQuery();
+                //check for a filter and if none exists run a regular query
+                if(filter != null) {
+                    cursor = mPoiTable.filterQuery(filter);
+                }
+                else {
+                    cursor = mPoiTable.poiQuery();
+                }
             } catch (Exception e) {
                 ex = e;
                 Log.e("ERROR_DO", String.valueOf(ex));
@@ -248,7 +270,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.action_switch) {
-            if (mListState == true) {
+            if (mListState) {
                 getFragmentManager().beginTransaction().show(mMapFragment).commit();
                 mPoiList.setVisibility(View.INVISIBLE);
                 mListState = false;
@@ -265,7 +287,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
             startActivity(intent);
         }
         else if(id == R.id.action_filter){
-            FilterDialogFragment dialog = new FilterDialogFragment();
+            FilterDialogFragment dialog = new FilterDialogFragment(this);
             dialog.show(getSupportFragmentManager(), "dialog");
         }
 
@@ -284,7 +306,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         }
         else {
             loc = location;
-            new GetPlaces(BlocSpotActivity.this).execute();
+            new GetPlaces(BlocSpotActivity.this, null).execute();
             Log.e(TAG, "location : " + location);
         }
     }
