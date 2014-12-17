@@ -132,6 +132,7 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     public void applyFilters(String name) {
         mFilter = name;
+        mMap.clear();
         new GetPlaces(BlocSpotActivity.this, name).execute();
     }
 
