@@ -12,14 +12,16 @@
 
         <TextView
             android:id="@+id/nameField"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_weight="0.9"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text" />
+            android:layout_height="match_parent" />
 
         <ImageButton
             android:id="@+id/visitedButton"
+            android:src="@drawable/ic_check_off"
+            android:background="@android:color/white"
             android:layout_weight="0.1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
@@ -27,7 +29,7 @@
 
     <TextView
         android:id="@+id/noteField"
-        android:text="New Text"
+        android:text=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header" />
@@ -41,21 +43,33 @@
 
         <TextView
             android:id="@+id/categoryField"
-            android:layout_weight="0.8"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text" />
+            android:layout_weight="0.45"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/noteButton"
+            android:src="@drawable/ic_take_note"
+            android:background="@android:color/white"
+            android:layout_weight="0.15"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
 
         <ImageButton
             android:id="@+id/shareButton"
-            android:layout_weight="0.1"
+            android:src="@drawable/ic_share"
+            android:background="@android:color/white"
+            android:layout_weight="0.15"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
 
         <ImageButton
             android:id="@+id/deleteButton"
-            android:layout_weight="0.1"
+            android:src="@drawable/ic_trash"
+            android:background="@android:color/white"
+            android:layout_weight="0.15"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
     </LinearLayout>
