@@ -45,5 +45,7 @@
     <string name="toast_select_color">Select a Color</string>
     <string name="toast_no_category">Category Name is Empty</string>
     <string name="toast_poi_saved">POI Saved!</string>
+    <string name="button_filter">Filter</string>
+    <string name="button_reset_filter">Reset Filters</string>
 
 </resources>

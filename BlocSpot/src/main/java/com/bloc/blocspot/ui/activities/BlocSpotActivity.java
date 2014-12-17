@@ -24,6 +24,7 @@ import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.places.Place;
+import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -262,6 +263,10 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         else if(id == R.id.action_search) {
             Intent intent = new Intent(this, SearchActivity.class);
             startActivity(intent);
+        }
+        else if(id == R.id.action_filter){
+            FilterDialogFragment dialog = new FilterDialogFragment();
+            dialog.show(getSupportFragmentManager(), "dialog");
         }
 
         return super.onOptionsItemSelected(item);
