@@ -8,6 +8,7 @@ public class Constants {
     //SavedInstanceState Constants
     public static final String LIST_STATE = "listState";
     public static final String QUERY_TEXT = "queryText";
+    public static final String FILTER_TEXT = "filterText";
 
     //Shared Preferences
     public static final String MAIN_PREFS ="mainPrefs";

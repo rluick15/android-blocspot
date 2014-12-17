@@ -1,8 +1,8 @@
 package com.bloc.blocspot.ui.activities;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,7 +23,7 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
-import com.bloc.blocspot.places.Place;
+import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,22 +44,24 @@ import java.util.ArrayList;
  *
  *
  */
-public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCallback {
+public class BlocSpotActivity extends FragmentActivity
+        implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
-    private String[] places;
     private LocationManager locationManager;
     private Location loc;
     private boolean mListState = true;
     private ListView mPoiList;
     private PoiTable mPoiTable = new PoiTable();
     private MapFragment mMapFragment;
+    private String mFilter;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Constants.LIST_STATE, mListState);
+        outState.putString(Constants.FILTER_TEXT, mFilter);
     }
 
     @Override
@@ -69,6 +70,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         setContentView(R.layout.activity_main);
         if (savedInstanceState != null) {
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
+            mFilter = savedInstanceState.getString(Constants.FILTER_TEXT);
         }
 
         Utils.setContext(this);
@@ -81,27 +83,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         checkCategoryPreference();
 
         initCompo();
-        places = getResources().getStringArray(R.array.places);
         currentLocation();
-
-        final ActionBar actionBar = getActionBar();
-        assert actionBar != null;
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setListNavigationCallbacks(ArrayAdapter.createFromResource(
-                this, R.array.places, android.R.layout.simple_list_item_1),
-                new ActionBar.OnNavigationListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-                        Log.e(TAG, places[itemPosition].toLowerCase().replace("-", "_"));
-                        if (loc != null) {
-                            mMap.clear();
-                            new GetPlaces(BlocSpotActivity.this,
-                                    places[itemPosition].toLowerCase().replace(
-                                    "-", "_").replace(" ", "_")).execute();
-                        }
-                        return true;
-                    }
-                });
 
         if(mListState) { //hide the map if the list state is selected
             getFragmentManager().beginTransaction().hide(mMapFragment).commit();
@@ -109,6 +91,12 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         else if(!mListState) { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyFilters(mFilter);
     }
 
     @Override
@@ -141,14 +129,23 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {} //Todo: Something goes here!
 
+    @Override
+    public void applyFilters(String name) {
+        mFilter = name;
+        mMap.clear();
+        new GetPlaces(BlocSpotActivity.this, name).execute();
+    }
+
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;
         private Context context;
+        private String filter;
         private Exception ex;
 
-        public GetPlaces(Context context, String places) {
+        public GetPlaces(Context context, String filter) {
             this.context = context;
+            this.filter = filter;
         }
 
         @Override
@@ -169,10 +166,15 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
 
         @Override
         protected Cursor doInBackground(Void... arg0) {
-            ArrayList<Place> places = new ArrayList<Place>();
             Cursor cursor = null;
             try {
-                cursor = mPoiTable.poiQuery();
+                //check for a filter and if none exists run a regular query
+                if(filter != null) {
+                    cursor = mPoiTable.filterQuery(filter);
+                }
+                else {
+                    cursor = mPoiTable.poiQuery();
+                }
             } catch (Exception e) {
                 ex = e;
                 Log.e("ERROR_DO", String.valueOf(ex));
@@ -208,8 +210,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                                 .defaultMarker(getMarkerColor(c))));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) // Sets the center of the map to
-                            // Mountain View
+                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //current location
                     .zoom(14) // Sets the zoom
                     .tilt(0) // Sets the tilt of the camera to 30 degrees
                     .build(); // Creates a CameraPosition from the builder
@@ -269,8 +270,8 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.action_settings) {
-            if(mListState == true) {
+        if(id == R.id.action_switch) {
+            if (mListState) {
                 getFragmentManager().beginTransaction().show(mMapFragment).commit();
                 mPoiList.setVisibility(View.INVISIBLE);
                 mListState = false;
@@ -281,8 +282,14 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
                 mListState = true;
             }
             this.invalidateOptionsMenu();
-//            Intent intent = new Intent(this, SearchActivity.class);
-//            startActivity(intent);
+        }
+        else if(id == R.id.action_search) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        }
+        else if(id == R.id.action_filter){
+            FilterDialogFragment dialog = new FilterDialogFragment(this);
+            dialog.show(getSupportFragmentManager(), "dialog");
         }
 
         return super.onOptionsItemSelected(item);
@@ -300,8 +307,7 @@ public class BlocSpotActivity extends FragmentActivity implements OnMapReadyCall
         }
         else {
             loc = location;
-            new GetPlaces(BlocSpotActivity.this, places[0].toLowerCase().replace(
-                    "-", "_")).execute();
+            new GetPlaces(BlocSpotActivity.this, null).execute();
             Log.e(TAG, "location : " + location);
         }
     }
