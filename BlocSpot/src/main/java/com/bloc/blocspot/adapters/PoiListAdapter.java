@@ -104,11 +104,12 @@ public class PoiListAdapter extends CursorAdapter {
         //setup popup menu
         holder.threeDots.setFocusable(false);
         mPopupMenu = new PopupMenu(mContext, holder.threeDots);
-        mPopupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, "Edit Note");
-        mPopupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, "Mark as Visited");
-        mPopupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, "View on Map");
-        mPopupMenu.getMenu().add(Menu.NONE, 3, Menu.NONE, "Share POI");
-        mPopupMenu.getMenu().add(Menu.NONE, 4, Menu.NONE, "Delete Poi");
+        mPopupMenu.getMenu().add(Menu.NONE, 0, Menu.NONE, context.getString(R.string.popup_edit_note));
+        mPopupMenu.getMenu().add(Menu.NONE, 1, Menu.NONE, context.getString(R.string.popup_visited));
+        mPopupMenu.getMenu().add(Menu.NONE, 2, Menu.NONE, context.getString(R.string.popup_category));
+        mPopupMenu.getMenu().add(Menu.NONE, 3, Menu.NONE, "View on Map");
+        mPopupMenu.getMenu().add(Menu.NONE, 4, Menu.NONE, "Share POI");
+        mPopupMenu.getMenu().add(Menu.NONE, 5, Menu.NONE, "Delete Poi");
 
         holder.threeDots.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,11 +140,13 @@ public class PoiListAdapter extends CursorAdapter {
                         ((BlocSpotActivity) mContext).editVisited(mId, !mVisited);
                         break;
                     case 2:
-                        ((BlocSpotActivity) mContext).viewOnMap(mLat, mLng);
                         break;
                     case 3:
+                        ((BlocSpotActivity) mContext).viewOnMap(mLat, mLng);
                         break;
                     case 4:
+                        break;
+                    case 5:
                         ((BlocSpotActivity) mContext).deletePoi(mId);
                         break;
                 }

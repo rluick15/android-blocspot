@@ -53,5 +53,8 @@
     <string name="desc_popup_menu">Popup Menu</string>
     <string name="desc_visited">Visited</string>
     <string name="toast_poi_updated">POI Updated!</string>
+    <string name="popup_edit_note">Edit Note</string>
+    <string name="popup_visited">Mark as Visited</string>
+    <string name="popup_category">Change Category</string>
 
 </resources>

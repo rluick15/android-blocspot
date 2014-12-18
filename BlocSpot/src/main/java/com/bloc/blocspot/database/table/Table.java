@@ -21,15 +21,31 @@ public abstract class Table {
     }
 
     public final void load() {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 super.run();
-                //Todo:ERROR!!!
-                mDb = BlocSpotApplication.get().getWritableDb();
+                if (BlocSpotApplication.get() == null) {
+                    while (BlocSpotApplication.get() == null) {
+                        mDb = BlocSpotApplication.get().getWritableDb();
+                    }
+                } else {
+                    mDb = BlocSpotApplication.get().getWritableDb();
+                }
             }
+
         }.start();
     }
+//
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                public void run() {
+//                    mDb = BlocSpotApplication.get().getWritableDb();
+//                }
+//            }, 2000);
+
+
+    //Todo:share intent
 
     /*
      * Return the create statement for this Table
