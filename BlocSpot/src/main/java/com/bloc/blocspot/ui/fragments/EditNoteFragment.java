@@ -1,9 +1,10 @@
 package com.bloc.blocspot.ui.fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,39 +17,35 @@ import com.bloc.blocspot.blocspot.R;
  * {@link EditNoteFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class EditNoteFragment extends Fragment {
+public class EditNoteFragment extends DialogFragment {
 
+    private String mName;
+    private String mId;
     private OnFragmentInteractionListener mListener;
 
     public EditNoteFragment() {} // Required empty public constructor
 
     public EditNoteFragment(String name) {
-
+        this.mName = name;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_note, container, false);
+        getDialog().setTitle(getString(R.string.title_edit_note));
 
         return rootView;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        try {
+//            mListener = (OnFragmentInteractionListener) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
     }
 
     @Override

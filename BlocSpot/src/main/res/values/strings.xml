@@ -48,5 +48,7 @@
     <string name="button_filter">Filter</string>
     <string name="button_reset_filter">Reset Filters</string>
     <string name="title_filter">Filter By Category</string>
+    <string name="title_edit_note">Edit Note</string>
+    <string name="button_edit_note">Edit Note</string>
 
 </resources>
