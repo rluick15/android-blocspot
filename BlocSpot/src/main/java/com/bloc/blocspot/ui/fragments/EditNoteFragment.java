@@ -19,7 +19,6 @@ import com.bloc.blocspot.utils.Constants;
  */
 public class EditNoteFragment extends DialogFragment {
 
-    private String mName;
     private String mOldNote;
     private String mId;
     private Context mContext;
@@ -34,8 +33,8 @@ public class EditNoteFragment extends DialogFragment {
         savedInstanceState.putString(Constants.EDIT_NOTE_TEXT, mNewNote.getText().toString());
     }
 
-    public EditNoteFragment(String name, Context context, String note) {
-        this.mName = name;
+    public EditNoteFragment(String id, Context context, String note) {
+        this.mId = id;
         this.mContext = context;
         this.mOldNote = note;
     }
@@ -66,7 +65,7 @@ public class EditNoteFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String updatedNote = mNewNote.getText().toString();
-                ((BlocSpotActivity) mContext).updateNoteDb(mName, updatedNote);
+                ((BlocSpotActivity) mContext).updateNoteDb(mId, updatedNote);
                 dismiss();
             }
         });

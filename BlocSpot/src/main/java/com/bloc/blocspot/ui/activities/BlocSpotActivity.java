@@ -49,7 +49,7 @@ import java.util.ArrayList;
  */
 public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
-        EditNoteFragment.OnNoteUpdateListener {
+        EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -140,9 +140,15 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void updateNoteDb(String name, String note) {
-        mPoiTable.updateNote(name, note);
+    public void updateNoteDb(String id, String note) {
+        mPoiTable.updateNote(id, note);
         //Todo:update list
+    }
+
+    @Override
+    public void editNoteDialog(String id, String note) {
+        EditNoteFragment dialog = new EditNoteFragment(id, this, note);
+        dialog.show(getSupportFragmentManager(), "dialog");
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
@@ -291,9 +297,7 @@ public class BlocSpotActivity extends FragmentActivity
                     @Override
                     public void onClick(View view) {
                         //Todo: do switch using ID
-                        EditNoteFragment dialog = new EditNoteFragment(
-                                name, BlocSpotActivity.this, note );
-                        dialog.show(getSupportFragmentManager(), "dialog");
+                        //editNoteDialog(id, note)
                     }
                 });
 

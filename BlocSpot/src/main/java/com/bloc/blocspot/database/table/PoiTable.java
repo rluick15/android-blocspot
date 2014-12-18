@@ -73,10 +73,10 @@ public class PoiTable extends Table {
                 null, null, null, null);
     }
 
-    public void updateNote(String name, String note) {
+    public void updateNote(String id, String note) {
         ContentValues values = new ContentValues();
         values.put(Constants.TABLE_COLUMN_NOTE, note);
         mDb.update(Constants.TABLE_POI_NAME, values,
-                Constants.TABLE_COLUMN_POI_NAME + " = ?", new String[]{name});
+                Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
     }
 }
