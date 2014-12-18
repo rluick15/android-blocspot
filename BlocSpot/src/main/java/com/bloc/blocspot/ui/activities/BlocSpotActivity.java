@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
@@ -149,6 +150,8 @@ public class BlocSpotActivity extends FragmentActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
+                            Toast.LENGTH_LONG).show();
                         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
                     }
                 });
@@ -173,6 +176,8 @@ public class BlocSpotActivity extends FragmentActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
+                                Toast.LENGTH_LONG).show();
                         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
                     }
                 });
