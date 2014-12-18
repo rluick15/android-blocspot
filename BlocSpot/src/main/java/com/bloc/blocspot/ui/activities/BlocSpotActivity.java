@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -208,19 +209,8 @@ public class BlocSpotActivity extends FragmentActivity
                         .position(new LatLng(c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE)),
                                 c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE))))
                         .icon(BitmapDescriptorFactory
-                                .defaultMarker(getMarkerColor(c))));
-                mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-                    @Override
-                    public View getInfoWindow(Marker marker) {
-                        return null;
-                    }
-
-                    @Override
-                    public View getInfoContents(Marker marker) {
-                        View v = getLayoutInflater().inflate(R.layout.adapter_info_window, null);
-                        return v;
-                    }
-                });
+                                .defaultMarker(getMarkerColor(c))))
+                        .setSnippet(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_NOTE)));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //current location
@@ -267,6 +257,34 @@ public class BlocSpotActivity extends FragmentActivity
 
     private void initCompo() {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                View v = getLayoutInflater().inflate(R.layout.adapter_info_window, null);
+
+                TextView nameField = (TextView) v.findViewById(R.id.nameField);
+                TextView noteField = (TextView) v.findViewById(R.id.noteField);
+                TextView catName = (TextView) v.findViewById(R.id.categoryField);
+
+                nameField.setText(marker.getTitle());
+                noteField.setText(marker.getSnippet());
+
+                Button addNoteButton = (Button) v.findViewById(R.id.noteButton);
+                addNoteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+                return v;
+            }
+        });
     }
 
     @Override
