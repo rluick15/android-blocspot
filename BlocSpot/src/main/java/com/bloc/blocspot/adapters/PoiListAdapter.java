@@ -29,6 +29,8 @@ public class PoiListAdapter extends CursorAdapter {
     private PopupMenu mPopupMenu;
     private String mId;
     private String mNote;
+    private String mVisitedString;
+    private Boolean mVisited;
 
     public PoiListAdapter(Context context, Cursor c, Location loc) {
         super(context, c);
@@ -50,6 +52,7 @@ public class PoiListAdapter extends CursorAdapter {
         holder.threeDots = (ImageButton) mView.findViewById(R.id.threeDots);
         holder.color = (TextView) mView.findViewById(R.id.colorArea);
         holder.id = (TextView) mView.findViewById(R.id.idHolder);
+        holder.visited = (TextView) mView.findViewById(R.id.visitedHolder);
         mView.setTag(holder);
 
         return mView;
@@ -81,7 +84,13 @@ public class PoiListAdapter extends CursorAdapter {
 
         if(visited != null && visited == true) {
             holder.checkMark.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_check_on));
+            holder.visited.setText(Constants.TRUE);
         }
+        else if(visited != null && visited == false) {
+            holder.checkMark.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_check_off));
+            holder.visited.setText(Constants.FALSE);
+        }
+
         if(color != null && holder.color != null) {
             Utils.setColorString(color, holder.color);
         }
@@ -100,6 +109,13 @@ public class PoiListAdapter extends CursorAdapter {
             public void onClick(View view) {
                 mNote = holder.note.getText().toString();
                 mId = holder.id.getText().toString();
+                String tf = holder.visited.getText().toString();
+                if(tf.equals(Constants.TRUE)){
+                    mVisited = true;
+                }
+                else if(tf.equals(Constants.FALSE)) {
+                    mVisited = false;
+                }
                 mPopupMenu.show();
             }
         });
@@ -110,6 +126,9 @@ public class PoiListAdapter extends CursorAdapter {
                 switch (menuItem.getItemId()) {
                     case 0:
                         ((BlocSpotActivity) mContext).editNoteDialog(mId, mNote);
+                        break;
+                    case 1:
+                        ((BlocSpotActivity) mContext).editVisited(mId, !mVisited);
                         break;
                 }
                 return false;
@@ -125,9 +144,11 @@ public class PoiListAdapter extends CursorAdapter {
         ImageView checkMark;
         ImageButton threeDots;
         TextView id;
+        TextView visited;
     }
 
     public interface OnPoiListAdapterListener {
         public void editNoteDialog(String id, String note);
+        public void editVisited(String id, Boolean visited);
     }
 }

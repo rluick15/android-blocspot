@@ -71,6 +71,8 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
     public static final String CATEGORY_UNCATEGORIZED = "categoryUncategorized";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
     
 
 

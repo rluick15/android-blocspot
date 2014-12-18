@@ -154,13 +154,30 @@ public class BlocSpotActivity extends FragmentActivity
                 });
             }
         }.start();
-        //Todo:update list
     }
 
     @Override
     public void editNoteDialog(String id, String note) {
         EditNoteFragment dialog = new EditNoteFragment(id, this, note);
         dialog.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void editVisited(final String id, final Boolean visited) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                mPoiTable.updateVisited(id, visited);
+                Log.e("ERROR", String.valueOf(visited));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                    }
+                });
+            }
+        }.start();
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {

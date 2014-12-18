@@ -103,6 +103,12 @@
             android:layout_height="wrap_content"
             android:text=""
             android:id="@+id/idHolder" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/visitedHolder" />
 
     </RelativeLayout>
 

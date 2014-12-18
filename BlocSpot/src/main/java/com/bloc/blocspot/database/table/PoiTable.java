@@ -79,4 +79,11 @@ public class PoiTable extends Table {
         mDb.update(Constants.TABLE_POI_NAME, values,
                 Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
     }
+
+    public void updateVisited(String id, Boolean visited) {
+        ContentValues values = new ContentValues();
+        values.put(Constants.TABLE_COLUMN_VISITED, visited);
+        mDb.update(Constants.TABLE_POI_NAME, values,
+                Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
+    }
 }
