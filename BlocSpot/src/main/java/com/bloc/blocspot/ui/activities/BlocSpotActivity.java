@@ -24,6 +24,7 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
@@ -47,7 +48,8 @@ import java.util.ArrayList;
  *
  */
 public class BlocSpotActivity extends FragmentActivity
-        implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener {
+        implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
+        EditNoteFragment.OnNoteUpdateListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -135,6 +137,12 @@ public class BlocSpotActivity extends FragmentActivity
     public void applyFilters(String name) {
         mFilter = name;
         new GetPlaces(BlocSpotActivity.this, name).execute();
+    }
+
+    @Override
+    public void updateNoteDb(String name, String note) {
+        mPoiTable.updateNote(name, note);
+        //Todo:update list
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {

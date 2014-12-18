@@ -23,9 +23,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a6db0f7-dc06-4430-bdde-02615bbe9a07" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/EditNoteFragment.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/EditNoteFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_edit_note.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_edit_note.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" />
     </list>
     <ignored path="android-blocspot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -91,23 +91,23 @@
       <file leaf-file-name="BlocSpotActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3672" max-vertical-offset="5610">
-              <caret line="282" column="0" selection-start-line="282" selection-start-column="0" selection-end-line="282" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="3803" max-vertical-offset="5729">
+              <caret line="217" column="42" selection-start-line="217" selection-start-column="42" selection-end-line="217" selection-end-column="42" />
               <folding>
-                <element signature="e#10600#10803#0" expanded="true" />
-                <element signature="e#10784#10785#0" expanded="true" />
+                <element signature="e#10850#11053#0" expanded="true" />
+                <element signature="e#11034#11035#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fragment_edit_note.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="fragment_edit_note.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_edit_note.xml">
           <provider editor-type-id="android-designer">
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.65163934" vertical-offset="277" max-vertical-offset="850">
+            <state vertical-scroll-proportion="-12.592592" vertical-offset="255" max-vertical-offset="850">
               <caret line="35" column="37" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
               <folding>
                 <element signature="e#472#505#0" expanded="true" />
@@ -126,15 +126,27 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="PoiTable.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/table/PoiTable.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5708738" vertical-offset="777" max-vertical-offset="1360">
+              <caret line="71" column="34" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="34" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="EditNoteFragment.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/EditNoteFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1173">
-              <caret line="34" column="64" selection-start-line="34" selection-start-column="64" selection-end-line="34" selection-end-column="64" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="1734">
+              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding>
-                <element signature="e#807#808#0" expanded="true" />
-                <element signature="e#840#841#0" expanded="true" />
-                <element signature="e#1079#1114#0" expanded="true" />
+                <element signature="e#1517#1552#0" expanded="true" />
+                <element signature="e#1947#2093#0" expanded="true" />
+                <element signature="e#2082#2083#0" expanded="true" />
+                <element signature="e#2256#2550#0" expanded="true" />
+                <element signature="e#2539#2540#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -143,8 +155,8 @@
       <file leaf-file-name="Constants.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="1394">
-              <caret line="10" column="58" selection-start-line="10" selection-start-column="58" selection-end-line="10" selection-end-column="58" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="1411">
+              <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -1204,13 +1216,13 @@
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_filter_dialog.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/FilterDialogFragment.java" />
-        <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/adapters/InfoWindowAdapter.java" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/adapter_info_window.xml" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/table/PoiTable.java" />
+        <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_edit_note.xml" />
+        <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" />
         <option value="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/EditNoteFragment.java" />
-        <option value="$PROJECT_DIR$/BlocSpot/src/main/res/layout/fragment_edit_note.xml" />
       </list>
     </option>
   </component>
@@ -1505,6 +1517,78 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android-blocspot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android-blocspot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BlocSpot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="blocspot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="database" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android-blocspot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="android-blocspot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BlocSpot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="blocspot" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="database" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="table" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2070,14 +2154,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1394">
-          <caret line="10" column="58" selection-start-line="10" selection-start-column="58" selection-end-line="10" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/table/Table.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="325" max-vertical-offset="714">
@@ -2097,6 +2173,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="692" max-vertical-offset="1411">
           <caret line="63" column="38" selection-start-line="63" selection-start-column="38" selection-end-line="63" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2185,33 +2262,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
+    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3672" max-vertical-offset="5610">
-          <caret line="282" column="0" selection-start-line="282" selection-start-column="0" selection-end-line="282" selection-end-column="0" />
-          <folding>
-            <element signature="e#10600#10803#0" expanded="true" />
-            <element signature="e#10784#10785#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/table/PoiTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="777" max-vertical-offset="1360">
-          <caret line="71" column="34" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="1411">
+          <caret line="9" column="56" selection-start-line="9" selection-start-column="56" selection-end-line="9" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/EditNoteFragment.java">
+    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1173">
-          <caret line="34" column="64" selection-start-line="34" selection-start-column="64" selection-end-line="34" selection-end-column="64" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2834" max-vertical-offset="5729">
+          <caret line="217" column="42" selection-start-line="217" selection-start-column="42" selection-end-line="217" selection-end-column="42" />
           <folding>
-            <element signature="e#807#808#0" expanded="true" />
-            <element signature="e#840#841#0" expanded="true" />
-            <element signature="e#1079#1114#0" expanded="true" />
+            <element signature="e#10850#11053#0" expanded="true" />
+            <element signature="e#11034#11035#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2221,7 +2286,7 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.65163934" vertical-offset="277" max-vertical-offset="850">
+        <state vertical-scroll-proportion="-12.592592" vertical-offset="255" max-vertical-offset="850">
           <caret line="35" column="37" selection-start-line="35" selection-start-column="37" selection-end-line="35" selection-end-column="37" />
           <folding>
             <element signature="e#472#505#0" expanded="true" />
@@ -2236,6 +2301,28 @@
             <element signature="e#1750#1783#0" expanded="true" />
             <element signature="e#1823#1858#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/fragments/EditNoteFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="765" max-vertical-offset="1734">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding>
+            <element signature="e#1517#1552#0" expanded="true" />
+            <element signature="e#1947#2093#0" expanded="true" />
+            <element signature="e#2082#2083#0" expanded="true" />
+            <element signature="e#2256#2550#0" expanded="true" />
+            <element signature="e#2539#2540#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/table/PoiTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5708738" vertical-offset="777" max-vertical-offset="1360">
+          <caret line="71" column="34" selection-start-line="71" selection-start-column="34" selection-end-line="71" selection-end-column="34" />
+          <folding />
         </state>
       </provider>
     </entry>
