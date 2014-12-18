@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -270,15 +270,17 @@ public class BlocSpotActivity extends FragmentActivity
                 TextView nameField = (TextView) v.findViewById(R.id.nameField);
                 TextView noteField = (TextView) v.findViewById(R.id.noteField);
                 TextView catName = (TextView) v.findViewById(R.id.categoryField);
+                //noteId, catColor, visited??
 
                 nameField.setText(marker.getTitle());
                 noteField.setText(marker.getSnippet());
 
-                Button addNoteButton = (Button) v.findViewById(R.id.noteButton);
+                ImageButton addNoteButton = (ImageButton) v.findViewById(R.id.noteButton);
                 addNoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        //Todo: do switch using ID
+                        
                     }
                 });
 

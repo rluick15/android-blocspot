@@ -73,12 +73,10 @@ public class PoiTable extends Table {
                 null, null, null, null);
     }
 
-    public Cursor updateNote(String name) {
-        return mDb.query(Constants.TABLE_POI_NAME,
-                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME
-                        , Constants.TABLE_COLUMN_CAT_COLOR},
-                Constants.TABLE_COLUMN_POI_NAME + " = ?",
-                new String[]{name},
-                null, null, null, null);
+    public void updateNote(String name, String note) {
+        ContentValues values = new ContentValues();
+        values.put(Constants.TABLE_COLUMN_NOTE, note);
+        mDb.update(Constants.TABLE_POI_NAME, values,
+                Constants.TABLE_COLUMN_POI_NAME + " = ?", new String[]{name});
     }
 }
