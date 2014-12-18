@@ -185,6 +185,24 @@ public class BlocSpotActivity extends FragmentActivity
         }.start();
     }
 
+    @Override
+    public void viewOnMap(String lat, String lng) {
+        getFragmentManager().beginTransaction().show(mMapFragment).commit();
+        mPoiList.setVisibility(View.INVISIBLE);
+        mListState = false;
+        this.invalidateOptionsMenu();
+
+        Double latitude = Double.parseDouble(lat);
+        Double longitude = Double.parseDouble(lng);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude)) //current location
+                .zoom(20) // Sets the zoom
+                .tilt(0) // Sets the tilt of the camera to 30 degrees
+                .build(); // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;

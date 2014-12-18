@@ -29,8 +29,9 @@ public class PoiListAdapter extends CursorAdapter {
     private PopupMenu mPopupMenu;
     private String mId;
     private String mNote;
-    private String mVisitedString;
     private Boolean mVisited;
+    private String mLat;
+    private String mLng;
 
     public PoiListAdapter(Context context, Cursor c, Location loc) {
         super(context, c);
@@ -53,6 +54,8 @@ public class PoiListAdapter extends CursorAdapter {
         holder.color = (TextView) mView.findViewById(R.id.colorArea);
         holder.id = (TextView) mView.findViewById(R.id.idHolder);
         holder.visited = (TextView) mView.findViewById(R.id.visitedHolder);
+        holder.lat = (TextView) mView.findViewById(R.id.latHolder);
+        holder.lng = (TextView) mView.findViewById(R.id.lngHolder);
         mView.setTag(holder);
 
         return mView;
@@ -75,6 +78,9 @@ public class PoiListAdapter extends CursorAdapter {
             holder.note.setText(note);
         }
         holder.id.setText(id);
+        holder.lat.setText(String.valueOf(lat));
+        holder.lng.setText(String.valueOf(lng));
+
 
         Location placeLoc = new Location("");
         placeLoc.setLatitude(lat);
@@ -109,6 +115,8 @@ public class PoiListAdapter extends CursorAdapter {
             public void onClick(View view) {
                 mNote = holder.note.getText().toString();
                 mId = holder.id.getText().toString();
+                mLat = holder.lat.getText().toString();
+                mLng = holder.lng.getText().toString();
                 String tf = holder.visited.getText().toString();
                 if(tf.equals(Constants.TRUE)){
                     mVisited = true;
@@ -130,6 +138,9 @@ public class PoiListAdapter extends CursorAdapter {
                     case 1:
                         ((BlocSpotActivity) mContext).editVisited(mId, !mVisited);
                         break;
+                    case 2:
+                        ((BlocSpotActivity) mContext).viewOnMap(mLat, mLng);
+                        break;
                 }
                 return false;
             }
@@ -145,10 +156,13 @@ public class PoiListAdapter extends CursorAdapter {
         ImageButton threeDots;
         TextView id;
         TextView visited;
+        TextView lat;
+        TextView lng;
     }
 
     public interface OnPoiListAdapterListener {
         public void editNoteDialog(String id, String note);
         public void editVisited(String id, Boolean visited);
+        public void viewOnMap(String lat, String lng);
     }
 }
