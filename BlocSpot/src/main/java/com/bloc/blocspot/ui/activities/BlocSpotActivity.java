@@ -280,7 +280,7 @@ public class BlocSpotActivity extends FragmentActivity
                     @Override
                     public void onClick(View view) {
                         //Todo: do switch using ID
-                        
+
                     }
                 });
 
