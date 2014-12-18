@@ -272,23 +272,28 @@ public class BlocSpotActivity extends FragmentActivity
             }
 
             @Override
-            public View getInfoContents(Marker marker) {
+            public View getInfoContents(final Marker marker) {
                 View v = getLayoutInflater().inflate(R.layout.adapter_info_window, null);
+
+                final String name = marker.getTitle();
+                final String note = marker.getSnippet();
 
                 TextView nameField = (TextView) v.findViewById(R.id.nameField);
                 TextView noteField = (TextView) v.findViewById(R.id.noteField);
                 TextView catName = (TextView) v.findViewById(R.id.categoryField);
                 //noteId, catColor, visited??
 
-                nameField.setText(marker.getTitle());
-                noteField.setText(marker.getSnippet());
+                nameField.setText(name);
+                noteField.setText(note);
 
                 ImageButton addNoteButton = (ImageButton) v.findViewById(R.id.noteButton);
                 addNoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //Todo: do switch using ID
-
+                        EditNoteFragment dialog = new EditNoteFragment(
+                                name, BlocSpotActivity.this, note );
+                        dialog.show(getSupportFragmentManager(), "dialog");
                     }
                 });
 
