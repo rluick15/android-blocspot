@@ -140,8 +140,20 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void updateNoteDb(String id, String note) {
-        mPoiTable.updateNote(id, note);
+    public void updateNoteDb(final String id, final String note) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                mPoiTable.updateNote(id, note);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                    }
+                });
+            }
+        }.start();
         //Todo:update list
     }
 
