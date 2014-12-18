@@ -141,6 +141,11 @@ public class PoiListAdapter extends CursorAdapter {
                     case 2:
                         ((BlocSpotActivity) mContext).viewOnMap(mLat, mLng);
                         break;
+                    case 3:
+                        break;
+                    case 4:
+                        ((BlocSpotActivity) mContext).deletePoi(mId);
+                        break;
                 }
                 return false;
             }
@@ -164,5 +169,6 @@ public class PoiListAdapter extends CursorAdapter {
         public void editNoteDialog(String id, String note);
         public void editVisited(String id, Boolean visited);
         public void viewOnMap(String lat, String lng);
+        public void deletePoi(String id);
     }
 }

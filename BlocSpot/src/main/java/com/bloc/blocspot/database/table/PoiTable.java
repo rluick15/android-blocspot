@@ -86,4 +86,8 @@ public class PoiTable extends Table {
         mDb.update(Constants.TABLE_POI_NAME, values,
                 Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
     }
+
+    public void deletePoi(String id) {
+        mDb.delete(Constants.TABLE_POI_NAME, Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
+    }
 }

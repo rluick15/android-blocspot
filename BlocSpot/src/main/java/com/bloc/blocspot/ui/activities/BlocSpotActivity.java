@@ -203,6 +203,25 @@ public class BlocSpotActivity extends FragmentActivity
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
+    @Override
+    public void deletePoi(final String id) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                mPoiTable.deletePoi(id);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(BlocSpotActivity.this, "POI Deleted!",
+                                Toast.LENGTH_LONG).show();
+                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                    }
+                });
+            }
+        }.start();
+    }
+
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;
@@ -350,6 +369,7 @@ public class BlocSpotActivity extends FragmentActivity
                     public void onClick(View view) {
                         //Todo: do switch using ID
                         //editNoteDialog(id, note)
+                        //also set Id to title or snippet and use custom dialog
                     }
                 });
 
