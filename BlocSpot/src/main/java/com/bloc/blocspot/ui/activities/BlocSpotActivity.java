@@ -25,6 +25,7 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.utils.Constants;
@@ -224,7 +225,8 @@ public class BlocSpotActivity extends FragmentActivity
 
     @Override
     public void changeCategory(String id, String category, String catColor) {
-
+        ChangeCategoryFragment dialog = new ChangeCategoryFragment(id, category, catColor, this);
+        dialog.show(getSupportFragmentManager(), "dialog");
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {

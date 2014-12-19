@@ -58,6 +58,8 @@ public class PoiListAdapter extends CursorAdapter {
         holder.visited = (TextView) mView.findViewById(R.id.visitedHolder);
         holder.lat = (TextView) mView.findViewById(R.id.latHolder);
         holder.lng = (TextView) mView.findViewById(R.id.lngHolder);
+        holder.catName = (TextView) mView.findViewById(R.id.catNameHolder);
+        holder.catColor = (TextView) mView.findViewById(R.id.catColorHolder);
         mView.setTag(holder);
 
         return mView;
