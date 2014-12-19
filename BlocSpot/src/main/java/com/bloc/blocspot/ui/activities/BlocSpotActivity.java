@@ -51,7 +51,8 @@ import java.util.ArrayList;
  */
 public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
-        EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener {
+        EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener,
+        ChangeCategoryFragment.OnChangeCategoryListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -94,7 +95,7 @@ public class BlocSpotActivity extends FragmentActivity
         if(mListState) { //hide the map if the list state is selected
             getFragmentManager().beginTransaction().hide(mMapFragment).commit();
         }
-        else if(!mListState) { //hide the list if map is to be shown
+        else { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
     }
@@ -229,6 +230,11 @@ public class BlocSpotActivity extends FragmentActivity
         dialog.show(getSupportFragmentManager(), "dialog");
     }
 
+    @Override
+    public void refreshList() {
+        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+    }
+
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;
@@ -286,7 +292,7 @@ public class BlocSpotActivity extends FragmentActivity
             if (dialog.isShowing()) {
                 try {
                     dialog.dismiss();
-                } catch (IllegalArgumentException e){}
+                } catch (IllegalArgumentException ignored){}
             }
 
             PoiListAdapter adapter = new PoiListAdapter(BlocSpotActivity.this, cursor, loc);

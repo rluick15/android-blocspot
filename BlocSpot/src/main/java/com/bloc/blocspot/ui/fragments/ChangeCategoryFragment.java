@@ -1,10 +1,8 @@
 package com.bloc.blocspot.ui.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -13,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
+import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.ui.activities.BlocSpotActivity;
 import com.bloc.blocspot.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,21 +26,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChangeCategoryFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
+ * This fragment allows the user to change the category of a POI
  */
 public class ChangeCategoryFragment extends DialogFragment {
 
     private String mId;
-    private String mCatName;
-    private String mCatColor;
     private Category mCategory;
     private Context mContext;
-    private ListView mListView;
-
-    private OnFragmentInteractionListener mListener;
+    private PoiTable mPoiTable = new PoiTable();
 
     public ChangeCategoryFragment() {} // Required empty public constructor
 
@@ -65,11 +59,11 @@ public class ChangeCategoryFragment extends DialogFragment {
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
         final ArrayList<Category> categories = new Gson().fromJson(json, type);
 
-        mListView = (ListView) rootView.findViewById(R.id.categoryList);
+        ListView listView = (ListView) rootView.findViewById(R.id.categoryList);
         final SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        mListView.setAdapter(adapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 view.setSelected(true);
@@ -89,24 +83,48 @@ public class ChangeCategoryFragment extends DialogFragment {
             }
         });
 
+        Button cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
+        savePoiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String catName = mCategory.getName();
+                final String catColor = mCategory.getColor();
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        mPoiTable.updateCategory(mId, catName, catColor);
+                    }
+                }.start();
+                Toast.makeText(mContext, mContext.getString(R.string.toast_poi_updated), Toast.LENGTH_LONG).show();
+                ((BlocSpotActivity) mContext).refreshList();
+                dismiss();
+            }
+        });
+
         return rootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        try {
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -119,8 +137,8 @@ public class ChangeCategoryFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+    public interface OnChangeCategoryListener {
+        public void refreshList();
     }
 
 }
