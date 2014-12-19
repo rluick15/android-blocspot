@@ -37,15 +37,14 @@ public class ChangeCategoryFragment extends DialogFragment {
     private String mCatColor;
     private Category mCategory;
     private Context mContext;
+    private ListView mListView;
 
     private OnFragmentInteractionListener mListener;
 
     public ChangeCategoryFragment() {} // Required empty public constructor
 
-    public ChangeCategoryFragment(String id, String catName, String catColor, Context context) {
+    public ChangeCategoryFragment(String id, Context context) {
         this.mId = id;
-        this.mCatName = catName;
-        this.mCatColor = catColor;
         this.mContext = context;
     }
 
@@ -56,7 +55,7 @@ public class ChangeCategoryFragment extends DialogFragment {
 
         //set the save button to disabled until a category is selected
         final Button savePoiButton = (Button) rootView.findViewById(R.id.saveButton);
-        savePoiButton.setText(R.string.button_save_poi);
+        savePoiButton.setText(mContext.getString(R.string.button_change_category));
         if(mCategory == null) {
             savePoiButton.setEnabled(false);
         }
@@ -66,16 +65,27 @@ public class ChangeCategoryFragment extends DialogFragment {
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
         final ArrayList<Category> categories = new Gson().fromJson(json, type);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.categoryList);
+        mListView = (ListView) rootView.findViewById(R.id.categoryList);
         final SavePoiListAdapter adapter = new SavePoiListAdapter(mContext, categories);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 view.setSelected(true);
                 mCategory = (Category) adapterView.getItemAtPosition(position);
                 savePoiButton.setEnabled(true);
+            }
+        });
+
+        Button newCatButton = (Button) rootView.findViewById(R.id.addButton);
+        newCatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CreateCategoryDialogFragment dialogFragment =
+                        new CreateCategoryDialogFragment(null, categories, mContext, mId);
+                dialogFragment.show(getFragmentManager(), "dialog");
+                dismiss();
             }
         });
 

@@ -59,5 +59,6 @@
     <string name="popup_view_map">View on Map</string>
     <string name="popup_share">Share POI</string>
     <string name="popup_delete">Delete Poi</string>
+    <string name="button_change_category">Update</string>
 
 </resources>

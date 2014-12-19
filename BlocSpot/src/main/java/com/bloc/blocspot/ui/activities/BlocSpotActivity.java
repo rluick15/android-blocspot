@@ -224,8 +224,8 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void changeCategory(String id, String category, String catColor) {
-        ChangeCategoryFragment dialog = new ChangeCategoryFragment(id, category, catColor, this);
+    public void changeCategory(String id) {
+        ChangeCategoryFragment dialog = new ChangeCategoryFragment(id, this);
         dialog.show(getSupportFragmentManager(), "dialog");
     }
 
