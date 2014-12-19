@@ -56,5 +56,8 @@
     <string name="popup_edit_note">Edit Note</string>
     <string name="popup_visited">Mark as Visited</string>
     <string name="popup_category">Change Category</string>
+    <string name="popup_view_map">View on Map</string>
+    <string name="popup_share">Share POI</string>
+    <string name="popup_delete">Delete Poi</string>
 
 </resources>

@@ -222,6 +222,11 @@ public class BlocSpotActivity extends FragmentActivity
         }.start();
     }
 
+    @Override
+    public void changeCategory(String id, String category, String catColor) {
+
+    }
+
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
 
         private ProgressDialog dialog;

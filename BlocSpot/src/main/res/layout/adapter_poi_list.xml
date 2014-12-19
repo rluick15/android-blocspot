@@ -121,6 +121,18 @@
             android:layout_height="wrap_content"
             android:text=""
             android:id="@+id/lngHolder" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/catNameHolder" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/catColorHolder" />
 
     </RelativeLayout>
 

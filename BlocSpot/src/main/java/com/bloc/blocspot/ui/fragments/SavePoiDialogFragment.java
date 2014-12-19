@@ -48,13 +48,14 @@ public class SavePoiDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_save_poi_dialog, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_pick_category_dialog, container, false);
         getDialog().setTitle(getString(R.string.title_save_poi_dialog));
 
         //Todo: change background and color of title
 
         //set the save button to disabled until a category is selected
         final Button savePoiButton = (Button) rootView.findViewById(R.id.saveButton);
+        savePoiButton.setText(R.string.button_save_poi);
         if(mCategory == null) {
             savePoiButton.setEnabled(false);
         }
