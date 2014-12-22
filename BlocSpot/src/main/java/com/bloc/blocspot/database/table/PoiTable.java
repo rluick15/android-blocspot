@@ -2,7 +2,6 @@ package com.bloc.blocspot.database.table;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.bloc.blocspot.utils.Constants;
 
@@ -28,9 +27,6 @@ public class PoiTable extends Table {
     public String getCreateStatement() {
         return SQL_CREATE_POI;
     }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
 
     public void addNewPoi(String name, double lat, double lng, String catName, String catColor) {
         ContentValues values = new ContentValues();
