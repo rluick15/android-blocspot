@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +27,7 @@ import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
+import com.bloc.blocspot.ui.fragments.InfoWindowFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -314,12 +314,11 @@ public class BlocSpotActivity extends FragmentActivity
             for (int i = 0; i < cursor.getCount(); i++) {
                 c = ((Cursor) adapter.getItem(i));
                 mMap.addMarker(new MarkerOptions()
-                        .title(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME)))
+                        .title(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_ID)))
                         .position(new LatLng(c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE)),
                                 c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE))))
                         .icon(BitmapDescriptorFactory
-                                .defaultMarker(getMarkerColor(c))))
-                        .setSnippet(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_NOTE)));
+                                .defaultMarker(getMarkerColor(c))));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //current location
@@ -366,38 +365,12 @@ public class BlocSpotActivity extends FragmentActivity
 
     private void initCompo() {
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(final Marker marker) {
-                View v = getLayoutInflater().inflate(R.layout.adapter_info_window, null);
-
-                final String name = marker.getTitle();
-                final String note = marker.getSnippet();
-
-                TextView nameField = (TextView) v.findViewById(R.id.nameField);
-                TextView noteField = (TextView) v.findViewById(R.id.noteField);
-                TextView catName = (TextView) v.findViewById(R.id.categoryField);
-                //noteId, catColor, visited??
-
-                nameField.setText(name);
-                noteField.setText(note);
-
-                ImageButton addNoteButton = (ImageButton) v.findViewById(R.id.noteButton);
-                addNoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Todo: do switch using ID
-                        //editNoteDialog(id, note)
-                        //also set Id to title or snippet and use custom dialog
-                    }
-                });
-
-                return v;
+            public boolean onMarkerClick(Marker marker) {
+                InfoWindowFragment fragment = new InfoWindowFragment();
+                fragment.show(getSupportFragmentManager(), "dialog");
+                return false;
             }
         });
     }
