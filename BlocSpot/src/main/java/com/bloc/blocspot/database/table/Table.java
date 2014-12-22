@@ -36,14 +36,6 @@ public abstract class Table {
 
         }.start();
     }
-//
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                public void run() {
-//                    mDb = BlocSpotApplication.get().getWritableDb();
-//                }
-//            }, 2000);
-
 
     //Todo:share intent
 

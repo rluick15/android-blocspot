@@ -49,6 +49,17 @@ public class PoiTable extends Table {
                 null, null, null, null, null, null);
     }
 
+    public Cursor poiSpecificQuery(String id) {
+        return mDb.query(Constants.TABLE_POI_NAME,
+                new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME,
+                        Constants.TABLE_COLUMN_NOTE, Constants.TABLE_COLUMN_VISITED,
+                        Constants.TABLE_COLUMN_LATITUDE, Constants.TABLE_COLUMN_LONGITUDE,
+                        Constants.TABLE_COLUMN_CAT_NAME, Constants.TABLE_COLUMN_CAT_COLOR},
+                Constants.TABLE_COLUMN_ID + " = ?",
+                new String[]{id},
+                null, null, null, null);
+    }
+
     public Cursor filterQuery(String filter) {
         return mDb.query(Constants.TABLE_POI_NAME,
                 new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME,

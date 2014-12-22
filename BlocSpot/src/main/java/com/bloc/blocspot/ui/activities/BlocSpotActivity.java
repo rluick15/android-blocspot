@@ -368,9 +368,10 @@ public class BlocSpotActivity extends FragmentActivity
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                InfoWindowFragment fragment = new InfoWindowFragment();
+                InfoWindowFragment fragment = new InfoWindowFragment(marker.getTitle(), BlocSpotActivity.this);
                 fragment.show(getSupportFragmentManager(), "dialog");
-                return false;
+
+                return true;
             }
         });
     }
