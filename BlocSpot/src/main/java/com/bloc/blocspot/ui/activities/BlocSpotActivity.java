@@ -231,6 +231,17 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
+    public void shareLocation(String name, String lat, String lng) {
+        name = name.replace(" ", "+");
+        String shareUrl = "https://www.google.com/maps/place/" + name + "/@" + lat + "," + lng;
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType(Constants.INTENT_TYPE_TEXT_PLAIN);
+        intent.putExtra(Intent.EXTRA_SUBJECT, name);
+        intent.putExtra(Intent.EXTRA_TEXT, shareUrl);
+        startActivity(Intent.createChooser(intent, getString(R.string.intent_share_poi)));
+    }
+
+    @Override
     public void refreshList() {
         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
     }

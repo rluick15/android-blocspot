@@ -30,6 +30,7 @@ public class PoiListAdapter extends CursorAdapter {
     private Boolean mVisited;
     private String mLat;
     private String mLng;
+    private String mName;
 
     public PoiListAdapter(Context context, Cursor c, Location loc) {
         super(context, c);
@@ -110,6 +111,7 @@ public class PoiListAdapter extends CursorAdapter {
         holder.threeDots.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mName = holder.name.getText().toString();
                 mNote = holder.note.getText().toString();
                 mId = holder.id.getText().toString();
                 mLat = holder.lat.getText().toString();
@@ -142,6 +144,7 @@ public class PoiListAdapter extends CursorAdapter {
                         ((BlocSpotActivity) mContext).viewOnMap(mLat, mLng);
                         break;
                     case 4:
+                        ((BlocSpotActivity) mContext).shareLocation(mName, mLat, mLng);
                         break;
                     case 5:
                         ((BlocSpotActivity) mContext).deletePoi(mId);
@@ -171,5 +174,6 @@ public class PoiListAdapter extends CursorAdapter {
         public void viewOnMap(String lat, String lng);
         public void deletePoi(String id);
         public void changeCategory(String id);
+        public void shareLocation(String name, String lat, String lng);
     }
 }
