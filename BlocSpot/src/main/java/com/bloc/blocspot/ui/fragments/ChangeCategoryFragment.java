@@ -17,8 +17,7 @@ import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
-import com.bloc.blocspot.places.Place;
-import com.bloc.blocspot.ui.activities.SearchActivity;
+import com.bloc.blocspot.ui.activities.BlocSpotActivity;
 import com.bloc.blocspot.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,24 +25,21 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class SavePoiDialogFragment extends DialogFragment {
+/**
+ * This fragment allows the user to change the category of a POI
+ */
+public class ChangeCategoryFragment extends DialogFragment {
 
-    private Place mPlace;
-    private Context mContext;
+    private String mId;
     private Category mCategory;
+    private Context mContext;
     private PoiTable mPoiTable = new PoiTable();
 
-    public SavePoiDialogFragment() {} // Required empty public constructor
+    public ChangeCategoryFragment() {} // Required empty public constructor
 
-    public SavePoiDialogFragment(Context context, Place place) {
-        this.mPlace = place;
+    public ChangeCategoryFragment(String id, Context context) {
+        this.mId = id;
         this.mContext = context;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     @Override
@@ -51,16 +47,13 @@ public class SavePoiDialogFragment extends DialogFragment {
         View rootView = inflater.inflate(R.layout.fragment_pick_category_dialog, container, false);
         getDialog().setTitle(getString(R.string.title_save_poi_dialog));
 
-        //Todo: change background and color of title
-
         //set the save button to disabled until a category is selected
         final Button savePoiButton = (Button) rootView.findViewById(R.id.saveButton);
-        savePoiButton.setText(R.string.button_save_poi);
+        savePoiButton.setText(mContext.getString(R.string.button_change_category));
         if(mCategory == null) {
             savePoiButton.setEnabled(false);
         }
 
-        //get Category Array
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences(Constants.MAIN_PREFS, 0);
         String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
@@ -84,7 +77,7 @@ public class SavePoiDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 CreateCategoryDialogFragment dialogFragment =
-                        new CreateCategoryDialogFragment(mPlace, categories, mContext, null);
+                        new CreateCategoryDialogFragment(null, categories, mContext, mId);
                 dialogFragment.show(getFragmentManager(), "dialog");
                 dismiss();
             }
@@ -101,20 +94,17 @@ public class SavePoiDialogFragment extends DialogFragment {
         savePoiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String name = mPlace.getName();
-                final Double lat = mPlace.getLatitude();
-                final Double lng = mPlace.getLongitude();
                 final String catName = mCategory.getName();
                 final String catColor = mCategory.getColor();
                 new Thread(){
                     @Override
                     public void run() {
                         super.run();
-                        mPoiTable.addNewPoi(name, lat, lng, catName, catColor);
+                        mPoiTable.updateCategory(mId, catName, catColor);
                     }
                 }.start();
-                Toast.makeText(mContext, mContext.getString(R.string.toast_poi_saved), Toast.LENGTH_LONG).show();
-                ((SearchActivity) mContext).returnToMain();
+                Toast.makeText(mContext, mContext.getString(R.string.toast_poi_updated), Toast.LENGTH_LONG).show();
+                ((BlocSpotActivity) mContext).refreshList();
                 dismiss();
             }
         });
@@ -125,6 +115,11 @@ public class SavePoiDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        try {
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
@@ -142,8 +137,8 @@ public class SavePoiDialogFragment extends DialogFragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnSavePoiInteractionListener {
-        public void returnToMain();
+    public interface OnChangeCategoryListener {
+        public void refreshList();
     }
 
 }

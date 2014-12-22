@@ -19,11 +19,13 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.utils.Constants;
@@ -49,7 +51,8 @@ import java.util.ArrayList;
  */
 public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
-        EditNoteFragment.OnNoteUpdateListener {
+        EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener,
+        ChangeCategoryFragment.OnChangeCategoryListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -92,7 +95,7 @@ public class BlocSpotActivity extends FragmentActivity
         if(mListState) { //hide the map if the list state is selected
             getFragmentManager().beginTransaction().hide(mMapFragment).commit();
         }
-        else if(!mListState) { //hide the list if map is to be shown
+        else { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
     }
@@ -140,9 +143,107 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void updateNoteDb(String name, String note) {
-        mPoiTable.updateNote(name, note);
-        //Todo:update list
+    public void updateNoteDb(final String id, final String note) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                mPoiTable.updateNote(id, note);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
+                            Toast.LENGTH_LONG).show();
+                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @Override
+    public void editNoteDialog(String id, String note) {
+        EditNoteFragment dialog = new EditNoteFragment(id, this, note);
+        dialog.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void editVisited(final String id, final Boolean visited) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                mPoiTable.updateVisited(id, visited);
+                Log.e("ERROR", String.valueOf(visited));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
+                                Toast.LENGTH_LONG).show();
+                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @Override
+    public void viewOnMap(String lat, String lng) {
+        getFragmentManager().beginTransaction().show(mMapFragment).commit();
+        mPoiList.setVisibility(View.INVISIBLE);
+        mListState = false;
+        this.invalidateOptionsMenu();
+
+        Double latitude = Double.parseDouble(lat);
+        Double longitude = Double.parseDouble(lng);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(latitude, longitude)) //current location
+                .zoom(20) // Sets the zoom
+                .tilt(0) // Sets the tilt of the camera to 30 degrees
+                .build(); // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
+    @Override
+    public void deletePoi(final String id) {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                mPoiTable.deletePoi(id);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(BlocSpotActivity.this, "POI Deleted!",
+                                Toast.LENGTH_LONG).show();
+                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @Override
+    public void changeCategory(String id) {
+        ChangeCategoryFragment dialog = new ChangeCategoryFragment(id, this);
+        dialog.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void shareLocation(String name, String lat, String lng) {
+        name = name.replace(" ", "+");
+        String shareUrl = "https://www.google.com/maps/place/" + name + "/@" + lat + "," + lng;
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType(Constants.INTENT_TYPE_TEXT_PLAIN);
+        intent.putExtra(Intent.EXTRA_SUBJECT, name);
+        intent.putExtra(Intent.EXTRA_TEXT, shareUrl);
+        startActivity(Intent.createChooser(intent, getString(R.string.intent_share_poi)));
+    }
+
+    @Override
+    public void refreshList() {
+        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
@@ -202,7 +303,7 @@ public class BlocSpotActivity extends FragmentActivity
             if (dialog.isShowing()) {
                 try {
                     dialog.dismiss();
-                } catch (IllegalArgumentException e){}
+                } catch (IllegalArgumentException ignored){}
             }
 
             PoiListAdapter adapter = new PoiListAdapter(BlocSpotActivity.this, cursor, loc);
@@ -291,9 +392,8 @@ public class BlocSpotActivity extends FragmentActivity
                     @Override
                     public void onClick(View view) {
                         //Todo: do switch using ID
-                        EditNoteFragment dialog = new EditNoteFragment(
-                                name, BlocSpotActivity.this, note );
-                        dialog.show(getSupportFragmentManager(), "dialog");
+                        //editNoteDialog(id, note)
+                        //also set Id to title or snippet and use custom dialog
                     }
                 });
 

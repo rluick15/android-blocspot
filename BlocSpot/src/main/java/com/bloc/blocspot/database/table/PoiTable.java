@@ -2,7 +2,6 @@ package com.bloc.blocspot.database.table;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.bloc.blocspot.utils.Constants;
 
@@ -28,9 +27,6 @@ public class PoiTable extends Table {
     public String getCreateStatement() {
         return SQL_CREATE_POI;
     }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
 
     public void addNewPoi(String name, double lat, double lng, String catName, String catColor) {
         ContentValues values = new ContentValues();
@@ -73,10 +69,29 @@ public class PoiTable extends Table {
                 null, null, null, null);
     }
 
-    public void updateNote(String name, String note) {
+    public void updateNote(String id, String note) {
         ContentValues values = new ContentValues();
         values.put(Constants.TABLE_COLUMN_NOTE, note);
         mDb.update(Constants.TABLE_POI_NAME, values,
-                Constants.TABLE_COLUMN_POI_NAME + " = ?", new String[]{name});
+                Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
+    }
+
+    public void updateVisited(String id, Boolean visited) {
+        ContentValues values = new ContentValues();
+        values.put(Constants.TABLE_COLUMN_VISITED, visited);
+        mDb.update(Constants.TABLE_POI_NAME, values,
+                Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
+    }
+
+    public void deletePoi(String id) {
+        mDb.delete(Constants.TABLE_POI_NAME, Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
+    }
+
+    public void updateCategory(String id, String category, String catColor) {
+        ContentValues values = new ContentValues();
+        values.put(Constants.TABLE_COLUMN_CAT_NAME, category);
+        values.put(Constants.TABLE_COLUMN_CAT_COLOR, catColor);
+        mDb.update(Constants.TABLE_POI_NAME, values,
+                Constants.TABLE_COLUMN_ID + " = ?", new String[]{id});
     }
 }

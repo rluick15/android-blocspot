@@ -18,11 +18,13 @@
             android:id="@+id/colorArea"
             android:layout_width="@dimen/color_area"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_toRightOf="@+id/colorArea"
+            android:layout_toEndOf="@+id/colorArea"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -32,7 +34,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:padding="@dimen/activity_vertical_padding"
-                android:layout_marginRight="@dimen/adapter_mini_margin">
+                android:layout_marginRight="@dimen/adapter_mini_margin"
+                android:layout_marginEnd="@dimen/adapter_mini_margin">
 
                 <TextView
                     android:id="@+id/placeName"
@@ -65,6 +68,7 @@
 
                 <ImageView
                     android:id="@+id/checkImage"
+                    android:contentDescription="@string/desc_visited"
                     android:src="@drawable/ic_check_off"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -85,13 +89,38 @@
 
             <ImageButton
                 android:id="@+id/threeDots"
+                android:contentDescription="@string/desc_popup_menu"
                 android:layout_weight="0.1"
                 android:src="@drawable/ic_menu_overflow"
-                android:layout_centerVertical="true"
                 android:background="@android:color/white"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
         </LinearLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/idHolder" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/visitedHolder" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/latHolder" />
+        <TextView
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/lngHolder" />
 
     </RelativeLayout>
 

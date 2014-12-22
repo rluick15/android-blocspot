@@ -14,6 +14,7 @@ public class BlocSpotApplication  extends Application {
 
     @Override
     public void onCreate() {
+        super.onCreate();
         mDatabase = new BlocSpotDbHelper(getApplicationContext());
         BlocSpotApplication.context = getApplicationContext();
     }
@@ -23,6 +24,9 @@ public class BlocSpotApplication  extends Application {
     }
 
     public static BlocSpotApplication get() {
+        if(BlocSpotApplication.context == null) {
+
+        }
         return (BlocSpotApplication) BlocSpotApplication.context;
     }
 }

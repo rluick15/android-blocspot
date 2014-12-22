@@ -37,13 +37,16 @@ public class CreateCategoryDialogFragment extends DialogFragment {
     private EditText mNameField;
     private RadioGroup mRadioGroup;
     private String mColorString;
+    private String mId;
 
     public CreateCategoryDialogFragment() {} // Required empty public constructor
 
-    public CreateCategoryDialogFragment(Place place, ArrayList<Category> categories, Context context) {
+    public CreateCategoryDialogFragment(Place place, ArrayList<Category> categories,
+                                        Context context, String id) {
         this.mPlace = place;
         this.mCategories = categories;
         this.mContext = context;
+        this.mId = id;
     }
 
     @Override
@@ -64,8 +67,14 @@ public class CreateCategoryDialogFragment extends DialogFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
-                poiDialog.show(getFragmentManager(), "dialog");
+                if(mPlace != null) {
+                    SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
+                    poiDialog.show(getFragmentManager(), "dialog");
+                }
+                else {
+                    ChangeCategoryFragment catDialog = new ChangeCategoryFragment(mId, mContext);
+                    catDialog.show(getFragmentManager(), "dialog");
+                }
                 dismiss();
             }
         });
@@ -90,8 +99,14 @@ public class CreateCategoryDialogFragment extends DialogFragment {
                     prefsEditor.putString(Constants.CATEGORY_ARRAY, jsonCat);
                     prefsEditor.commit();
 
-                    SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
-                    poiDialog.show(getFragmentManager(), "dialog");
+                    if(mPlace != null) {
+                        SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
+                        poiDialog.show(getFragmentManager(), "dialog");
+                    }
+                    else{
+                        ChangeCategoryFragment catDialog = new ChangeCategoryFragment(mId, mContext);
+                        catDialog.show(getFragmentManager(), "dialog");
+                    }
                     dismiss();
                 }
             }
