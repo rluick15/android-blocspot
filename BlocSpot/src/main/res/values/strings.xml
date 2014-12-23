@@ -48,5 +48,18 @@
     <string name="button_filter">Filter</string>
     <string name="button_reset_filter">Reset Filters</string>
     <string name="title_filter">Filter By Category</string>
+    <string name="title_edit_note">Edit Note</string>
+    <string name="button_edit_note">Edit Note</string>
+    <string name="desc_popup_menu">Popup Menu</string>
+    <string name="desc_visited">Visited</string>
+    <string name="toast_poi_updated">POI Updated!</string>
+    <string name="popup_edit_note">Edit Note</string>
+    <string name="popup_visited">Mark as Visited</string>
+    <string name="popup_category">Change Category</string>
+    <string name="popup_view_map">View on Map</string>
+    <string name="popup_share">Share POI</string>
+    <string name="popup_delete">Delete Poi</string>
+    <string name="button_change_category">Update</string>
+    <string name="intent_share_poi">Share POI</string>
 
 </resources>

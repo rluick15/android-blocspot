@@ -37,19 +37,23 @@ public class CreateCategoryDialogFragment extends DialogFragment {
     private EditText mNameField;
     private RadioGroup mRadioGroup;
     private String mColorString;
+    private String mId;
 
     public CreateCategoryDialogFragment() {} // Required empty public constructor
 
-    public CreateCategoryDialogFragment(Place place, ArrayList<Category> categories, Context context) {
+    public CreateCategoryDialogFragment(Place place, ArrayList<Category> categories,
+                                        Context context, String id) {
         this.mPlace = place;
         this.mCategories = categories;
         this.mContext = context;
+        this.mId = id;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_category_dialog, container, false);
         getDialog().setTitle(getString(R.string.title_create_category));
+        getDialog().setCanceledOnTouchOutside(true);
 
         mNameField = (EditText) rootView.findViewById(R.id.newCatName);
         mRadioGroup = (RadioGroup) rootView.findViewById(R.id.colorSelect);
@@ -64,8 +68,14 @@ public class CreateCategoryDialogFragment extends DialogFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
-                poiDialog.show(getFragmentManager(), "dialog");
+                if(mPlace != null) {
+                    SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
+                    poiDialog.show(getFragmentManager(), "dialog");
+                }
+                else {
+                    ChangeCategoryFragment catDialog = new ChangeCategoryFragment(mId, mContext);
+                    catDialog.show(getFragmentManager(), "dialog");
+                }
                 dismiss();
             }
         });
@@ -90,8 +100,14 @@ public class CreateCategoryDialogFragment extends DialogFragment {
                     prefsEditor.putString(Constants.CATEGORY_ARRAY, jsonCat);
                     prefsEditor.commit();
 
-                    SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
-                    poiDialog.show(getFragmentManager(), "dialog");
+                    if(mPlace != null) {
+                        SavePoiDialogFragment poiDialog = new SavePoiDialogFragment(mContext, mPlace);
+                        poiDialog.show(getFragmentManager(), "dialog");
+                    }
+                    else{
+                        ChangeCategoryFragment catDialog = new ChangeCategoryFragment(mId, mContext);
+                        catDialog.show(getFragmentManager(), "dialog");
+                    }
                     dismiss();
                 }
             }

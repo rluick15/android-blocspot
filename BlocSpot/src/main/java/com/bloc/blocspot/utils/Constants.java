@@ -9,6 +9,7 @@ public class Constants {
     public static final String LIST_STATE = "listState";
     public static final String QUERY_TEXT = "queryText";
     public static final String FILTER_TEXT = "filterText";
+    public static final String EDIT_NOTE_TEXT = "editNoteText";
 
     //Shared Preferences
     public static final String MAIN_PREFS ="mainPrefs";
@@ -70,6 +71,9 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
     public static final String CATEGORY_UNCATEGORIZED = "categoryUncategorized";
+    public static final String TRUE = "true";
+    public static final String FALSE = "false";
+    public static final String INTENT_TYPE_TEXT_PLAIN = "text/plain";
     
 
 
