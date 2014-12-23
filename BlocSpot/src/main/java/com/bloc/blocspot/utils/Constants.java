@@ -26,6 +26,7 @@ public class Constants {
     public static final long INVALID_LONG_VALUE = -999l;
     public static final float INVALID_FLOAT_VALUE = -999.0f;
     public static final int INVALID_INT_VALUE = -999;
+    public static final float GEOFENCE_RADIUS = 160.934f;
 
     //API Key
     public static final String API_KEY = "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI";
