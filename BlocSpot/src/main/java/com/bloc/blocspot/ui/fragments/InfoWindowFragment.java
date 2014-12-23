@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.ui.activities.BlocSpotActivity;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 
@@ -32,6 +33,7 @@ public class InfoWindowFragment extends DialogFragment {
     private TextView mNoteField;
     private ImageButton mVisitedButton;
     private TextView mCatField;
+    private Boolean mVisited;
 
     public InfoWindowFragment() {} // Required empty public constructor
 
@@ -58,6 +60,14 @@ public class InfoWindowFragment extends DialogFragment {
 
         new GetPlaceInfo(mContext, mId).execute();
 
+        mVisitedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BlocSpotActivity) mContext).editVisited(mId, !mVisited);
+                new GetPlaceInfo(mContext, mId).execute();
+            }
+        });
+
         return rootView;
     }
 
@@ -83,8 +93,7 @@ public class InfoWindowFragment extends DialogFragment {
 
         @Override
         protected Cursor doInBackground(Void... voids) {
-            Cursor cursor = mPoiTable.poiSpecificQuery(id);
-            return cursor;
+            return mPoiTable.poiSpecificQuery(id);
         }
 
         @Override
@@ -95,8 +104,6 @@ public class InfoWindowFragment extends DialogFragment {
                 String name = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME));
                 String note = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_NOTE));
                 Boolean visited = cursor.getInt(cursor.getColumnIndex(Constants.TABLE_COLUMN_VISITED)) > 0;
-                Double lat = cursor.getDouble(cursor.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE));
-                Double lng = cursor.getDouble(cursor.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE));
                 String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
                 String catName = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_NAME));
 
@@ -107,13 +114,24 @@ public class InfoWindowFragment extends DialogFragment {
                 if(visited != null && visited) {
                     mVisitedButton.setImageDrawable(mContext.getResources()
                             .getDrawable(R.drawable.ic_check_on));
+                    mVisited = true;
                 }
                 else if(visited != null && !visited) {
                     mVisitedButton.setImageDrawable(mContext.getResources()
                             .getDrawable(R.drawable.ic_check_off));
+                    mVisited = false;
                 }
             }
         }
+    }
+
+    public interface OnPoiListAdapterListener {
+        public void editNoteDialog(String id, String note);
+        public void editVisited(String id, Boolean visited);
+        public void viewOnMap(String lat, String lng);
+        public void deletePoi(String id);
+        public void changeCategory(String id);
+        public void shareLocation(String name, String lat, String lng);
     }
 
 }
