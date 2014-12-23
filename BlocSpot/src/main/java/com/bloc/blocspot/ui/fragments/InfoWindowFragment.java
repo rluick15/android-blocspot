@@ -34,6 +34,10 @@ public class InfoWindowFragment extends DialogFragment {
     private ImageButton mVisitedButton;
     private TextView mCatField;
     private Boolean mVisited;
+    private String mName;
+    private String mLat;
+    private String mLng;
+    private String mNote;
 
     public InfoWindowFragment() {} // Required empty public constructor
 
@@ -52,23 +56,60 @@ public class InfoWindowFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_info_window, container, false);
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getDialog().setCanceledOnTouchOutside(true);
 
         mNameField = (TextView) rootView.findViewById(R.id.nameField);
         mNoteField = (TextView) rootView.findViewById(R.id.noteField);
         mVisitedButton = (ImageButton) rootView.findViewById(R.id.visitedButton);
         mCatField = (TextView) rootView.findViewById(R.id.categoryField);
 
-        new GetPlaceInfo(mContext, mId).execute();
+        new GetPlaceInfo(mId).execute();
 
         mVisitedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((BlocSpotActivity) mContext).editVisited(mId, !mVisited);
-                new GetPlaceInfo(mContext, mId).execute();
+            }
+        });
+
+        ImageButton deletePoiButton = (ImageButton) rootView.findViewById(R.id.deleteButton);
+        deletePoiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BlocSpotActivity) mContext).deletePoi(mId);
+                dismiss();
+            }
+        });
+
+        ImageButton sharePoiButton = (ImageButton) rootView.findViewById(R.id.shareButton);
+        sharePoiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BlocSpotActivity) mContext).shareLocation(mName, mLat, mLng);
+            }
+        });
+
+        ImageButton editNoteButton = (ImageButton) rootView.findViewById(R.id.noteButton);
+        editNoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BlocSpotActivity) mContext).editNoteDialog(mId, mNote);
+            }
+        });
+
+        TextView catTextView = (TextView) rootView.findViewById(R.id.categoryField);
+        catTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((BlocSpotActivity) mContext).changeCategory(mId);
             }
         });
 
         return rootView;
+    }
+
+    public void refreshInfoWindow(String id) {
+        new GetPlaceInfo(id).execute();
     }
 
     @Override
@@ -83,11 +124,9 @@ public class InfoWindowFragment extends DialogFragment {
 
     private class GetPlaceInfo extends AsyncTask<Void, Void, Cursor> {
 
-        private Context context;
         private String id;
 
-        public GetPlaceInfo(Context context, String id) {
-            this.context = context;
+        public GetPlaceInfo(String id) {
             this.id = id;
         }
 
@@ -101,16 +140,22 @@ public class InfoWindowFragment extends DialogFragment {
             super.onPostExecute(cursor);
 
             if(cursor.moveToFirst()) {
-                String name = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME));
-                String note = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_NOTE));
+                mName = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_POI_NAME));
+                mNote = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_NOTE));
                 Boolean visited = cursor.getInt(cursor.getColumnIndex(Constants.TABLE_COLUMN_VISITED)) > 0;
                 String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
                 String catName = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_NAME));
+                mLat = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE));
+                mLng = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE));
 
-                mNameField.setText(name);
-                mNoteField.setText(note);
+                mNameField.setText(mName);
+                mNoteField.setText(mNote);
                 mCatField.setText(catName);
-                Utils.setColorString(color, mCatField);
+
+                if(color != null && mCatField != null) {
+                    Utils.setColorString(color, mCatField);
+                }
+
                 if(visited != null && visited) {
                     mVisitedButton.setImageDrawable(mContext.getResources()
                             .getDrawable(R.drawable.ic_check_on));

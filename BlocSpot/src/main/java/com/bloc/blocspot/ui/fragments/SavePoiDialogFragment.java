@@ -50,6 +50,7 @@ public class SavePoiDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pick_category_dialog, container, false);
         getDialog().setTitle(getString(R.string.title_save_poi_dialog));
+        getDialog().setCanceledOnTouchOutside(true);
 
         //Todo: change background and color of title
 

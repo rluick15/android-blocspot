@@ -2,6 +2,7 @@ package com.bloc.blocspot.database.table;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.bloc.blocspot.utils.Constants;
 
@@ -50,6 +51,7 @@ public class PoiTable extends Table {
     }
 
     public Cursor poiSpecificQuery(String id) {
+        Log.e("ERRORID", id);
         return mDb.query(Constants.TABLE_POI_NAME,
                 new String[]{Constants.TABLE_COLUMN_ID, Constants.TABLE_COLUMN_POI_NAME,
                         Constants.TABLE_COLUMN_NOTE, Constants.TABLE_COLUMN_VISITED,

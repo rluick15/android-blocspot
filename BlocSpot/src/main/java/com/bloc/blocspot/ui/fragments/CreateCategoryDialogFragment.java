@@ -53,6 +53,7 @@ public class CreateCategoryDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_category_dialog, container, false);
         getDialog().setTitle(getString(R.string.title_create_category));
+        getDialog().setCanceledOnTouchOutside(true);
 
         mNameField = (EditText) rootView.findViewById(R.id.newCatName);
         mRadioGroup = (RadioGroup) rootView.findViewById(R.id.colorSelect);

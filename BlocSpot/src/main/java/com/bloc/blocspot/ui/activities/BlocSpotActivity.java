@@ -63,6 +63,7 @@ public class BlocSpotActivity extends FragmentActivity
     private PoiTable mPoiTable = new PoiTable();
     private MapFragment mMapFragment;
     private String mFilter;
+    private InfoWindowFragment mInfoWindowFragment;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -155,6 +156,7 @@ public class BlocSpotActivity extends FragmentActivity
                         Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
                             Toast.LENGTH_LONG).show();
                         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                        refreshList(id);
                     }
                 });
             }
@@ -180,7 +182,7 @@ public class BlocSpotActivity extends FragmentActivity
                     public void run() {
                         Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
                                 Toast.LENGTH_LONG).show();
-                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                        refreshList(id);
                     }
                 });
             }
@@ -218,6 +220,7 @@ public class BlocSpotActivity extends FragmentActivity
                         Toast.makeText(BlocSpotActivity.this, "POI Deleted!",
                                 Toast.LENGTH_LONG).show();
                         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+                        refreshList(id);
                     }
                 });
             }
@@ -242,8 +245,9 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void refreshList() {
+    public void refreshList(String id) {
         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+        mInfoWindowFragment.refreshInfoWindow(id);
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
@@ -368,8 +372,8 @@ public class BlocSpotActivity extends FragmentActivity
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                InfoWindowFragment fragment = new InfoWindowFragment(marker.getTitle(), BlocSpotActivity.this);
-                fragment.show(getSupportFragmentManager(), "dialog");
+                mInfoWindowFragment = new InfoWindowFragment(marker.getTitle(), BlocSpotActivity.this);
+                mInfoWindowFragment.show(getSupportFragmentManager(), "dialog");
 
                 return true;
             }
