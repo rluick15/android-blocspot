@@ -58,6 +58,11 @@
             android:name="com.bloc.blocspot.adapters.PlacesSearchItemAdapter"
             android:label="@string/title_activity_places_search_item_adapter" >
         </activity>
+
+        <service
+            android:name="com.bloc.blocspot.geofence.GeofenceIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
