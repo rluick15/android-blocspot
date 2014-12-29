@@ -1,5 +1,6 @@
 package com.bloc.blocspot.ui.activities;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.geofence.GeofenceIntentService;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
@@ -111,6 +113,15 @@ public class BlocSpotActivity extends FragmentActivity
     protected void onDestroy() {
         super.onDestroy();
         Utils.setContext(null);
+    }
+
+    /*
+     * Create a PendingIntent that triggers an IntentService in your
+     * app when a geofence transition occurs.
+     */
+    private PendingIntent getTransitionPendingIntent() {
+        Intent intent = new Intent(this, GeofenceIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /**
