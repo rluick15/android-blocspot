@@ -36,9 +36,10 @@ import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.ErrorDialogFragment;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -61,8 +62,8 @@ import java.util.ArrayList;
 public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
         EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener,
-        ChangeCategoryFragment.OnChangeCategoryListener, GooglePlayServicesClient.ConnectionCallbacks,
-        GooglePlayServicesClient.OnConnectionFailedListener, {
+        ChangeCategoryFragment.OnChangeCategoryListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -74,9 +75,10 @@ public class BlocSpotActivity extends FragmentActivity
     private MapFragment mMapFragment;
     private String mFilter;
     private InfoWindowFragment mInfoWindowFragment;
-    private LocationClient mLocationClient;
     private PendingIntent mGeofenceRequestIntent;
     private boolean mInProgress;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -93,6 +95,13 @@ public class BlocSpotActivity extends FragmentActivity
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
             mFilter = savedInstanceState.getString(Constants.FILTER_TEXT);
         }
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mInProgress = false;
 
         Utils.setContext(this);
 
@@ -115,9 +124,21 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         applyFilters(mFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -126,25 +147,52 @@ public class BlocSpotActivity extends FragmentActivity
         Utils.setContext(null);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        switch (requestCode) {
+//            case Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST:
+//            /*
+//             * If the result code is Activity.RESULT_OK, try
+//             * to connect again
+//             */
+//                switch (resultCode) {
+//                    case Activity.RESULT_OK :
+//                    /*
+//                     * Try the request again
+//                     */
+//                        break;
+//                }
+//        }
+//    }
 
-        switch (requestCode) {
-            case Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST:
-            /*
-             * If the result code is Activity.RESULT_OK, try
-             * to connect again
-             */
-                switch (resultCode) {
-                    case Activity.RESULT_OK :
-                    /*
-                     * Try the request again
-                     */
-                        break;
-                }
-        }
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000); // Update location every second
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
+                (com.google.android.gms.location.LocationListener) this);
     }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onLocationChanged(Location location) {}
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+    @Override
+    public void onProviderEnabled(String provider) {}
+
+    @Override
+    public void onProviderDisabled(String provider) {}
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
 
     private boolean servicesConnected() {
         // Check that Google Play services is available
@@ -177,21 +225,6 @@ public class BlocSpotActivity extends FragmentActivity
             }
             return false;
         }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onDisconnected() {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     /*
