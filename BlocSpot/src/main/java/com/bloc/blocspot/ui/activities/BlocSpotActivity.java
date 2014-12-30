@@ -1,5 +1,7 @@
 package com.bloc.blocspot.ui.activities;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -32,6 +34,11 @@ import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
 import com.bloc.blocspot.ui.fragments.InfoWindowFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.ErrorDialogFragment;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -54,7 +61,8 @@ import java.util.ArrayList;
 public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
         EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener,
-        ChangeCategoryFragment.OnChangeCategoryListener {
+        ChangeCategoryFragment.OnChangeCategoryListener, GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener, {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -66,6 +74,9 @@ public class BlocSpotActivity extends FragmentActivity
     private MapFragment mMapFragment;
     private String mFilter;
     private InfoWindowFragment mInfoWindowFragment;
+    private LocationClient mLocationClient;
+    private PendingIntent mGeofenceRequestIntent;
+    private boolean mInProgress;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -115,10 +126,78 @@ public class BlocSpotActivity extends FragmentActivity
         Utils.setContext(null);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST:
+            /*
+             * If the result code is Activity.RESULT_OK, try
+             * to connect again
+             */
+                switch (resultCode) {
+                    case Activity.RESULT_OK :
+                    /*
+                     * Try the request again
+                     */
+                        break;
+                }
+        }
+    }
+
+    private boolean servicesConnected() {
+        // Check that Google Play services is available
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        // If Google Play services is available
+        if (ConnectionResult.SUCCESS == resultCode) {
+            // In debug mode, log the status
+            Log.d("Geofence Detection", "Google Play services is available.");
+            // Continue
+            return true;
+            // Google Play services was not available for some reason
+        }
+        else {
+            // Get the error code
+            int errorCode = connectionResult.getErrorCode();
+            // Get the error dialog from Google Play services
+            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+                    errorCode,
+                    this,
+                    Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
+            // If Google Play services can provide an error dialog
+            if (errorDialog != null) {
+                // Create a new DialogFragment for the error dialog
+                ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+                // Set the dialog in the DialogFragment
+                errorFragment.setDialog(errorDialog);
+                // Show the error dialog in the DialogFragment
+                errorFragment.show(getFragmentManager(), "Geofence Detection");
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
     /*
-     * Create a PendingIntent that triggers an IntentService in your
-     * app when a geofence transition occurs.
-     */
+         * Create a PendingIntent that triggers an IntentService in your
+         * app when a geofence transition occurs.
+         */
     private PendingIntent getTransitionPendingIntent() {
         Intent intent = new Intent(this, GeofenceIntentService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

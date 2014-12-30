@@ -117,7 +117,7 @@ public class SavePoiDialogFragment extends DialogFragment {
                 mGeofence = new SimpleGeofence(name, lat, lng, Constants.GEOFENCE_RADIUS,
                         Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER);
                 mGeofenceStorage.setGeofence(name, mGeofence);
-                //Todo: best to save by name?? also inputs
+                //Todo:extra id field UUID
                 new Thread(){
                     @Override
                     public void run() {
