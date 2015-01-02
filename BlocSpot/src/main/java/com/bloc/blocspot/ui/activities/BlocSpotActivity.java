@@ -39,6 +39,7 @@ import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -55,6 +56,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -81,6 +83,7 @@ public class BlocSpotActivity extends FragmentActivity
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private EditGeofences mEditGeofences;
+    private PendingIntent mGeofencePendingIntent;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -99,6 +102,8 @@ public class BlocSpotActivity extends FragmentActivity
         }
 
         mEditGeofences = new EditGeofences(this);
+        mGoogleApiClient = null;
+        mGeofencePendingIntent = null;
         mInProgress = false;
 
         Utils.setContext(this);
@@ -173,6 +178,34 @@ public class BlocSpotActivity extends FragmentActivity
                         //mEditGeofences.addGeofences(mCurrentGeofences);
                         break;
                 }
+        }
+    }
+
+    /**
+     * Start adding geofences. Save the geofences, then start adding them by requesting a
+     * connection
+     *
+     * @param geofences A List of one or more geofences to add
+     */
+    public void addGeofences(List<Geofence> geofences) throws UnsupportedOperationException {
+        //mCurrentGeofences = (ArrayList<Geofence>) geofences;
+
+        if (!servicesConnected()) {
+            return;
+        }
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        if (!mInProgress) {
+            mInProgress = true;
+            mGoogleApiClient.connect();
+        }
+        else {
+            //Todo:handle if request is underway. How??
         }
     }
 
