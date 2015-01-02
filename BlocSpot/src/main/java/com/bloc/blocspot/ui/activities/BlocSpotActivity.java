@@ -1,5 +1,6 @@
 package com.bloc.blocspot.ui.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -27,6 +28,7 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.geofence.EditGeofences;
 import com.bloc.blocspot.geofence.GeofenceIntentService;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
@@ -37,11 +39,6 @@ import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingApi;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,7 +55,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -68,7 +64,7 @@ public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
         EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener,
         ChangeCategoryFragment.OnChangeCategoryListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, GeofencingApi {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -84,7 +80,7 @@ public class BlocSpotActivity extends FragmentActivity
     private boolean mInProgress;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    //private GeofenceRequester mGeofenceRequester;
+    private EditGeofences mEditGeofences;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -102,11 +98,7 @@ public class BlocSpotActivity extends FragmentActivity
             mFilter = savedInstanceState.getString(Constants.FILTER_TEXT);
         }
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        mEditGeofences = new EditGeofences(this);
         mInProgress = false;
 
         Utils.setContext(this);
@@ -130,42 +122,10 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         applyFilters(mFilter);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
-    }
-
-    //    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        switch (requestCode) {
-//            case Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST:
-//            /*
-//             * If the result code is Activity.RESULT_OK, try
-//             * to connect again
-//             */
-//                switch (resultCode) {
-//                    case Activity.RESULT_OK :
-//                    /*
-//                     * Try the request again
-//                     */
-//                        break;
-//                }
-//        }
-//    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -202,26 +162,26 @@ public class BlocSpotActivity extends FragmentActivity
      * call returns here, to onActivityResult.
      * calls
      */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        switch (requestCode) {
-//            case GeofenceUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
-//                switch (resultCode) {
-//                    // If Google Play services resolved the problem
-//                    case Activity.RESULT_OK:
-////                        mGeofenceRequester.setInProgressFlag(false);
-////                        mGeofenceRequester.addGeofences(mCurrentGeofences);
-//                        break;
-//                }
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST :
+                switch (resultCode) {
+                    // If Google Play services resolved the problem
+                    case Activity.RESULT_OK:
+                        mEditGeofences.setInProgressFlag(false);
+                        //mEditGeofences.addGeofences(mCurrentGeofences);
+                        break;
+                }
+        }
+    }
 
     /**
      * Verify that Google Play services is available before making a request.
      *
      * @return true if Google Play services is available, otherwise false
      */
-    private boolean servicesConnected() {
+    public boolean servicesConnected() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
         if (ConnectionResult.SUCCESS == resultCode) {
@@ -382,26 +342,6 @@ public class BlocSpotActivity extends FragmentActivity
     public void refreshList(String id) {
         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
         mInfoWindowFragment.refreshInfoWindow(id);
-    }
-
-    @Override
-    public PendingResult<Status> addGeofences(GoogleApiClient googleApiClient, List<Geofence> geofences, PendingIntent pendingIntent) {
-        return null;
-    }
-
-    @Override
-    public PendingResult<Status> addGeofences(GoogleApiClient googleApiClient, GeofencingRequest geofencingRequest, PendingIntent pendingIntent) {
-        return null;
-    }
-
-    @Override
-    public PendingResult<Status> removeGeofences(GoogleApiClient googleApiClient, PendingIntent pendingIntent) {
-        return null;
-    }
-
-    @Override
-    public PendingResult<Status> removeGeofences(GoogleApiClient googleApiClient, List<String> strings) {
-        return null;
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
