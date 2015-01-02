@@ -47,6 +47,7 @@ public class SimpleGeofence {
     public int getTransitionType() {
         return mTransitionType;
     }
+
     /**
      * Creates a Location Services Geofence object from a SimpleGeofence
      *

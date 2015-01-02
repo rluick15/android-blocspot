@@ -21,6 +21,7 @@ public class EditGeofences implements GeofencingApi {
         // Save the context
         mContext = context;
     }
+
     @Override
     public PendingResult<Status> addGeofences(GoogleApiClient googleApiClient, List<Geofence> geofences, PendingIntent pendingIntent) {
         return null;

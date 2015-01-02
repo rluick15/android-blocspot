@@ -13,6 +13,7 @@ public class Constants {
 
     //Shared Preferences
     public static final String MAIN_PREFS ="mainPrefs";
+    public static final String GEOFENCE_PREFS ="geofencePrefs";
     public static final String CATEGORY_ARRAY = "categoryArray";
 
     //Geofence Constants

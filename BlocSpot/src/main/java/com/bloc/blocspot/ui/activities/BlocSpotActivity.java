@@ -56,7 +56,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -84,6 +83,7 @@ public class BlocSpotActivity extends FragmentActivity
     private LocationRequest mLocationRequest;
     private EditGeofences mEditGeofences;
     private PendingIntent mGeofencePendingIntent;
+    private ArrayList<Geofence> mCurrentGeofences;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -105,6 +105,7 @@ public class BlocSpotActivity extends FragmentActivity
         mGoogleApiClient = null;
         mGeofencePendingIntent = null;
         mInProgress = false;
+        addGeofences();
 
         Utils.setContext(this);
 
@@ -132,33 +133,6 @@ public class BlocSpotActivity extends FragmentActivity
         applyFilters(mFilter);
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000); // Update location every second
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
-                (com.google.android.gms.location.LocationListener) this);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {}
-
-    @Override
-    public void onLocationChanged(Location location) {}
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-    @Override
-    public void onProviderEnabled(String provider) {}
-
-    @Override
-    public void onProviderDisabled(String provider) {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
-
     /*
      * Handle results returned to this Activity by other Activities started with
      * startActivityForResult(). In particular, the method onConnectionFailed() in
@@ -174,7 +148,8 @@ public class BlocSpotActivity extends FragmentActivity
                 switch (resultCode) {
                     // If Google Play services resolved the problem
                     case Activity.RESULT_OK:
-                        mEditGeofences.setInProgressFlag(false);
+                        mInProgress = false;
+                        addGeofences();
                         //mEditGeofences.addGeofences(mCurrentGeofences);
                         break;
                 }
@@ -184,11 +159,10 @@ public class BlocSpotActivity extends FragmentActivity
     /**
      * Start adding geofences. Save the geofences, then start adding them by requesting a
      * connection
-     *
-     * @param geofences A List of one or more geofences to add
      */
-    public void addGeofences(List<Geofence> geofences) throws UnsupportedOperationException {
-        //mCurrentGeofences = (ArrayList<Geofence>) geofences;
+    private void addGeofences() {
+        mCurrentGeofences = new ArrayList<Geofence>();
+
 
         if (!servicesConnected()) {
             return;
@@ -209,12 +183,17 @@ public class BlocSpotActivity extends FragmentActivity
         }
     }
 
+    private void continueAddGeofences() {
+        mGeofencePendingIntent = getTransitionPendingIntent();
+        //mEditGeofences.addGeofences();
+    }
+
     /**
      * Verify that Google Play services is available before making a request.
      *
      * @return true if Google Play services is available, otherwise false
      */
-    public boolean servicesConnected() {
+    private boolean servicesConnected() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
         if (ConnectionResult.SUCCESS == resultCode) {
@@ -232,13 +211,42 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     /*
-         * Create a PendingIntent that triggers an IntentService in your
-         * app when a geofence transition occurs.
-         */
+    * Create a PendingIntent that triggers an IntentService in your
+    * app when a geofence transition occurs.
+    */
     private PendingIntent getTransitionPendingIntent() {
         Intent intent = new Intent(this, GeofenceIntentService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(1000); // Update location every second
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
+                (com.google.android.gms.location.LocationListener) this);
+
+        continueAddGeofences();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
+
+    @Override
+    public void onLocationChanged(Location location) {}
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+    @Override
+    public void onProviderEnabled(String provider) {}
+
+    @Override
+    public void onProviderDisabled(String provider) {}
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
 
     /**
      * This method is called onCreate of the Main Activity. It checks if a shared preference

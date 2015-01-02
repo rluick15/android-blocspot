@@ -9,7 +9,7 @@ public class SimpleGeofenceStore {
     private final SharedPreferences mPrefs;
 
     public SimpleGeofenceStore(Context context) {
-        mPrefs = context.getSharedPreferences(Constants.MAIN_PREFS, Context.MODE_PRIVATE);
+        mPrefs = context.getSharedPreferences(Constants.GEOFENCE_PREFS, Context.MODE_PRIVATE);
     }
 
     /**

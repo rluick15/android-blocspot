@@ -28,6 +28,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class SavePoiDialogFragment extends DialogFragment {
 
@@ -114,9 +115,10 @@ public class SavePoiDialogFragment extends DialogFragment {
                 final Double lng = mPlace.getLongitude();
                 final String catName = mCategory.getName();
                 final String catColor = mCategory.getColor();
-                mGeofence = new SimpleGeofence(name, lat, lng, Constants.GEOFENCE_RADIUS,
+                String id = UUID.randomUUID().toString();
+                mGeofence = new SimpleGeofence(id, lat, lng, Constants.GEOFENCE_RADIUS,
                         Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER);
-                mGeofenceStorage.setGeofence(name, mGeofence);
+                mGeofenceStorage.setGeofence(id, mGeofence);
                 //Todo:extra id field UUID
                 new Thread(){
                     @Override
