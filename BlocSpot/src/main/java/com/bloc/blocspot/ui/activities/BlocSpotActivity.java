@@ -1,6 +1,5 @@
 package com.bloc.blocspot.ui.activities;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -14,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -35,9 +35,13 @@ import com.bloc.blocspot.ui.fragments.InfoWindowFragment;
 import com.bloc.blocspot.utils.Constants;
 import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.ErrorDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,6 +58,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -63,7 +68,7 @@ public class BlocSpotActivity extends FragmentActivity
         implements OnMapReadyCallback, FilterDialogFragment.OnFilterListener,
         EditNoteFragment.OnNoteUpdateListener, PoiListAdapter.OnPoiListAdapterListener,
         ChangeCategoryFragment.OnChangeCategoryListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener{
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, GeofencingApi {
 
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mMap;
@@ -79,6 +84,7 @@ public class BlocSpotActivity extends FragmentActivity
     private boolean mInProgress;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    //private GeofenceRequester mGeofenceRequester;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -141,13 +147,7 @@ public class BlocSpotActivity extends FragmentActivity
         mGoogleApiClient.disconnect();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Utils.setContext(null);
-    }
-
-//    @Override
+    //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //
@@ -194,34 +194,45 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {}
 
+    /*
+     * Handle results returned to this Activity by other Activities started with
+     * startActivityForResult(). In particular, the method onConnectionFailed() in
+     * GeofenceRemover and GeofenceRequester may call startResolutionForResult() to
+     * start an Activity that handles Google Play services problems. The result of this
+     * call returns here, to onActivityResult.
+     * calls
+     */
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//        switch (requestCode) {
+//            case GeofenceUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST :
+//                switch (resultCode) {
+//                    // If Google Play services resolved the problem
+//                    case Activity.RESULT_OK:
+////                        mGeofenceRequester.setInProgressFlag(false);
+////                        mGeofenceRequester.addGeofences(mCurrentGeofences);
+//                        break;
+//                }
+//        }
+//    }
+
+    /**
+     * Verify that Google Play services is available before making a request.
+     *
+     * @return true if Google Play services is available, otherwise false
+     */
     private boolean servicesConnected() {
-        // Check that Google Play services is available
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        // If Google Play services is available
+
         if (ConnectionResult.SUCCESS == resultCode) {
-            // In debug mode, log the status
-            Log.d("Geofence Detection", "Google Play services is available.");
-            // Continue
             return true;
-            // Google Play services was not available for some reason
         }
         else {
-            // Get the error code
-            int errorCode = connectionResult.getErrorCode();
-            // Get the error dialog from Google Play services
-            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
-                    errorCode,
-                    this,
-                    Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-            // If Google Play services can provide an error dialog
-            if (errorDialog != null) {
-                // Create a new DialogFragment for the error dialog
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0);
+            if (dialog != null) {
                 ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-                // Set the dialog in the DialogFragment
-                errorFragment.setDialog(errorDialog);
-                // Show the error dialog in the DialogFragment
-                errorFragment.show(getFragmentManager(), "Geofence Detection");
+                errorFragment.setDialog(dialog);
+                errorFragment.show(getSupportFragmentManager(), Constants.APPTAG);
             }
             return false;
         }
@@ -371,6 +382,26 @@ public class BlocSpotActivity extends FragmentActivity
     public void refreshList(String id) {
         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
         mInfoWindowFragment.refreshInfoWindow(id);
+    }
+
+    @Override
+    public PendingResult<Status> addGeofences(GoogleApiClient googleApiClient, List<Geofence> geofences, PendingIntent pendingIntent) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<Status> addGeofences(GoogleApiClient googleApiClient, GeofencingRequest geofencingRequest, PendingIntent pendingIntent) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<Status> removeGeofences(GoogleApiClient googleApiClient, PendingIntent pendingIntent) {
+        return null;
+    }
+
+    @Override
+    public PendingResult<Status> removeGeofences(GoogleApiClient googleApiClient, List<String> strings) {
+        return null;
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
@@ -577,5 +608,35 @@ public class BlocSpotActivity extends FragmentActivity
             locationManager.removeUpdates(listener);
         }
     };
+
+    /*
+    * Define a DialogFragment to display the error dialog generated in
+    * showErrorDialog.
+    */
+    public static class ErrorDialogFragment extends DialogFragment {
+        private Dialog mDialog;
+
+        public ErrorDialogFragment() {
+            super();
+            mDialog = null;
+        }
+
+        /**
+         * Set the dialog to display
+         *
+         * @param dialog An error dialog
+         */
+        public void setDialog(Dialog dialog) {
+            mDialog = dialog;
+        }
+
+        /*
+         * This method must return a Dialog to the DialogFragment.
+         */
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return mDialog;
+        }
+    }
 
 }

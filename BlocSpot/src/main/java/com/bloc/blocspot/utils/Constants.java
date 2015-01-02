@@ -22,6 +22,7 @@ public class Constants {
     public static final String KEY_EXPIRATION_DURATION ="com.example.android.geofence.KEY_EXPIRATION_DURATION";
     public static final String KEY_TRANSITION_TYPE ="com.example.android.geofence.KEY_TRANSITION_TYPE";
     public static final String KEY_PREFIX ="com.example.android.geofence.KEY";
+    public static final String APPTAG = "Geofence Detection";
 
     public static final long INVALID_LONG_VALUE = -999l;
     public static final float INVALID_FLOAT_VALUE = -999.0f;
