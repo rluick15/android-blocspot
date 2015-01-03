@@ -50,6 +50,7 @@ public class SimpleGeofenceStore {
      */
     public void setGeofence(String id, SimpleGeofence geofence) {
         SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putString(getGeofenceFieldKey(id, Constants.KEY_ID), id);
         editor.putFloat(getGeofenceFieldKey(id, Constants.KEY_LATITUDE), (float) geofence.getLatitude());
         editor.putFloat(getGeofenceFieldKey(id, Constants.KEY_LONGITUDE), (float) geofence.getLongitude());
         editor.putFloat(getGeofenceFieldKey(id, Constants.KEY_RADIUS), geofence.getRadius());
@@ -67,6 +68,7 @@ public class SimpleGeofenceStore {
         editor.remove(getGeofenceFieldKey(id, Constants.KEY_TRANSITION_TYPE));
         editor.commit();
     }
+
     /**
      * Given a Geofence object's ID and the name of a field
      * (for example, KEY_LATITUDE), return the key name of the

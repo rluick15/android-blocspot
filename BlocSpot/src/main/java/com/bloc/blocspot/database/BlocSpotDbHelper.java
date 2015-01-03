@@ -40,7 +40,6 @@ public class BlocSpotDbHelper extends SQLiteOpenHelper {
         if (oldVersion == 8 && newVersion == 9) {
             db.execSQL("ALTER TABLE " + Constants.TABLE_POI_NAME +
                     " ADD COLUMN " + Constants.TABLE_COLUMN_GEO_ID + " TEXT");
-            onCreate(db);
         }
     }
 

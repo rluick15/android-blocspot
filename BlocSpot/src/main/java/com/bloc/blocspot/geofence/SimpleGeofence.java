@@ -56,9 +56,9 @@ public class SimpleGeofence {
     public Geofence toGeofence() {
         return new Geofence.Builder()
                 .setRequestId(getId())
-                .setTransitionTypes(mTransitionType)
+                .setTransitionTypes(getTransitionType())
                 .setCircularRegion(getLatitude(), getLongitude(), getRadius())
-                .setExpirationDuration(mExpirationDuration)
+                .setExpirationDuration(getExpirationDuration())
                 .build();
     }
 }

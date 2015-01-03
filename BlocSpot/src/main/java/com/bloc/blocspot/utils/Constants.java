@@ -17,6 +17,7 @@ public class Constants {
     public static final String CATEGORY_ARRAY = "categoryArray";
 
     //Geofence Constants
+    public static final String KEY_ID ="com.example.android.geofence.KEY_ID";
     public static final String KEY_LATITUDE ="com.example.android.geofence.KEY_LATITUDE";
     public static final String KEY_LONGITUDE ="com.example.android.geofence.KEY_LONGITUDE";
     public static final String KEY_RADIUS ="com.example.android.geofence.KEY_RADIUS";
