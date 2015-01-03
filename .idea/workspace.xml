@@ -23,13 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a6db0f7-dc06-4430-bdde-02615bbe9a07" name="Default" comment="">
-      <change type="MOVED" beforePath="C:\Users\Rich\Desktop\WebProjects\AndroidStudioProjects\BlocWork\android-blocspot\BlocSpot\src\main\java\com\bloc\blocspot\utils\utils.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Utils.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/BlocSpotDbHelper.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/database/BlocSpotDbHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/utils/Constants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/geofence/SimpleGeofence.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/geofence/SimpleGeofence.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/geofence/SimpleGeofenceStore.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/geofence/SimpleGeofenceStore.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="android-blocspot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -95,25 +89,25 @@
       <file leaf-file-name="BlocSpotActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.60227275" vertical-offset="2255" max-vertical-offset="10540">
-              <caret line="199" column="46" selection-start-line="199" selection-start-column="46" selection-end-line="199" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.5067961" vertical-offset="2153" max-vertical-offset="10574">
+              <caret line="199" column="49" selection-start-line="199" selection-start-column="49" selection-end-line="199" selection-end-column="49" />
               <folding>
-                <element signature="e#12780#13386#0" expanded="true" />
-                <element signature="e#12956#13360#0" expanded="true" />
-                <element signature="e#13105#13142#0" expanded="true" />
-                <element signature="e#13341#13342#0" expanded="true" />
-                <element signature="e#13375#13376#0" expanded="true" />
-                <element signature="e#14093#14130#0" expanded="true" />
-                <element signature="e#15162#15742#0" expanded="true" />
-                <element signature="e#15331#15716#0" expanded="true" />
-                <element signature="e#15697#15698#0" expanded="true" />
-                <element signature="e#15731#15732#0" expanded="true" />
-                <element signature="e#16481#16517#0" expanded="true" />
-                <element signature="e#17292#17327#0" expanded="true" />
-                <element signature="e#24644#24645#0" expanded="true" />
-                <element signature="e#24684#24685#0" expanded="true" />
-                <element signature="e#24859#24860#0" expanded="true" />
-                <element signature="e#24897#24898#0" expanded="true" />
+                <element signature="e#12851#13457#0" expanded="true" />
+                <element signature="e#13027#13431#0" expanded="true" />
+                <element signature="e#13176#13213#0" expanded="true" />
+                <element signature="e#13412#13413#0" expanded="true" />
+                <element signature="e#13446#13447#0" expanded="true" />
+                <element signature="e#14164#14201#0" expanded="true" />
+                <element signature="e#15233#15813#0" expanded="true" />
+                <element signature="e#15402#15787#0" expanded="true" />
+                <element signature="e#15768#15769#0" expanded="true" />
+                <element signature="e#15802#15803#0" expanded="true" />
+                <element signature="e#16552#16588#0" expanded="true" />
+                <element signature="e#17363#17398#0" expanded="true" />
+                <element signature="e#24715#24716#0" expanded="true" />
+                <element signature="e#24755#24756#0" expanded="true" />
+                <element signature="e#24930#24931#0" expanded="true" />
+                <element signature="e#24968#24969#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1810,13 +1804,13 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1296" height="699" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1296" height="699" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.46224678" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2289,25 +2283,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.60227275" vertical-offset="2255" max-vertical-offset="10540">
-          <caret line="199" column="46" selection-start-line="199" selection-start-column="46" selection-end-line="199" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.5067961" vertical-offset="2153" max-vertical-offset="10574">
+          <caret line="199" column="49" selection-start-line="199" selection-start-column="49" selection-end-line="199" selection-end-column="49" />
           <folding>
-            <element signature="e#12780#13386#0" expanded="true" />
-            <element signature="e#12956#13360#0" expanded="true" />
-            <element signature="e#13105#13142#0" expanded="true" />
-            <element signature="e#13341#13342#0" expanded="true" />
-            <element signature="e#13375#13376#0" expanded="true" />
-            <element signature="e#14093#14130#0" expanded="true" />
-            <element signature="e#15162#15742#0" expanded="true" />
-            <element signature="e#15331#15716#0" expanded="true" />
-            <element signature="e#15697#15698#0" expanded="true" />
-            <element signature="e#15731#15732#0" expanded="true" />
-            <element signature="e#16481#16517#0" expanded="true" />
-            <element signature="e#17292#17327#0" expanded="true" />
-            <element signature="e#24644#24645#0" expanded="true" />
-            <element signature="e#24684#24685#0" expanded="true" />
-            <element signature="e#24859#24860#0" expanded="true" />
-            <element signature="e#24897#24898#0" expanded="true" />
+            <element signature="e#12851#13457#0" expanded="true" />
+            <element signature="e#13027#13431#0" expanded="true" />
+            <element signature="e#13176#13213#0" expanded="true" />
+            <element signature="e#13412#13413#0" expanded="true" />
+            <element signature="e#13446#13447#0" expanded="true" />
+            <element signature="e#14164#14201#0" expanded="true" />
+            <element signature="e#15233#15813#0" expanded="true" />
+            <element signature="e#15402#15787#0" expanded="true" />
+            <element signature="e#15768#15769#0" expanded="true" />
+            <element signature="e#15802#15803#0" expanded="true" />
+            <element signature="e#16552#16588#0" expanded="true" />
+            <element signature="e#17363#17398#0" expanded="true" />
+            <element signature="e#24715#24716#0" expanded="true" />
+            <element signature="e#24755#24756#0" expanded="true" />
+            <element signature="e#24930#24931#0" expanded="true" />
+            <element signature="e#24968#24969#0" expanded="true" />
           </folding>
         </state>
       </provider>

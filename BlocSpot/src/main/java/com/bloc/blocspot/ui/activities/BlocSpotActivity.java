@@ -205,6 +205,8 @@ public class BlocSpotActivity extends FragmentActivity
                 Log.d("GEOID", id);
             }
 
+            //Todo:convert from string to long and int to avoid error
+
             Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
             i++;
             if(i % 6 == 0) {
