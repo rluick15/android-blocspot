@@ -29,7 +29,7 @@ public class PoiTable extends Table {
         return SQL_CREATE_POI;
     }
 
-    public void addNewPoi(String name, double lat, double lng, String catName, String catColor) {
+    public void addNewPoi(String name, double lat, double lng, String catName, String catColor, String geoId) {
         ContentValues values = new ContentValues();
         values.put(Constants.TABLE_COLUMN_POI_NAME, name);
         values.put(Constants.TABLE_COLUMN_LATITUDE, lat);
@@ -38,6 +38,7 @@ public class PoiTable extends Table {
         values.put(Constants.TABLE_COLUMN_CAT_COLOR, catColor);
         values.put(Constants.TABLE_COLUMN_NOTE, "");
         values.put(Constants.TABLE_COLUMN_VISITED, false);
+        values.put(Constants.TABLE_COLUMN_GEO_ID, geoId);
         mDb.insert(Constants.TABLE_POI_NAME, null, values);
     }
 

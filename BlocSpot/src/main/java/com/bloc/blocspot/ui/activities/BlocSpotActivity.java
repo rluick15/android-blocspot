@@ -56,6 +56,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -162,7 +165,22 @@ public class BlocSpotActivity extends FragmentActivity
      */
     private void addGeofences() {
         mCurrentGeofences = new ArrayList<Geofence>();
+        Set geofenceIds = new HashSet(); //holds the geofence ids from prefs. no duplicates
 
+        SharedPreferences sharedPrefs = getSharedPreferences(Constants.GEOFENCE_PREFS, Context.MODE_PRIVATE);
+        Map<String,?> keys = sharedPrefs.getAll();
+        int i = 0; //set the iterator
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            if(i % 5 == 0) {
+
+            }
+
+            String id = entry.getKey().toString();
+            geofenceIds.add(id);
+            Log.d("map values", entry.getKey() + ": " +
+                    entry.getValue().toString());
+            i++;
+        }
 
         if (!servicesConnected()) {
             return;
@@ -221,12 +239,11 @@ public class BlocSpotActivity extends FragmentActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000); // Update location every second
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
-                (com.google.android.gms.location.LocationListener) this);
-
+//        mLocationRequest = LocationRequest.create();
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        mLocationRequest.setInterval(1000); // Update location every second
+//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
+//                (com.google.android.gms.location.LocationListener) this);
         continueAddGeofences();
     }
 
@@ -254,7 +271,7 @@ public class BlocSpotActivity extends FragmentActivity
      * that contains one default category "Uncategorized"     *
      */
     private void checkCategoryPreference() {
-        SharedPreferences sharedPrefs = getSharedPreferences(Constants.MAIN_PREFS, 0);
+        SharedPreferences sharedPrefs = getSharedPreferences(Constants.MAIN_PREFS, Context.MODE_PRIVATE);
         String json = sharedPrefs.getString(Constants.CATEGORY_ARRAY, null);
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
         ArrayList<Category> categories = new Gson().fromJson(json, type);

@@ -115,16 +115,16 @@ public class SavePoiDialogFragment extends DialogFragment {
                 final Double lng = mPlace.getLongitude();
                 final String catName = mCategory.getName();
                 final String catColor = mCategory.getColor();
-                String id = UUID.randomUUID().toString();
+                final String id = UUID.randomUUID().toString();
                 mGeofence = new SimpleGeofence(id, lat, lng, Constants.GEOFENCE_RADIUS,
                         Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER);
                 mGeofenceStorage.setGeofence(id, mGeofence);
-                //Todo:extra id field UUID
+                //Todo:how to attach the place name to the Geofence
                 new Thread(){
                     @Override
                     public void run() {
                         super.run();
-                        mPoiTable.addNewPoi(name, lat, lng, catName, catColor);
+                        mPoiTable.addNewPoi(name, lat, lng, catName, catColor, id);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
