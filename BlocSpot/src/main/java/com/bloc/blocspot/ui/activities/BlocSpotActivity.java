@@ -151,8 +151,8 @@ public class BlocSpotActivity extends FragmentActivity
                     // If Google Play services resolved the problem
                     case Activity.RESULT_OK:
                         mInProgress = false;
-                        addGeofences(mGeoIds);
-                        //mEditGeofences.addGeofences(mCurrentGeofences);
+                        beginAddGeofences(mGeoIds);
+                        //mEditGeofences.beginAddGeofences(mCurrentGeofences);
                         break;
                 }
         }
@@ -162,7 +162,7 @@ public class BlocSpotActivity extends FragmentActivity
      * Start adding geofences. Save the geofences, then start adding them by requesting a
      * connection
      */
-    private void addGeofences(ArrayList<String> geoIds) {
+    private void beginAddGeofences(ArrayList<String> geoIds) {
         mCurrentGeofences = new ArrayList<>();
 
         for(String id : geoIds) {
@@ -188,9 +188,16 @@ public class BlocSpotActivity extends FragmentActivity
         }
     }
 
-    private void continueAddGeofences() {
+    @Override
+    public void onConnected(Bundle bundle) {
+//        mLocationRequest = LocationRequest.create();
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        mLocationRequest.setInterval(1000); // Update location every second
+//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
+//                (com.google.android.gms.location.LocationListener) this);
+
         mGeofencePendingIntent = getTransitionPendingIntent();
-        //mEditGeofences.addGeofences();
+        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mCurrentGeofences, mGeofencePendingIntent);
     }
 
     /**
@@ -222,16 +229,6 @@ public class BlocSpotActivity extends FragmentActivity
     private PendingIntent getTransitionPendingIntent() {
         Intent intent = new Intent(this, GeofenceIntentService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-//        mLocationRequest = LocationRequest.create();
-//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        mLocationRequest.setInterval(1000); // Update location every second
-//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
-//                (com.google.android.gms.location.LocationListener) this);
-        continueAddGeofences();
     }
 
     @Override
@@ -472,7 +469,7 @@ public class BlocSpotActivity extends FragmentActivity
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
 
-            addGeofences(mGeoIds);
+            beginAddGeofences(mGeoIds);
         }
 
         private float getMarkerColor(Cursor c) {
