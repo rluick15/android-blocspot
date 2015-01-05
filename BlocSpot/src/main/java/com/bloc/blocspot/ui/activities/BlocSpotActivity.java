@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Criteria;
@@ -245,7 +246,10 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+        mInProgress = false;
+        mGoogleApiClient = null;
+    }
 
     @Override
     public void onLocationChanged(Location location) {}
@@ -260,7 +264,28 @@ public class BlocSpotActivity extends FragmentActivity
     public void onProviderDisabled(String provider) {}
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        mInProgress = false;
+        if(connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(
+                        this, Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                Log.e("ConnectionFailed", String.valueOf(e));
+            }
+        }
+        else {
+            int errorCode = connectionResult.getErrorCode();
+            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(
+                    errorCode, this, Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            if (errorDialog != null) {
+                ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+                errorFragment.setDialog(errorDialog);
+                errorFragment.show(getSupportFragmentManager(), "Geofence Detection");
+                //Todo: what to do here
+            }
+        }
+    }
 
     /**
      * This method is called onCreate of the Main Activity. It checks if a shared preference

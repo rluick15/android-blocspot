@@ -24,9 +24,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a6db0f7-dc06-4430-bdde-02615bbe9a07" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\Users\Rich\Desktop\WebProjects\AndroidStudioProjects\BlocWork\android-blocspot\BlocSpot\src\main\java\com\bloc\blocspot\geofence\EditGeofences.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" afterPath="$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="android-blocspot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -92,21 +90,24 @@
       <file leaf-file-name="BlocSpotActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6368932" vertical-offset="3786" max-vertical-offset="10693">
-              <caret line="242" column="21" selection-start-line="242" selection-start-column="21" selection-end-line="242" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.6038835" vertical-offset="4466" max-vertical-offset="11169">
+              <caret line="281" column="59" selection-start-line="281" selection-start-column="59" selection-end-line="281" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#8848#9362#0" expanded="true" />
-                <element signature="e#11272#11878#0" expanded="true" />
-                <element signature="e#11597#11634#0" expanded="true" />
-                <element signature="e#11867#11868#0" expanded="true" />
-                <element signature="e#12585#12622#0" expanded="true" />
-                <element signature="e#13654#14234#0" expanded="true" />
-                <element signature="e#13823#14208#0" expanded="true" />
-                <element signature="e#14189#14190#0" expanded="true" />
-                <element signature="e#14223#14224#0" expanded="true" />
-                <element signature="e#14973#15009#0" expanded="true" />
-                <element signature="e#15784#15819#0" expanded="true" />
+                <element signature="e#8885#9399#0" expanded="true" />
+                <element signature="e#9380#9381#0" expanded="true" />
+                <element signature="e#12317#12923#0" expanded="true" />
+                <element signature="e#12493#12897#0" expanded="true" />
+                <element signature="e#12642#12679#0" expanded="true" />
+                <element signature="e#12878#12879#0" expanded="true" />
+                <element signature="e#12912#12913#0" expanded="true" />
+                <element signature="e#13630#13667#0" expanded="true" />
+                <element signature="e#14699#15279#0" expanded="true" />
+                <element signature="e#14868#15253#0" expanded="true" />
+                <element signature="e#15234#15235#0" expanded="true" />
+                <element signature="e#15268#15269#0" expanded="true" />
+                <element signature="e#16018#16054#0" expanded="true" />
+                <element signature="e#16829#16864#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2322,21 +2323,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BlocSpot/src/main/java/com/bloc/blocspot/ui/activities/BlocSpotActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6368932" vertical-offset="3786" max-vertical-offset="10693">
-          <caret line="242" column="21" selection-start-line="242" selection-start-column="21" selection-end-line="242" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.6038835" vertical-offset="4466" max-vertical-offset="11169">
+          <caret line="281" column="59" selection-start-line="281" selection-start-column="59" selection-end-line="281" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#8848#9362#0" expanded="true" />
-            <element signature="e#11272#11878#0" expanded="true" />
-            <element signature="e#11597#11634#0" expanded="true" />
-            <element signature="e#11867#11868#0" expanded="true" />
-            <element signature="e#12585#12622#0" expanded="true" />
-            <element signature="e#13654#14234#0" expanded="true" />
-            <element signature="e#13823#14208#0" expanded="true" />
-            <element signature="e#14189#14190#0" expanded="true" />
-            <element signature="e#14223#14224#0" expanded="true" />
-            <element signature="e#14973#15009#0" expanded="true" />
-            <element signature="e#15784#15819#0" expanded="true" />
+            <element signature="e#8885#9399#0" expanded="true" />
+            <element signature="e#9380#9381#0" expanded="true" />
+            <element signature="e#12317#12923#0" expanded="true" />
+            <element signature="e#12493#12897#0" expanded="true" />
+            <element signature="e#12642#12679#0" expanded="true" />
+            <element signature="e#12878#12879#0" expanded="true" />
+            <element signature="e#12912#12913#0" expanded="true" />
+            <element signature="e#13630#13667#0" expanded="true" />
+            <element signature="e#14699#15279#0" expanded="true" />
+            <element signature="e#14868#15253#0" expanded="true" />
+            <element signature="e#15234#15235#0" expanded="true" />
+            <element signature="e#15268#15269#0" expanded="true" />
+            <element signature="e#16018#16054#0" expanded="true" />
+            <element signature="e#16829#16864#0" expanded="true" />
           </folding>
         </state>
       </provider>
