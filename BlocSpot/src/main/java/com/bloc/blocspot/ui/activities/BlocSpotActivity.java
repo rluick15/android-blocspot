@@ -28,7 +28,6 @@ import com.bloc.blocspot.adapters.PoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
-import com.bloc.blocspot.geofence.EditGeofences;
 import com.bloc.blocspot.geofence.GeofenceIntentService;
 import com.bloc.blocspot.geofence.SimpleGeofenceStore;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
@@ -40,6 +39,8 @@ import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -82,7 +83,6 @@ public class BlocSpotActivity extends FragmentActivity
     private boolean mInProgress;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private EditGeofences mEditGeofences;
     private PendingIntent mGeofencePendingIntent;
     private ArrayList<Geofence> mCurrentGeofences;
     private ArrayList<String> mGeoIds;
@@ -113,7 +113,6 @@ public class BlocSpotActivity extends FragmentActivity
 
         checkCategoryPreference();
 
-        mEditGeofences = new EditGeofences(this);
         mGoogleApiClient = null;
         mGeofencePendingIntent = null;
         mInProgress = false;
@@ -188,18 +187,6 @@ public class BlocSpotActivity extends FragmentActivity
         }
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-//        mLocationRequest = LocationRequest.create();
-//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        mLocationRequest.setInterval(1000); // Update location every second
-//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
-//                (com.google.android.gms.location.LocationListener) this);
-
-        mGeofencePendingIntent = getTransitionPendingIntent();
-        LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mCurrentGeofences, mGeofencePendingIntent);
-    }
-
     /**
      * Verify that Google Play services is available before making a request.
      *
@@ -229,6 +216,32 @@ public class BlocSpotActivity extends FragmentActivity
     private PendingIntent getTransitionPendingIntent() {
         Intent intent = new Intent(this, GeofenceIntentService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+//        mLocationRequest = LocationRequest.create();
+//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        mLocationRequest.setInterval(1000); // Update location every second
+//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
+//                (com.google.android.gms.location.LocationListener) this);
+
+        mGeofencePendingIntent = getTransitionPendingIntent();
+        LocationServices.GeofencingApi
+                .addGeofences(mGoogleApiClient, mCurrentGeofences, mGeofencePendingIntent)
+                .setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        if(status.isSuccess()) {
+                            //Todo:whats a broadcast Intent??
+                        }
+                        else {
+                            //Todo:whats a broadcast Intent??
+                        }
+                        mInProgress = false;
+                        mGoogleApiClient.disconnect();
+                    }
+                });
     }
 
     @Override
