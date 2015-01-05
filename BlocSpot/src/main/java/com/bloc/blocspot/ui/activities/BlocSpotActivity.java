@@ -30,6 +30,8 @@ import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.geofence.EditGeofences;
 import com.bloc.blocspot.geofence.GeofenceIntentService;
+import com.bloc.blocspot.geofence.SimpleGeofence;
+import com.bloc.blocspot.geofence.SimpleGeofenceStore;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
@@ -39,7 +41,6 @@ import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -83,7 +84,9 @@ public class BlocSpotActivity extends FragmentActivity
     private LocationRequest mLocationRequest;
     private EditGeofences mEditGeofences;
     private PendingIntent mGeofencePendingIntent;
-    private ArrayList<Geofence> mCurrentGeofences;
+    private ArrayList<SimpleGeofence> mCurrentGeofences;
+    private ArrayList<String> mGeoIds;
+    private SimpleGeofenceStore mGeofenceStorage;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -110,6 +113,11 @@ public class BlocSpotActivity extends FragmentActivity
 
         checkCategoryPreference();
 
+        mEditGeofences = new EditGeofences(this);
+        mGoogleApiClient = null;
+        mGeofencePendingIntent = null;
+        mInProgress = false;
+
         initCompo();
         currentLocation();
 
@@ -119,12 +127,6 @@ public class BlocSpotActivity extends FragmentActivity
         else { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
-
-        mEditGeofences = new EditGeofences(this);
-        mGoogleApiClient = null;
-        mGeofencePendingIntent = null;
-        mInProgress = false;
-        addGeofences();
     }
 
     @Override
@@ -149,7 +151,7 @@ public class BlocSpotActivity extends FragmentActivity
                     // If Google Play services resolved the problem
                     case Activity.RESULT_OK:
                         mInProgress = false;
-                        addGeofences();
+                        addGeofences(mGeoIds);
                         //mEditGeofences.addGeofences(mCurrentGeofences);
                         break;
                 }
@@ -160,8 +162,12 @@ public class BlocSpotActivity extends FragmentActivity
      * Start adding geofences. Save the geofences, then start adding them by requesting a
      * connection
      */
-    private void addGeofences() {
+    private void addGeofences(ArrayList<String> geoIds) {
         mCurrentGeofences = new ArrayList<>();
+
+        for(String id : geoIds) {
+            mCurrentGeofences.add(mGeofenceStorage.getGeofence(id));
+        }
 
         if (!servicesConnected()) {
             return;
@@ -257,7 +263,7 @@ public class BlocSpotActivity extends FragmentActivity
         Type type = new TypeToken<ArrayList<Category>>(){}.getType();
         ArrayList<Category> categories = new Gson().fromJson(json, type);
         if(categories == null) {
-            categories = new ArrayList<Category>();
+            categories = new ArrayList<>();
             Category uncategorized = new Category(Constants.CATEGORY_UNCATEGORIZED, Constants.CYAN);
             categories.add(uncategorized);
             String jsonCat = new Gson().toJson(categories);
@@ -456,6 +462,7 @@ public class BlocSpotActivity extends FragmentActivity
                                 c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE))))
                         .icon(BitmapDescriptorFactory
                                 .defaultMarker(getMarkerColor(c))));
+                mGeoIds.add(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_GEO_ID)));
             }
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //current location
@@ -464,6 +471,8 @@ public class BlocSpotActivity extends FragmentActivity
                     .build(); // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory
                     .newCameraPosition(cameraPosition));
+
+            addGeofences(mGeoIds);
         }
 
         private float getMarkerColor(Cursor c) {
