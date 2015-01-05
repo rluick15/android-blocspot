@@ -30,7 +30,6 @@ import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.geofence.EditGeofences;
 import com.bloc.blocspot.geofence.GeofenceIntentService;
-import com.bloc.blocspot.geofence.SimpleGeofence;
 import com.bloc.blocspot.geofence.SimpleGeofenceStore;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
@@ -41,6 +40,7 @@ import com.bloc.blocspot.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -84,7 +84,7 @@ public class BlocSpotActivity extends FragmentActivity
     private LocationRequest mLocationRequest;
     private EditGeofences mEditGeofences;
     private PendingIntent mGeofencePendingIntent;
-    private ArrayList<SimpleGeofence> mCurrentGeofences;
+    private ArrayList<Geofence> mCurrentGeofences;
     private ArrayList<String> mGeoIds;
     private SimpleGeofenceStore mGeofenceStorage;
 
@@ -166,7 +166,7 @@ public class BlocSpotActivity extends FragmentActivity
         mCurrentGeofences = new ArrayList<>();
 
         for(String id : geoIds) {
-            mCurrentGeofences.add(mGeofenceStorage.getGeofence(id));
+            mCurrentGeofences.add(mGeofenceStorage.getGeofence(id).toGeofence());
         }
 
         if (!servicesConnected()) {
