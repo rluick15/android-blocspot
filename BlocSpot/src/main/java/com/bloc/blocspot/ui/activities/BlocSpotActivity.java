@@ -30,7 +30,6 @@ import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.geofence.EditGeofences;
 import com.bloc.blocspot.geofence.GeofenceIntentService;
-import com.bloc.blocspot.geofence.SimpleGeofence;
 import com.bloc.blocspot.ui.fragments.ChangeCategoryFragment;
 import com.bloc.blocspot.ui.fragments.EditNoteFragment;
 import com.bloc.blocspot.ui.fragments.FilterDialogFragment;
@@ -57,7 +56,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  *
@@ -164,66 +162,6 @@ public class BlocSpotActivity extends FragmentActivity
      */
     private void addGeofences() {
         mCurrentGeofences = new ArrayList<>();
-
-        //set the strings for creating a new Geofence
-        String longId;
-        String id = null;
-        int transType = 0;
-        Float radius = null;
-        Float lat = null;
-        Float lng = null;
-        Long expDur = null;
-
-        SharedPreferences sharedPrefs = getSharedPreferences(Constants.GEOFENCE_PREFS, Context.MODE_PRIVATE);
-        Map<String,?> keys = sharedPrefs.getAll();
-        int i = 0; //set the iterator
-        for(Map.Entry<String,?> entry : keys.entrySet()){
-            longId = entry.getKey();
-
-            if(longId.contains(Constants.KEY_TRANSITION_TYPE)) {
-                transType = Integer.parseInt(entry.getValue().toString());
-                Log.d("GEOTRANS", String.valueOf(transType));
-            }
-            else if(longId.contains(Constants.KEY_RADIUS)) {
-                radius = (Float) entry.getValue();
-                Log.d("GEORADIUS", String.valueOf(radius));
-            }
-            else if(longId.contains(Constants.KEY_LATITUDE)) {
-                lat = (Float) entry.getValue();
-                Log.d("GEOLAT", String.valueOf(lat));
-            }
-            else if(longId.contains(Constants.KEY_LONGITUDE)) {
-                lng = (Float) entry.getValue();
-                Log.d("GEOLNG", String.valueOf(lng));
-            }
-            else if(longId.contains(Constants.KEY_EXPIRATION_DURATION)) {
-                expDur = Long.parseLong(entry.getValue().toString());
-                Log.d("GEODURATION", String.valueOf(expDur));
-            }
-            else if(longId.contains(Constants.KEY_ID)) {
-                id = entry.getValue().toString();
-                Log.d("GEOID", id);
-            }
-
-            //Todo:convert from string to long and int to avoid error
-
-            Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
-            i++;
-            if(i % 6 == 0) {
-                SimpleGeofence geofence = new SimpleGeofence(id, lat, lng, radius, expDur, transType);
-                mCurrentGeofences.add(geofence.toGeofence());
-                Log.e("WE GOT HERE", id);
-
-                //reset all the values
-                i = 0;
-                id = null;
-                transType = 0;
-                radius = null;
-                lat = null;
-                lng = null;
-                expDur = null;
-            }
-        }
 
         if (!servicesConnected()) {
             return;
