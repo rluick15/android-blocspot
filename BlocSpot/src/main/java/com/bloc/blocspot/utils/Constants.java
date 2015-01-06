@@ -38,7 +38,7 @@ public class Constants {
     //Database Constants
         //Database
         public static final String DATABASE_NAME = "BlocSpot";
-        public static final int DATABASE_VERSION = 13;
+        public static final int DATABASE_VERSION = 14;
         //Tables
         public static final String TABLE_POI_NAME = "poiTable";
             //Table Columns

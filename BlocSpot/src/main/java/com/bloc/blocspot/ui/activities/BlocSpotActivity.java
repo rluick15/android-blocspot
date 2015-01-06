@@ -114,12 +114,17 @@ public class BlocSpotActivity extends FragmentActivity
 
         checkCategoryPreference();
 
+        //Initialize Geofencing Objects
         mGoogleApiClient = null;
         mGeofencePendingIntent = null;
         mInProgress = false;
-
-        initCompo();
-        currentLocation();
+        mGeoIds = new ArrayList<>();
+        mGeofenceStorage = new SimpleGeofenceStore(this);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         if(mListState) { //hide the map if the list state is selected
             getFragmentManager().beginTransaction().hide(mMapFragment).commit();
@@ -135,14 +140,30 @@ public class BlocSpotActivity extends FragmentActivity
         applyFilters(mFilter);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        initCompo();
+        currentLocation();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
     /*
-     * Handle results returned to this Activity by other Activities started with
-     * startActivityForResult(). In particular, the method onConnectionFailed() in
-     * GeofenceRemover and GeofenceRequester may call startResolutionForResult() to
-     * start an Activity that handles Google Play services problems. The result of this
-     * call returns here, to onActivityResult.
-     * calls
-     */
+             * Handle results returned to this Activity by other Activities started with
+             * startActivityForResult(). In particular, the method onConnectionFailed() in
+             * GeofenceRemover and GeofenceRequester may call startResolutionForResult() to
+             * start an Activity that handles Google Play services problems. The result of this
+             * call returns here, to onActivityResult.
+             * calls
+             */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
@@ -152,7 +173,6 @@ public class BlocSpotActivity extends FragmentActivity
                     case Activity.RESULT_OK:
                         mInProgress = false;
                         beginAddGeofences(mGeoIds);
-                        //mEditGeofences.beginAddGeofences(mCurrentGeofences);
                         break;
                 }
         }
@@ -164,27 +184,22 @@ public class BlocSpotActivity extends FragmentActivity
      */
     private void beginAddGeofences(ArrayList<String> geoIds) {
         mCurrentGeofences = new ArrayList<>();
+        if(geoIds.size() > 0) {
+            for(String id : geoIds) {
+               mCurrentGeofences.add(mGeofenceStorage.getGeofence(id).toGeofence());
+            }
 
-        for(String id : geoIds) {
-            mCurrentGeofences.add(mGeofenceStorage.getGeofence(id).toGeofence());
-        }
+            if (!servicesConnected()) {
+                return;
+            }
 
-        if (!servicesConnected()) {
-            return;
-        }
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        if (!mInProgress) {
-            mInProgress = true;
-            mGoogleApiClient.connect();
-        }
-        else {
-            //Todo:handle if request is underway. How??
+            if (!mInProgress) {
+                mInProgress = true;
+                mGoogleApiClient.connect();
+            }
+            else {
+                //Todo:handle if request is underway. How??
+            }
         }
     }
 

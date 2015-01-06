@@ -1,55 +1,27 @@
 package com.bloc.blocspot.geofence;
 
 import android.app.IntentService;
-import android.content.Intent;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
+
+import com.bloc.blocspot.blocspot.R;
+import com.bloc.blocspot.ui.activities.BlocSpotActivity;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingEvent;
+
+import java.util.List;
 
 /**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
+ * This class receives geofence transition events from Location Services, in the
+ * form of an Intent containing the transition type and geofence id(s) that triggered
+ * the event.
  */
 public class GeofenceIntentService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.bloc.blocspot.geofence.action.FOO";
-    private static final String ACTION_BAZ = "com.bloc.blocspot.geofence.action.BAZ";
-
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.bloc.blocspot.geofence.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.bloc.blocspot.geofence.extra.PARAM2";
-
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, GeofenceIntentService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, GeofenceIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
 
     public GeofenceIntentService() {
         super("GeofenceIntentService");
@@ -58,34 +30,46 @@ public class GeofenceIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
+            GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+            int transition = geofencingEvent.getGeofenceTransition();
+            if (transition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+                List<Geofence> geofenceList = geofencingEvent.getTriggeringGeofences();
+                Log.e("GEOFENCES", String.valueOf(geofenceList));
+                String[] geofenceIds = new String[geofenceList.size()];
+
+                for (int i = 0; i < geofenceIds.length; i++) {
+                    geofenceIds[i] = geofenceList.get(i).getRequestId();
+                }
+
+
+                sendNotification("");
             }
         }
     }
 
     /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
+     * Posts a notification in the notification bar when a transition is detected.
+     * If the user clicks the notification, control goes to the main Activity.
+     *
      */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+    private void sendNotification(String ids) {
+        Intent notificationIntent = new Intent(getApplicationContext(), BlocSpotActivity.class);
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(BlocSpotActivity.class);
+        stackBuilder.addNextIntent(notificationIntent);
+
+        PendingIntent notificationPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("dssasdasdas")
+                .setContentText("YAYAYAYAYA")
+                .setContentIntent(notificationPendingIntent);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, builder.build());
     }
 }
