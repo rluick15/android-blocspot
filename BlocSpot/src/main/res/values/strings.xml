@@ -63,5 +63,6 @@
     <string name="intent_share_poi">Share POI</string>
     <string name="toast_delete_poi">POI Deleted!</string>
     <string name="notification_poi">You are near your POI!</string>
+    <string name="toast_geofences_failed">Failed to Add Geofences</string>
 
 </resources>

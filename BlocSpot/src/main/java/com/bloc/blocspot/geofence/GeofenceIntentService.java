@@ -31,7 +31,6 @@ public class GeofenceIntentService extends IntentService {
     private PoiTable mPoiTable = new PoiTable();
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor mEditor;
-    private Context mContext;
 
     public GeofenceIntentService() {
         super("GeofenceIntentService");

@@ -15,6 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -43,7 +44,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -82,7 +82,6 @@ public class BlocSpotActivity extends FragmentActivity
     private InfoWindowFragment mInfoWindowFragment;
     private boolean mInProgress;
     private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
     private PendingIntent mGeofencePendingIntent;
     private ArrayList<Geofence> mCurrentGeofences;
     private ArrayList<String> mGeoIds;
@@ -195,8 +194,9 @@ public class BlocSpotActivity extends FragmentActivity
                 mInProgress = true;
                 mGoogleApiClient.connect();
             }
-            else {
-                //Todo:handle if request is underway. How??
+            else { //retry
+                mInProgress = false;
+                beginAddGeofences(geoIds);
             }
         }
     }
@@ -240,11 +240,9 @@ public class BlocSpotActivity extends FragmentActivity
                 .setResultCallback(new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        if(status.isSuccess()) {
-                            //Todo:whats a broadcast Intent??
-                        }
-                        else {
-                            //Todo:whats a broadcast Intent??
+                        if(!status.isSuccess()) {
+                            Toast.makeText(BlocSpotActivity.this,
+                                    getString(R.string.toast_geofences_failed), Toast.LENGTH_SHORT).show();
                         }
                         mInProgress = false;
                         mGoogleApiClient.disconnect();
@@ -277,9 +275,7 @@ public class BlocSpotActivity extends FragmentActivity
             try {
                 connectionResult.startResolutionForResult(
                         this, Constants.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (IntentSender.SendIntentException e) {
-                Log.e("ConnectionFailed", String.valueOf(e));
-            }
+            } catch (IntentSender.SendIntentException ignored) {}
         }
         else {
             int errorCode = connectionResult.getErrorCode();
@@ -289,7 +285,6 @@ public class BlocSpotActivity extends FragmentActivity
                 ErrorDialogFragment errorFragment = new ErrorDialogFragment();
                 errorFragment.setDialog(errorDialog);
                 errorFragment.show(getSupportFragmentManager(), "Geofence Detection");
-                //Todo: what to do here
             }
         }
     }
@@ -316,7 +311,7 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {} //Todo: Something goes here!
+    public void onMapReady(GoogleMap googleMap) {}
 
     @Override
     public void applyFilters(String name) {
@@ -436,7 +431,6 @@ public class BlocSpotActivity extends FragmentActivity
         private ProgressDialog dialog;
         private Context context;
         private String filter;
-        private Exception ex;
 
         public GetPlaces(Context context, String filter) {
             this.context = context;
@@ -475,10 +469,6 @@ public class BlocSpotActivity extends FragmentActivity
         @Override
         protected void onPostExecute(Cursor cursor) {
             super.onPostExecute(cursor);
-            if(ex != null) {
-                dialog.dismiss();
-            }
-
             if (dialog.isShowing()) {
                 try {
                     dialog.dismiss();
@@ -515,32 +505,34 @@ public class BlocSpotActivity extends FragmentActivity
         private float getMarkerColor(Cursor c) {
             float colorId = 0;
             String color = c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
-            if(color.equals(Constants.CYAN)) {
-                colorId = BitmapDescriptorFactory.HUE_CYAN;
-            }
-            else if(color.equals(Constants.BLUE)) {
-                colorId = BitmapDescriptorFactory.HUE_BLUE;
-            }
-            else if(color.equals(Constants.GREEN)) {
-                colorId = BitmapDescriptorFactory.HUE_GREEN;
-            }
-            else if(color.equals(Constants.MAGENTA)) {
-                colorId = BitmapDescriptorFactory.HUE_MAGENTA;
-            }
-            else if(color.equals(Constants.ORANGE)) {
-                colorId = BitmapDescriptorFactory.HUE_ORANGE;
-            }
-            else if(color.equals(Constants.RED)) {
-                colorId = BitmapDescriptorFactory.HUE_RED;
-            }
-            else if(color.equals(Constants.ROSE)) {
-                colorId = BitmapDescriptorFactory.HUE_ROSE;
-            }
-            else if(color.equals(Constants.VIOLET)) {
-                colorId = BitmapDescriptorFactory.HUE_VIOLET;
-            }
-            else if(color.equals(Constants.YELLOW)) {
-                colorId = BitmapDescriptorFactory.HUE_YELLOW;
+            switch (color) {
+                case Constants.CYAN:
+                    colorId = BitmapDescriptorFactory.HUE_CYAN;
+                    break;
+                case Constants.BLUE:
+                    colorId = BitmapDescriptorFactory.HUE_BLUE;
+                    break;
+                case Constants.GREEN:
+                    colorId = BitmapDescriptorFactory.HUE_GREEN;
+                    break;
+                case Constants.MAGENTA:
+                    colorId = BitmapDescriptorFactory.HUE_MAGENTA;
+                    break;
+                case Constants.ORANGE:
+                    colorId = BitmapDescriptorFactory.HUE_ORANGE;
+                    break;
+                case Constants.RED:
+                    colorId = BitmapDescriptorFactory.HUE_RED;
+                    break;
+                case Constants.ROSE:
+                    colorId = BitmapDescriptorFactory.HUE_ROSE;
+                    break;
+                case Constants.VIOLET:
+                    colorId = BitmapDescriptorFactory.HUE_VIOLET;
+                    break;
+                case Constants.YELLOW:
+                    colorId = BitmapDescriptorFactory.HUE_YELLOW;
+                    break;
             }
             return colorId;
         }
@@ -659,6 +651,7 @@ public class BlocSpotActivity extends FragmentActivity
         /*
          * This method must return a Dialog to the DialogFragment.
          */
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return mDialog;
