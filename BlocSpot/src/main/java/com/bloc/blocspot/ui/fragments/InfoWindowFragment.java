@@ -38,12 +38,14 @@ public class InfoWindowFragment extends DialogFragment {
     private String mLat;
     private String mLng;
     private String mNote;
+    private String mGeoId;
 
     public InfoWindowFragment() {} // Required empty public constructor
 
-    public InfoWindowFragment(String id, Context context) {
+    public InfoWindowFragment(String id, String geoId, Context context) {
         this.mId = id;
         this.mContext = context;
+        this.mGeoId = geoId;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class InfoWindowFragment extends DialogFragment {
         deletePoiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((BlocSpotActivity) mContext).deletePoi(mId);
+                ((BlocSpotActivity) mContext).deletePoi(mId, mGeoId);
                 dismiss();
             }
         });

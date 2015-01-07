@@ -387,7 +387,7 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    public void deletePoi(final String id) {
+    public void deletePoi(final String id, final String geoId) {
         new Thread() {
             @Override
             public void run() {
@@ -398,6 +398,7 @@ public class BlocSpotActivity extends FragmentActivity
                     public void run() {
                         Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_delete_poi),
                                 Toast.LENGTH_LONG).show();
+                        mGeofenceStorage.removeGeofence(geoId);
                         refreshList(id);
                     }
                 });
@@ -440,6 +441,7 @@ public class BlocSpotActivity extends FragmentActivity
         public GetPlaces(Context context, String filter) {
             this.context = context;
             this.filter = filter;
+            mGeoIds.clear();
         }
 
         @Override
@@ -492,6 +494,7 @@ public class BlocSpotActivity extends FragmentActivity
                 c = ((Cursor) adapter.getItem(i));
                 mMap.addMarker(new MarkerOptions()
                         .title(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_ID)))
+                        .snippet(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_GEO_ID)))
                         .position(new LatLng(c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LATITUDE)),
                                 c.getDouble(c.getColumnIndex(Constants.TABLE_COLUMN_LONGITUDE))))
                         .icon(BitmapDescriptorFactory
@@ -548,7 +551,8 @@ public class BlocSpotActivity extends FragmentActivity
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                mInfoWindowFragment = new InfoWindowFragment(marker.getTitle(), BlocSpotActivity.this);
+                mInfoWindowFragment = new InfoWindowFragment(marker.getTitle(),
+                        marker.getSnippet(), BlocSpotActivity.this);
                 mInfoWindowFragment.show(getSupportFragmentManager(), "dialog");
 
                 return true;
