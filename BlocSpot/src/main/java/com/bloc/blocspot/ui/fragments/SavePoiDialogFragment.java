@@ -119,7 +119,6 @@ public class SavePoiDialogFragment extends DialogFragment {
                 mGeofence = new SimpleGeofence(id, lat, lng, Constants.GEOFENCE_RADIUS,
                         Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER);
                 mGeofenceStorage.setGeofence(id, mGeofence);
-                //Todo:how to attach the place name to the Geofence
                 new Thread(){
                     @Override
                     public void run() {

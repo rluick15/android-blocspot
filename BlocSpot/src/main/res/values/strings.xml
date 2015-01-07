@@ -61,5 +61,7 @@
     <string name="popup_delete">Delete Poi</string>
     <string name="button_change_category">Update</string>
     <string name="intent_share_poi">Share POI</string>
+    <string name="toast_delete_poi">POI Deleted!</string>
+    <string name="notification_poi">You are near your POI!</string>
 
 </resources>

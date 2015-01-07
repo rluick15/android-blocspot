@@ -11,6 +11,9 @@ public class Constants {
     public static final String FILTER_TEXT = "filterText";
     public static final String EDIT_NOTE_TEXT = "editNoteText";
 
+    //Intent Constants
+    public static final String KEY_GEO_IDS = "geoIds";
+
     //Shared Preferences
     public static final String MAIN_PREFS ="mainPrefs";
     public static final String GEOFENCE_PREFS ="geofencePrefs";

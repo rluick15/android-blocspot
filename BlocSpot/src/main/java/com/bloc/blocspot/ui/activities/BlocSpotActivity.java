@@ -80,7 +80,6 @@ public class BlocSpotActivity extends FragmentActivity
     private MapFragment mMapFragment;
     private String mFilter;
     private InfoWindowFragment mInfoWindowFragment;
-    private PendingIntent mGeofenceRequestIntent;
     private boolean mInProgress;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -143,7 +142,6 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     protected void onStart() {
         super.onStart();
-
         initCompo();
         currentLocation();
     }
@@ -157,13 +155,13 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     /*
-             * Handle results returned to this Activity by other Activities started with
-             * startActivityForResult(). In particular, the method onConnectionFailed() in
-             * GeofenceRemover and GeofenceRequester may call startResolutionForResult() to
-             * start an Activity that handles Google Play services problems. The result of this
-             * call returns here, to onActivityResult.
-             * calls
-             */
+    * Handle results returned to this Activity by other Activities started with
+    * startActivityForResult(). In particular, the method onConnectionFailed() in
+    * GeofenceRemover and GeofenceRequester may call startResolutionForResult() to
+    * start an Activity that handles Google Play services problems. The result of this
+    * call returns here, to onActivityResult.
+    * calls
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
@@ -236,12 +234,6 @@ public class BlocSpotActivity extends FragmentActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-//        mLocationRequest = LocationRequest.create();
-//        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-//        mLocationRequest.setInterval(1000); // Update location every second
-//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,
-//                (com.google.android.gms.location.LocationListener) this);
-
         mGeofencePendingIntent = getTransitionPendingIntent();
         LocationServices.GeofencingApi
                 .addGeofences(mGoogleApiClient, mCurrentGeofences, mGeofencePendingIntent)
@@ -344,7 +336,6 @@ public class BlocSpotActivity extends FragmentActivity
                     public void run() {
                         Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_poi_updated),
                             Toast.LENGTH_LONG).show();
-                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
                         refreshList(id);
                     }
                 });
@@ -365,7 +356,6 @@ public class BlocSpotActivity extends FragmentActivity
             public void run() {
                 super.run();
                 mPoiTable.updateVisited(id, visited);
-                Log.e("ERROR", String.valueOf(visited));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -406,9 +396,8 @@ public class BlocSpotActivity extends FragmentActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BlocSpotActivity.this, "POI Deleted!",
+                        Toast.makeText(BlocSpotActivity.this, getString(R.string.toast_delete_poi),
                                 Toast.LENGTH_LONG).show();
-                        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
                         refreshList(id);
                     }
                 });
@@ -436,7 +425,9 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     public void refreshList(String id) {
         new GetPlaces(BlocSpotActivity.this, mFilter).execute();
-        mInfoWindowFragment.refreshInfoWindow(id);
+        if(mInfoWindowFragment != null) {
+            mInfoWindowFragment.refreshInfoWindow(id);
+        }
     }
 
     private class GetPlaces extends AsyncTask<Void, Void, Cursor> {
@@ -461,10 +452,7 @@ public class BlocSpotActivity extends FragmentActivity
                 dialog.isIndeterminate();
                 dialog.show();
             }
-            catch (Exception e) {
-                //dialog.dismiss();
-                Log.e("ERROR_PRE", String.valueOf(e));
-            }
+            catch (Exception ignored) {}
         }
 
         @Override
@@ -478,10 +466,7 @@ public class BlocSpotActivity extends FragmentActivity
                 else {
                     cursor = mPoiTable.poiQuery();
                 }
-            } catch (Exception e) {
-                ex = e;
-                Log.e("ERROR_DO", String.valueOf(ex));
-            }
+            } catch (Exception ignored) {}
             return cursor;
         }
 
@@ -489,7 +474,6 @@ public class BlocSpotActivity extends FragmentActivity
         protected void onPostExecute(Cursor cursor) {
             super.onPostExecute(cursor);
             if(ex != null) {
-                Log.e("ERROR_POST", String.valueOf(ex));
                 dialog.dismiss();
             }
 
