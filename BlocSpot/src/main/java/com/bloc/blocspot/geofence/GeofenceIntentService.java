@@ -83,7 +83,7 @@ public class GeofenceIntentService extends IntentService {
      * and the app is reopened
      */
     private void sendNotification(String geoName, int i) {
-        if(System.currentTimeMillis() - mPrefs.getLong(geoName, 0) > Constants.TWENTY_MINUTES
+        if(System.currentTimeMillis() - mPrefs.getLong(geoName, 0) > 10
                 || mPrefs.getLong(geoName, 0) == 0) {
             mEditor.putLong(geoName, System.currentTimeMillis());
             mEditor.commit();
