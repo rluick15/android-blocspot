@@ -80,7 +80,6 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
         else {
             holder.colorLabel.setVisibility(View.INVISIBLE);
         }
-        cursor.close();
 
         return convertView;
     }

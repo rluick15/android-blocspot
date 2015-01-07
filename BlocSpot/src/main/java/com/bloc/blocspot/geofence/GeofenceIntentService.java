@@ -5,11 +5,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import com.bloc.blocspot.blocspot.BlocSpotApplication;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.database.table.PoiTable;
 import com.bloc.blocspot.ui.activities.BlocSpotActivity;
@@ -27,9 +29,14 @@ import java.util.List;
 public class GeofenceIntentService extends IntentService {
 
     private PoiTable mPoiTable = new PoiTable();
+    private SharedPreferences mPrefs;
+    private SharedPreferences.Editor mEditor;
+    private Context mContext;
 
     public GeofenceIntentService() {
         super("GeofenceIntentService");
+        mPrefs = BlocSpotApplication.get().getSharedPreferences(Constants.NOTIFICATION_PREFS, Context.MODE_PRIVATE);
+        mEditor = mPrefs.edit();
     }
 
     @Override
@@ -72,27 +79,35 @@ public class GeofenceIntentService extends IntentService {
     /**
      * Posts a notification in the notification bar when a transition is detected.
      * If the user clicks the notification, control goes to the main Activity.
+     * The notifications will be sent once every 20 minutes if the user is within the geofence
+     * and the app is reopened
      */
     private void sendNotification(String geoName, int i) {
-        Intent notificationIntent = new Intent(getApplicationContext(), BlocSpotActivity.class);
+        if(System.currentTimeMillis() - mPrefs.getLong(geoName, 0) > Constants.TWENTY_MINUTES
+                || mPrefs.getLong(geoName, 0) == 0) {
+            mEditor.putLong(geoName, System.currentTimeMillis());
+            mEditor.commit();
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(BlocSpotActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
+            Intent notificationIntent = new Intent(getApplicationContext(), BlocSpotActivity.class);
 
-        PendingIntent notificationPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+            stackBuilder.addParentStack(BlocSpotActivity.class);
+            stackBuilder.addNextIntent(notificationIntent);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle(geoName)
-                .setAutoCancel(true)
-                .setContentText(getString(R.string.notification_poi))
-                .setContentIntent(notificationPendingIntent);
+            PendingIntent notificationPendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(i, builder.build());
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            builder.setSmallIcon(R.drawable.ic_launcher)
+                    .setContentTitle(geoName)
+                    .setAutoCancel(true)
+                    .setContentText(getString(R.string.notification_poi))
+                    .setContentIntent(notificationPendingIntent);
+
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(i, builder.build());
+        }
     }
 
     private class GetPlaceName extends AsyncTask<Void, Void, Cursor> {
@@ -107,8 +122,7 @@ public class GeofenceIntentService extends IntentService {
 
         @Override
         protected Cursor doInBackground(Void... params) {
-            Cursor cursor = mPoiTable.notificationQuery(queryString, geofenceIds);
-            return cursor;
+            return mPoiTable.notificationQuery(queryString, geofenceIds);
         }
 
         @Override

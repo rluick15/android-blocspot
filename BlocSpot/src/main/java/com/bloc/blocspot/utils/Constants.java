@@ -17,6 +17,7 @@ public class Constants {
     //Shared Preferences
     public static final String MAIN_PREFS ="mainPrefs";
     public static final String GEOFENCE_PREFS ="geofencePrefs";
+    public static final String NOTIFICATION_PREFS ="notificationPrefs";
     public static final String CATEGORY_ARRAY = "categoryArray";
 
     //Geofence Constants
@@ -95,7 +96,7 @@ public class Constants {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String INTENT_TYPE_TEXT_PLAIN = "text/plain";
-    
+    public static final long TWENTY_MINUTES = 1200000;
 
 
 }
