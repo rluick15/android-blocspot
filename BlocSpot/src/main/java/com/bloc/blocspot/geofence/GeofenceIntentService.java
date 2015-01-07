@@ -86,6 +86,7 @@ public class GeofenceIntentService extends IntentService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(geoName)
+                .setAutoCancel(true)
                 .setContentText(getString(R.string.notification_poi))
                 .setContentIntent(notificationPendingIntent);
 
