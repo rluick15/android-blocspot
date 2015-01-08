@@ -1,10 +1,12 @@
 package com.bloc.blocspot.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -13,6 +15,8 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -98,6 +102,13 @@ public class BlocSpotActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //check if the device is connected to the network and terminate the app if not
+        if(!haveNetworkConnection()) {
+            terminateApplicationDialog();
+        }
+
+        //restore saved instances
         if (savedInstanceState != null) {
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
             mFilter = savedInstanceState.getString(Constants.FILTER_TEXT);
@@ -130,6 +141,48 @@ public class BlocSpotActivity extends FragmentActivity
         else { //hide the list if map is to be shown
             mPoiList.setVisibility(View.INVISIBLE);
         }
+    }
+
+    /*
+    * If no network is found, this method is called. It displays a dialog letting the user know
+    * that no dialog was found and that they need to connect before using the application.
+    */
+    private void terminateApplicationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.dialog_title_error))
+                .setMessage(getString(R.string.dialog_message_no_network))
+                .setPositiveButton(getString(R.string.dialog_positive_button_ok),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                                System.exit(0);
+                            }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /*
+    * Check if the network if connected to wifi or the mobile network
+    *
+    * return: Boolean true if connected, false if not
+    */
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
     }
 
     @Override

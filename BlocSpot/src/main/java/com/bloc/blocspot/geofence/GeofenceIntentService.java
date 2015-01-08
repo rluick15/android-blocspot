@@ -38,6 +38,11 @@ public class GeofenceIntentService extends IntentService {
         mEditor = mPrefs.edit();
     }
 
+//    @Override
+//    public int onStartCommand(Intent intent, int flags, int startId) {
+//        return START_STICKY;
+//    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
