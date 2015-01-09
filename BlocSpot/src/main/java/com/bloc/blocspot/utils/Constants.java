@@ -29,12 +29,12 @@ public class Constants {
     public static final String KEY_TRANSITION_TYPE ="com.example.android.geofence.KEY_TRANSITION_TYPE";
     public static final String KEY_PREFIX ="com.example.android.geofence.KEY";
     public static final String APPTAG = "Geofence Detection";
-
     public static final long INVALID_LONG_VALUE = -999l;
     public static final float INVALID_FLOAT_VALUE = -999.0f;
     public static final int INVALID_INT_VALUE = -999;
-    public static final float GEOFENCE_RADIUS = 160.934f;
+    public static final float GEOFENCE_RADIUS = 402.335f;
     public final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    public static final long TWENTY_MINUTES = 1200000;
 
     //API Key
     public static final String API_KEY = "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI";
@@ -96,7 +96,6 @@ public class Constants {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String INTENT_TYPE_TEXT_PLAIN = "text/plain";
-    public static final long TWENTY_MINUTES = 1200000;
     public static final String NETWORK_WIFI = "WIFI";
     public static final String NETWORK_MOBILE = "MOBILE";
 
