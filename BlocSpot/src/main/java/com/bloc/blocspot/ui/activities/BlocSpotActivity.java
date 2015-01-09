@@ -1,12 +1,10 @@
 package com.bloc.blocspot.ui.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -101,20 +99,17 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.setContext(this);
         setContentView(R.layout.activity_main);
 
         //check if the device is connected to the network and terminate the app if not
-        if(!haveNetworkConnection()) {
-            terminateApplicationDialog();
-        }
+        Utils.checkIfConnected();
 
         //restore saved instances
         if (savedInstanceState != null) {
             mListState = savedInstanceState.getBoolean(Constants.LIST_STATE);
             mFilter = savedInstanceState.getString(Constants.FILTER_TEXT);
         }
-
-        Utils.setContext(this);
 
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mPoiList = (ListView) findViewById(android.R.id.list);
@@ -143,25 +138,25 @@ public class BlocSpotActivity extends FragmentActivity
         }
     }
 
-    /*
-    * If no network is found, this method is called. It displays a dialog letting the user know
-    * that no dialog was found and that they need to connect before using the application.
-    */
-    private void terminateApplicationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.dialog_title_error))
-                .setMessage(getString(R.string.dialog_message_no_network))
-                .setPositiveButton(getString(R.string.dialog_positive_button_ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                                System.exit(0);
-                            }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+//    /*
+//    * If no network is found, this method is called. It displays a dialog letting the user know
+//    * that no dialog was found and that they need to connect before using the application.
+//    */
+//    private void terminateApplicationDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle(getString(R.string.dialog_title_error))
+//                .setMessage(getString(R.string.dialog_message_no_network))
+//                .setPositiveButton(getString(R.string.dialog_positive_button_ok), null);
+//        AlertDialog dialog = builder.create();
+//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                System.exit(0);
+//                finish();
+//            }
+//        });
+//        dialog.show();
+//    }
 
     /*
     * Check if the network if connected to wifi or the mobile network
@@ -186,16 +181,16 @@ public class BlocSpotActivity extends FragmentActivity
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        applyFilters(mFilter);
-    }
-
-    @Override
     protected void onStart() {
         super.onStart();
         initCompo();
         currentLocation();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyFilters(mFilter);
     }
 
     @Override
@@ -369,7 +364,7 @@ public class BlocSpotActivity extends FragmentActivity
     @Override
     public void applyFilters(String name) {
         mFilter = name;
-        new GetPlaces(BlocSpotActivity.this, name).execute();
+        currentLocation();
     }
 
     @Override
@@ -473,7 +468,7 @@ public class BlocSpotActivity extends FragmentActivity
 
     @Override
     public void refreshList(String id) {
-        new GetPlaces(BlocSpotActivity.this, mFilter).execute();
+        currentLocation();
         if(mInfoWindowFragment != null) {
             mInfoWindowFragment.refreshInfoWindow(id);
         }
@@ -544,6 +539,7 @@ public class BlocSpotActivity extends FragmentActivity
                                 .defaultMarker(getMarkerColor(c))));
                 mGeoIds.add(c.getString(c.getColumnIndex(Constants.TABLE_COLUMN_GEO_ID)));
             }
+
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(loc.getLatitude(), loc.getLongitude())) //current location
                     .zoom(14) // Sets the zoom
@@ -657,7 +653,6 @@ public class BlocSpotActivity extends FragmentActivity
         else {
             loc = location;
             new GetPlaces(BlocSpotActivity.this, null).execute();
-            Log.e(TAG, "location : " + location);
         }
     }
 
