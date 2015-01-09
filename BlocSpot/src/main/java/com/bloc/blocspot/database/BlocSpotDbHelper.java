@@ -37,11 +37,8 @@ public class BlocSpotDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion == 7 && newVersion == 8) {
-            db.execSQL("ALTER TABLE " + Constants.TABLE_POI_NAME +
-                    " ADD COLUMN " + Constants.TABLE_COLUMN_NOTE + " TEXT");
-            db.execSQL("ALTER TABLE " + Constants.TABLE_POI_NAME +
-                    " ADD COLUMN " + Constants.TABLE_COLUMN_VISITED + " BOOLEAN");
+        if (oldVersion == 14 && newVersion == 15) {
+            db.execSQL("DROP TABLE " + Constants.TABLE_POI_NAME);
             onCreate(db);
         }
     }

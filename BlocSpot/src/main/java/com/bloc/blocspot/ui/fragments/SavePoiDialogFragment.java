@@ -17,14 +17,18 @@ import com.bloc.blocspot.adapters.SavePoiListAdapter;
 import com.bloc.blocspot.blocspot.R;
 import com.bloc.blocspot.categories.Category;
 import com.bloc.blocspot.database.table.PoiTable;
+import com.bloc.blocspot.geofence.SimpleGeofence;
+import com.bloc.blocspot.geofence.SimpleGeofenceStore;
 import com.bloc.blocspot.places.Place;
 import com.bloc.blocspot.ui.activities.SearchActivity;
 import com.bloc.blocspot.utils.Constants;
+import com.google.android.gms.location.Geofence;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class SavePoiDialogFragment extends DialogFragment {
 
@@ -32,6 +36,8 @@ public class SavePoiDialogFragment extends DialogFragment {
     private Context mContext;
     private Category mCategory;
     private PoiTable mPoiTable = new PoiTable();
+    private SimpleGeofenceStore mGeofenceStorage;
+    private SimpleGeofence mGeofence;
 
     public SavePoiDialogFragment() {} // Required empty public constructor
 
@@ -44,6 +50,8 @@ public class SavePoiDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        mGeofenceStorage = new SimpleGeofenceStore(mContext);
     }
 
     @Override
@@ -107,14 +115,20 @@ public class SavePoiDialogFragment extends DialogFragment {
                 final Double lng = mPlace.getLongitude();
                 final String catName = mCategory.getName();
                 final String catColor = mCategory.getColor();
+                final String id = UUID.randomUUID().toString();
+                mGeofence = new SimpleGeofence(id, lat, lng, Constants.GEOFENCE_RADIUS,
+                        Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER);
+                mGeofenceStorage.setGeofence(id, mGeofence);
                 new Thread(){
                     @Override
                     public void run() {
                         super.run();
-                        mPoiTable.addNewPoi(name, lat, lng, catName, catColor);
+                        mPoiTable.addNewPoi(name, lat, lng, catName, catColor, id);
                     }
                 }.start();
-                Toast.makeText(mContext, mContext.getString(R.string.toast_poi_saved), Toast.LENGTH_LONG).show();
+
+                Toast.makeText(mContext, mContext.getString(R.string.toast_poi_saved),
+                        Toast.LENGTH_LONG).show();
                 ((SearchActivity) mContext).returnToMain();
                 dismiss();
             }

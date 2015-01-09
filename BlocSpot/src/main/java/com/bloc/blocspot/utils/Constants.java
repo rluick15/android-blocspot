@@ -11,9 +11,30 @@ public class Constants {
     public static final String FILTER_TEXT = "filterText";
     public static final String EDIT_NOTE_TEXT = "editNoteText";
 
+    //Intent Constants
+    public static final String KEY_GEO_IDS = "geoIds";
+
     //Shared Preferences
     public static final String MAIN_PREFS ="mainPrefs";
+    public static final String GEOFENCE_PREFS ="geofencePrefs";
+    public static final String NOTIFICATION_PREFS ="notificationPrefs";
     public static final String CATEGORY_ARRAY = "categoryArray";
+
+    //Geofence Constants
+    public static final String KEY_ID ="com.example.android.geofence.KEY_ID";
+    public static final String KEY_LATITUDE ="com.example.android.geofence.KEY_LATITUDE";
+    public static final String KEY_LONGITUDE ="com.example.android.geofence.KEY_LONGITUDE";
+    public static final String KEY_RADIUS ="com.example.android.geofence.KEY_RADIUS";
+    public static final String KEY_EXPIRATION_DURATION ="com.example.android.geofence.KEY_EXPIRATION_DURATION";
+    public static final String KEY_TRANSITION_TYPE ="com.example.android.geofence.KEY_TRANSITION_TYPE";
+    public static final String KEY_PREFIX ="com.example.android.geofence.KEY";
+    public static final String APPTAG = "Geofence Detection";
+    public static final long INVALID_LONG_VALUE = -999l;
+    public static final float INVALID_FLOAT_VALUE = -999.0f;
+    public static final int INVALID_INT_VALUE = -999;
+    public static final float GEOFENCE_RADIUS = 402.335f;
+    public final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    public static final long TWENTY_MINUTES = 1200000;
 
     //API Key
     public static final String API_KEY = "AIzaSyCdMYv2IzTm331hPXmgfUJCvvZmw9C2ZxI";
@@ -21,7 +42,7 @@ public class Constants {
     //Database Constants
         //Database
         public static final String DATABASE_NAME = "BlocSpot";
-        public static final int DATABASE_VERSION = 8;
+        public static final int DATABASE_VERSION = 15;
         //Tables
         public static final String TABLE_POI_NAME = "poiTable";
             //Table Columns
@@ -33,7 +54,8 @@ public class Constants {
                 public static final String TABLE_COLUMN_CAT_NAME= "catName";
                 public static final String TABLE_COLUMN_CAT_COLOR= "catColor";
                 public static final String TABLE_COLUMN_NOTE= "note";
-                public static final String TABLE_COLUMN_VISITED= "visited";
+                public static final String TABLE_COLUMN_VISITED = "visited";
+                public static final String TABLE_COLUMN_GEO_ID = "geoId";
 
     //JSON Search Constants
     public static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/search/json?";
@@ -70,11 +92,12 @@ public class Constants {
     //Misc
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
-    public static final String CATEGORY_UNCATEGORIZED = "categoryUncategorized";
+    public static final String CATEGORY_UNCATEGORIZED = "Uncategorized";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
     public static final String INTENT_TYPE_TEXT_PLAIN = "text/plain";
-    
+    public static final String NETWORK_WIFI = "WIFI";
+    public static final String NETWORK_MOBILE = "MOBILE";
 
 
 }

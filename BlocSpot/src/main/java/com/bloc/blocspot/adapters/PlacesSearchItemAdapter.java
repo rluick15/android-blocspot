@@ -71,16 +71,16 @@ public class PlacesSearchItemAdapter extends ArrayAdapter<Place>  {
         holder.typeLabel.setText(typeCap);
         holder.distanceLabel.setText(String.format("%.2f", dist) + " mi");
 
-        Cursor cursor = mPoiTable.alreadyPoiCheck(name);
-        if(cursor.moveToFirst() && cursor.getCount() >= 1) {
-            String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
-            holder.colorLabel.setVisibility(View.VISIBLE);
-            Utils.setColorString(color, holder.colorLabel);
+        if(mPoiTable != null && name != null) {
+            Cursor cursor = mPoiTable.alreadyPoiCheck(name);
+            if (cursor.moveToFirst() && cursor.getCount() >= 1) {
+                String color = cursor.getString(cursor.getColumnIndex(Constants.TABLE_COLUMN_CAT_COLOR));
+                holder.colorLabel.setVisibility(View.VISIBLE);
+                Utils.setColorString(color, holder.colorLabel);
+            } else {
+                holder.colorLabel.setVisibility(View.INVISIBLE);
+            }
         }
-        else {
-            holder.colorLabel.setVisibility(View.INVISIBLE);
-        }
-        cursor.close();
 
         return convertView;
     }

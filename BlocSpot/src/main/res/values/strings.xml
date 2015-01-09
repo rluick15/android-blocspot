@@ -61,5 +61,13 @@
     <string name="popup_delete">Delete Poi</string>
     <string name="button_change_category">Update</string>
     <string name="intent_share_poi">Share POI</string>
+    <string name="toast_delete_poi">POI Deleted!</string>
+    <string name="notification_poi">You are near your POI!</string>
+    <string name="toast_geofences_failed">Failed to Add Geofences</string>
+    <string name="dialog_title_error">Error</string>
+    <string name="dialog_message_no_network">No Network Found. Please connect to a network before using BlocSpot.</string>
+    <string name="dialog_positive_button_ok">OK</string>
+    <string name="toast_no_gps">No GPS Signal</string>
+    <string name="toast_no_network">No Network Connection</string>
 
 </resources>

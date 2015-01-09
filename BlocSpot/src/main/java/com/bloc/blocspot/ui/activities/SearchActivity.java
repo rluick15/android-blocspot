@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.PlacesSearchItemAdapter;
 import com.bloc.blocspot.blocspot.R;
@@ -48,24 +49,29 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Utils.setContext(this);
         setContentView(R.layout.activity_search);
+
+        //check if the device is connected to the network and terminate the app if not
+        Utils.checkIfConnected();
+
         if (savedInstanceState != null) {
             mQuery = savedInstanceState.getString(Constants.QUERY_TEXT);
         }
-
-        Utils.setContext(this);
 
         //get the search view query string
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             mQuery = getIntent().getStringExtra(SearchManager.QUERY);
         }
 
-        currentLocation();
         mSearchList = (ListView) findViewById(R.id.searchList);
 
-        if (mQuery != null) {
-            new GetPlaces(SearchActivity.this,
-                    mQuery.toLowerCase().replace("-", "_").replace(" ", "_")).execute();
+        if(Utils.haveNetworkConnection()) {
+            if (mQuery != null) {
+                currentLocation(mQuery.toLowerCase().replace("-", "_").replace(" ", "_"));
+            } else {
+                currentLocation(Constants.EMPTY_STRING);
+            }
         }
 
         mSearchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -127,17 +133,18 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
         return super.onOptionsItemSelected(item);
     }
 
-    private void currentLocation() {
+    private void currentLocation(String query) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(new Criteria(), true);
         Location location = locationManager.getLastKnownLocation(provider);
 
         if (location == null) {
+            Toast.makeText(this, getString(R.string.toast_no_gps), Toast.LENGTH_SHORT).show();
             locationManager.requestLocationUpdates(provider, 0, 0, listener);
         }
         else {
             loc = location;
-            new GetPlaces(SearchActivity.this, "").execute();
+            new GetPlaces(SearchActivity.this, query).execute();
             Log.e(TAG, "location : " + location);
         }
     }
