@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.bloc.blocspot.adapters.PlacesSearchItemAdapter;
 import com.bloc.blocspot.blocspot.R;
@@ -138,6 +139,7 @@ public class SearchActivity extends FragmentActivity implements SavePoiDialogFra
         Location location = locationManager.getLastKnownLocation(provider);
 
         if (location == null) {
+            Toast.makeText(this, getString(R.string.toast_no_gps), Toast.LENGTH_SHORT).show();
             locationManager.requestLocationUpdates(provider, 0, 0, listener);
         }
         else {

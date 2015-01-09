@@ -648,6 +648,7 @@ public class BlocSpotActivity extends FragmentActivity
         Location location = locationManager.getLastKnownLocation(provider);
 
         if (location == null) {
+            Toast.makeText(this, getString(R.string.toast_no_gps), Toast.LENGTH_SHORT).show();
             locationManager.requestLocationUpdates(provider, 0, 0, listener);
         }
         else {

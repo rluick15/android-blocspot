@@ -97,6 +97,8 @@ public class Constants {
     public static final String FALSE = "false";
     public static final String INTENT_TYPE_TEXT_PLAIN = "text/plain";
     public static final long TWENTY_MINUTES = 1200000;
+    public static final String NETWORK_WIFI = "WIFI";
+    public static final String NETWORK_MOBILE = "MOBILE";
 
 
 }

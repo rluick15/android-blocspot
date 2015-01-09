@@ -56,10 +56,10 @@ public class Utils {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] netInfo = cm.getAllNetworkInfo();
         for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+            if (ni.getTypeName().equalsIgnoreCase(Constants.NETWORK_WIFI))
                 if (ni.isConnected())
                     haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+            if (ni.getTypeName().equalsIgnoreCase(Constants.NETWORK_MOBILE))
                 if (ni.isConnected())
                     haveConnectedMobile = true;
         }
@@ -68,7 +68,7 @@ public class Utils {
 
     public static void checkIfConnected() {
         if(!haveNetworkConnection()) {
-            Toast.makeText(context, "No Network Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.toast_no_network), Toast.LENGTH_SHORT).show();
         }
     }
 }
