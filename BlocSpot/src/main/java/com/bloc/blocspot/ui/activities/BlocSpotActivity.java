@@ -138,26 +138,6 @@ public class BlocSpotActivity extends FragmentActivity
         }
     }
 
-//    /*
-//    * If no network is found, this method is called. It displays a dialog letting the user know
-//    * that no dialog was found and that they need to connect before using the application.
-//    */
-//    private void terminateApplicationDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(getString(R.string.dialog_title_error))
-//                .setMessage(getString(R.string.dialog_message_no_network))
-//                .setPositiveButton(getString(R.string.dialog_positive_button_ok), null);
-//        AlertDialog dialog = builder.create();
-//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//            @Override
-//            public void onDismiss(DialogInterface dialog) {
-//                System.exit(0);
-//                finish();
-//            }
-//        });
-//        dialog.show();
-//    }
-
     /*
     * Check if the network if connected to wifi or the mobile network
     *
@@ -653,7 +633,7 @@ public class BlocSpotActivity extends FragmentActivity
         }
         else {
             loc = location;
-            new GetPlaces(BlocSpotActivity.this, null).execute();
+            new GetPlaces(BlocSpotActivity.this, mFilter).execute();
         }
     }
 
